@@ -1,3 +1,8 @@
+---
+title: Vue 核心
+date: 2020-02-16
+---
+
 # Vue 核心
 
 代码地址：<https://github.com/zoeeying/vue-learning>

@@ -1,3 +1,8 @@
+---
+title: Vue 选项
+date: 2020-02-08
+---
+
 # Vue 选项
 
 代码地址：<https://github.com/zoeeying/vue-learning>

@@ -1,3 +1,8 @@
+---
+title: vue-router
+date: 2020-02-20
+---
+
 # vue-router
 
 路由指的是 SPA 的路径管理器，vue-router 是 Web 应用的链接路径管理器。

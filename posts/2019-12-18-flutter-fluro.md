@@ -1,3 +1,8 @@
+---
+title: 在 Flutter 中使用 Fluro 管理路由
+date: 2019-12-18
+---
+
 # 在 Flutter 中使用 Fluro 管理路由
 
 **步骤一：** 在入口文件 main.dart 中的 MyApp 类的 build 方法中初始化 fluro，声明路由。

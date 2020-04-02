@@ -1,10 +1,6 @@
 ---
-layout: post
 title: Iterator 遍历器
-subtitle: Iterator 是一种接口机制
-author: 小畅叙
-tags:
-    - ES6
+date: 2019-12-28
 ---
 
 # Iterator 遍历器

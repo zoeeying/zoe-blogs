@@ -1,3 +1,8 @@
+---
+title: JavaScript 字符串 API
+date: 2020-02-25
+---
+
 # JavaScript 字符串 API
 
 ## 1 字符方法

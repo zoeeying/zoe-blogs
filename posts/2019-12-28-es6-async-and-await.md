@@ -1,10 +1,6 @@
 ---
-layout: post
 title: async&await
-subtitle: 真正意义上解决了异步回调的问题
-author: 小畅叙
-tags:
-    - ES6
+date: 2019-12-28
 ---
 
 # async&await

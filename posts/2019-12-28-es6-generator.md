@@ -1,10 +1,6 @@
 ---
-layout: post
 title: Generator 函数
-subtitle: Generator 函数是一个状态机，用来生成遍历器对象
-author: 小畅叙
-tags:
-    - ES6
+date: 2019-12-28
 ---
 
 # Generator 函数
