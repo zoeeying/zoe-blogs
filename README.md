@@ -1,6 +1,6 @@
 ## ES6
 
-- ES6 基础知识
+- [ES6 基础知识](/posts/2019-09-25-es6-basic.md)
 - Promise 对象
 - Symbol
 - async&await
