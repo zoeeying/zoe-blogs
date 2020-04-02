@@ -1,0 +1,163 @@
+# 深拷贝和浅拷贝
+
+## 1 JavaScript 数据类型
+
+JavaScript 数据类型分为基本类型和引用类型。
+
+**值类型（基本类型）：** 字符串（String）、数字（Number）、布尔（Boolean）、对空（Null）、未定义（Undefined）、Symbol（Symbol 是 ES6 引入的一种新的原始数据类型，表示独一无二的值）
+
+**引用类型：** 对象（Object）、数组（Array）、函数（Function）
+
+## 2 赋值拷贝
+
+**基本类型：** 拷贝后会生成一份新的数据，修改拷贝后的数据不会影响原数据。
+
+**引用类型：** 拷贝后不会生成新的数据，而是拷贝引用，修改拷贝后的数据会影响原来的数据。
+
+## 3 深拷贝和浅拷贝
+
+深拷贝和浅拷贝只是针对数组和对象，基本类型没有深拷贝和浅拷贝之说。
+
+假设 B 复制了 A，当修改 A 时，看 B 是否会发生变化，如果 B 也跟着变了，说明是浅拷贝，如果 B 没变，那就是深拷贝。深入点来说，就是 B 复制了 A，如果 B 复制的是 A 的引用，那就是浅拷贝，如果 B 复制的是 A 的本体，那就是深拷贝。
+
+**浅拷贝：** 将原对象或原数组的引用直接赋给新对象或新数组，新对象或数组只是原对象或原数组的一个引用，修改拷贝以后的数据会影响原数据。
+
+**深拷贝：** 创建一个新的对象或数组，将原对象的各项属性的值或数组的所有元素拷贝过来，拷贝的是值，不是引用 ，修改拷贝以后的数据不会影响原数据。
+
+## 4 深拷贝
+
+### 4.1 拷贝第一层级的数组元素
+
+#### (1) 遍历
+
+#### (2) ES6 扩展运算符
+
+#### (3) slice
+
+`Array.prototype.slice()`，从已有的数组中返回选定的元素组成的新数组，不改变原数组。
+
+```javascript
+// 用法，start表示起始元素的下标，end表示终止元素的下标，新数组不包括end
+// 如果不带任何参数，默认返回一个和原数组元素相同的新数组
+array.slice(start, end)
+
+let arr = [1, 2, 3, 4]
+let copyArr = arr.slice()
+copyArr[0] = 100
+console.log(arr) // [1, 2, 3, 4]
+console.log(copyArr) // [100, 2, 3, 4]
+```
+
+#### (4) concat
+
+`Array.prototype.concat()`，用于连接两个或多个数组，不会改变原数组，而仅仅会返回被连接数组的一个副本。
+
+```javascript
+// 用法
+// 如果不带任何参数，array.concat()相当于array.concat([])，即把array和一个空数组合并后返回
+array.concat(array1, array2, ......, arrayN)
+
+let arr = [1, 2, 3, 4]
+let copyArr = arr.concat()
+copyArr[0] = 100
+console.log(arr) //[1, 2, 3, 4]
+console.log(copyArr) //[100, 2, 3, 4]
+
+// 如果数组中的元素有对象（数组），那么修改对象（数组），会影响原数组
+let arr = [1, 3, { username: 'zoe' }]
+let copyArr = arr.concat() // 不传入参数，相当于拷贝原数组
+copyArr[2].username = 'chao'
+console.log(arr) // [ 1, 3, { username: 'chao' } ]
+```
+
+### 4.2 拷贝第一层级的对象属性
+
+#### (1) 遍历
+
+#### (2) 扩展运算符
+
+ES6 扩展运算符，用于取出参数对象的所有可遍历属性，拷贝到当前对象之中。
+
+#### (3) Object.assign
+
+ES6 的 `Object.assign()` 用于对象的合并，将源对象（source）的所有可枚举属性复制到目标对象（target），并返回 target。
+
+```javascript
+// 用法
+Object.assign(target, source1, source2)
+
+let obj = {
+  name: '小畅叙',
+  job: '程序员'
+}
+// 把obj作为源对象
+let copyObj = Object.assign({}, obj)
+copyObj.name = '我不是小畅叙'
+console.log(obj) // {name: '小畅叙', job: '程序员'}
+console.log(copyObj) // {name: '我不是小畅叙', job: '程序员'}
+
+// 把obj作为目标对象
+let obj = { name: 'zoe' }
+let obj2 = Object.assign(obj)
+obj2.name = 'chao'
+console.log(obj) // { name: 'chao' }
+```
+
+### 4.3 拷贝所有层级的对象属性和数组元素
+
+上面的方法只是用来拷贝第一层级的对象属性或数组，如果第一层级对象属性或数组元素中有引用类型数据，那么如果改变这些引用类型数据，还是会导致原对象或者原数组改变。
+
+可以采用下面的方法真正实现深拷贝：
+
+#### (1) JSON 转换
+
+使用 `JSON.parse(JSON.stringify())` 来拷贝数据，拷贝的数据里不能有函数，因为 `JSON.stringify` 中只能放入原生的 JS 数组或对象。
+
+#### (2) 使用 lodash 库
+
+```javascript
+_.cloneDeep(obj)
+```
+
+#### (3) 递归
+
+## 5 使用递归来实现深拷贝
+
+#### 步骤一：检测数据类型
+
+```javascript
+// -1表示倒数第一个字符，slice截取字符串，包括end处的字符
+console.log(Object.prototype.toString.call([1, 2]).slice(8, -1)) // Array
+
+// 方法1
+const checkType = target => {
+  return Object.prototype.toString.call(target).slice(8, -1)
+}
+
+// 方法2
+console.log([].constructor === Array) // true
+```
+
+#### 步骤二：for...in...循环
+
+循环对象，得到属性名。循环数组，得到下标。
+
+#### 步骤三：实现深拷贝功能函数
+
+```javascript
+let arr = [{ number: 1 }, { number: 2 }, { number: 3 }]
+function copy(obj) {
+  let newobj = obj.constructor === Array ? [] : {}
+  if (typeof obj !== 'object') {
+    return obj
+  }
+  for (let i in obj) {
+    newobj[i] = typeof obj[i] === 'object' ? copy(obj[i]) : obj[i]
+  }
+  return newobj
+}
+let copyArr = copy(arr)
+copyArr[0].number = 100
+console.log(arr) // [{number: 1}, { number: 2 }, { number: 3 }]
+console.log(copyArr) // [{number: 100}, { number: 2 }, { number: 3 }]
+```

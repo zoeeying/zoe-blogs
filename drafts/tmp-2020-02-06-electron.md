@@ -1,0 +1,296 @@
+---
+layout: post
+title: Electron
+subtitle: Electron 是一个使用 JavaScript、HTML 和 CSS 等 Web 技术创建原生程序的框架
+author: 小畅叙
+tags:
+    - Vue
+---
+
+# Electron
+
+Electron 是一个由 GitHub 及众多贡献者组成的活跃社区共同维护的开源项目。
+
+Electron 是一个基于 Chromium 和 Node.js，使用 JavaScript、HTML 和 CSS 等 Web 技术创建原生程序的框架，它提供了丰富的本地（操作系统）的API。
+
+Electron 相当于 Node.js 的变体，但是它专注于桌面应用而不是 Web 服务器端。
+
+Electron 并不是某个图形用户界面（GUI）库的 JavaScript 版本，它使用 Web 页面作为它的 GUI，所以可以把它看作一个被 JavaScript 控制的，精简版的 Chromium 浏览器。
+
+## 1 环境搭建
+
+* 安装 Node.js，使用命令 `npm init` 初始化项目
+
+* 安装 Electron
+
+  ```bash
+  cnpm install electron -D
+  npx electron -v # 检查是否安装成功
+  ./node_modules/.bin/electron -v # 同上
+  npx electron # 启动项目，打开应用程序界面
+  ```
+
+## 2 Hello World
+
+* 新建 index.html 文件
+
+  ```html
+  <!DOCTYPE html>
+  <html lang="en">
+  
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Hello Zoe</title>
+  </head>
+  
+  <body>
+    Hello Zoe
+  </body>
+  
+  </html>
+  ```
+
+* 新建 main.js 文件，即入口文件
+
+  ```javascript
+  var { app, BrowserWindow } = require('electron')
+  var mainWindow = null // 主窗口
+  
+  app.on('ready', () => {
+    // ready相当于生命周期
+    mainWindow = new BrowserWindow({ height: 1000, height: 600 })
+    mainWindow.loadFile('index.html') // 加载HTML页面
+    mainWindow.on('closed', () => { // 监听窗口关闭
+      mainWindow = null
+    })
+  })
+  ```
+
+* 使用命令 `npx electron .` 启动项目
+
+## 3 运行流程
+
+**运行流程：**package.json => 主进程文件 => 读取页面布局和演示 => IPC 执行任务并获取信息
+
+* 读取 package.json 中的入口文件（main.js）
+* main.js 主进程中创建渲染进程
+* 读取应用页面的布局和样式
+* 使用 IPC 在主进程中执行任务并获取信息
+
+一个 Electron 应用程序有且只有一个**主进程**，一个应用程序中可能会有多个窗口，每个窗口都是一个**渲染进程**。也就是说主进程控制渲染进程，一个主进程可以控制多个渲染进程。
+
+下面是一个例子：
+
+* 在项目根目录下新建文件 frames.txt
+
+  ```
+  1.React
+  2.Vue
+  3.Flutter
+  4.Taro
+  5.Electron
+  6.Python
+  7.uni-app
+  ```
+
+* 修改主进程文件 main.js，设置 new BrowserWindow 中的 webPreferences 选项
+
+  ```javascript
+  // ...
+  app.on('ready', () => {
+    mainWindow = new BrowserWindow({
+  		// ...
+      // node中的所有东西都可以在渲染进程中使用，比如文件操作
+      webPreferences: {
+        nodeIntegration: true
+      },
+    })
+  	// ...
+  })
+  ```
+  
+* 在项目根目录下新建文件夹 render（render 文件夹下放渲染进程代码），在 render 文件夹下新建文件 index.js
+
+  ```javascript
+  var fs = require('fs')
+  
+  window.onload = () => {
+    // 这里的this指向global对象
+    var btn = this.document.querySelector('#btn')
+    var frames = this.document.querySelector('#frames')
+    btn.onclick = () => {
+      // 文件操作，注意这里的frames.txt文件路径是相对于index.html的
+      fs.readFile('frames.txt', (err, data) => {
+        frames.innerHTML = data
+      })
+    }
+  }
+  ```
+
+* 在 index.html 中添加 UI 元素，并引入上面的 index.js 文件
+
+  ```html
+  <body>
+    <button id="btn">要学习的框架</button>
+    <div id="frames"></div>
+    <script src="render/index.js"></script>
+  </body>
+  ```
+
+* 使用命令 `npx electron .` 启动项目
+
+## 4 Remote 模块
+
+主进程和渲染进程中使用的 API 方法和模块方法是有区别的。
+
+如果想在渲染进程中使用主进程中的模块方法，可以使用 Electron Remote 模块，它可以在主进程和渲染进程之间进行通讯。
+
+```javascript
+// 渲染进程中可以通过如下方式获取到BrowserWindow对象
+// 其它代码同main.js
+const { BrowserWindow } = require('electron').remote
+```
+
+## 5 菜单
+
+每个桌面应用的窗口最上方都会有菜单（工具栏），是使用 Electron 的内置模块 Menu 来创建的，它是一个主进程模块。
+
+* 新建 main 目录，用于放主进程的代码。在 main 目录下新建文件 menu.js。
+
+  ```javascript
+  const { Menu, BrowserWindow } = require('electron')
+  var template = [
+    {
+      label: 'Vue',
+      submenu: [
+        {
+          label: 'Vuex',
+          // 绑定快捷键
+          accelerator: 'ctrl+n',
+          // 绑定事件（点击子菜单的事件）
+          click() {
+            var newWin = new BrowserWindow({
+              width: 800,
+              height: 600,
+              webPreferences: {
+                nodeIntegration: true,
+              }
+            })
+            newWin.loadFile('newWin.html')
+            newWin.on('closed', () => {
+              newWin = null
+            })
+          }
+        },
+        { label: 'Vue Cli' },
+        { label: 'Vue Router' }
+      ]
+    },
+    {
+      label: 'React',
+      submenu: [
+        { label: 'React Hooks' },
+        { label: 'React Router' },
+        { label: 'Redux' }
+      ]
+    },
+    {
+      label: 'Flutter',
+      submenu: [
+        { label: 'Dart' },
+        { label: 'Provider' },
+        { label: 'Fluro' },
+      ]
+    }
+  ]
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template))
+  ```
+
+* 在 main.js 中引入 menu.js，
+  
+  ```javascript
+  
+  var { app, BrowserWindow } = require('electron')
+  var mainWindow = null // 主窗口
+  
+  app.on('ready', () => {
+  mainWindow = new BrowserWindow({
+      height: 800,
+      height: 600,
+      webPreferences: {
+        nodeIntegration: true
+      },
+    })
+    // 菜单修改后，我们就不能通过View=>Toggle Developer Tools来打开调试模式了
+    // 可以通过快捷键ctrl+shift+i打开调试模式
+    // 下面的方法可以在启动项目打开应用后，默认打开调试模式
+    mainWindow.webContents.openDevTools()
+    // 引入menu.js
+    require('./main/menu.js')
+    mainWindow.loadFile('index.html') 
+    mainWindow.on('closed', () => { 
+      mainWindow = null
+    })
+  })
+  ```
+
+## 6 右键菜单
+
+右键菜单功能需要写在**渲染进程**中，其实是给 index.html 添加一个右击事件。在 index.html 引入的 JS 中写我们的逻辑：
+
+```javascript
+// Menu是一个主进程模块，需要使用Remote
+const { remote: { Menu }, remote } = require('electron')
+// 菜单模板
+const rightTemplate = [
+  { label: '复制', accelerator: 'ctrl+c' },
+  { label: '粘贴', accelerator: 'ctrl+v' },
+]
+// 创建菜单
+const rightMenu = Menu.buildFromTemplate(rightTemplate)
+// contextmenu是右击事件
+window.addEventListener('contextmenu', (e) => {
+  e.preventDefault()
+  // 把菜单变成右键菜单
+  rightMenu.popup({
+    window: remote.getCurrentWindow()
+  })
+})
+```
+
+## 7 使用浏览器打开链接
+
+index.html 中有一个 a 标签，a 标签点击后默认会在当前 Electron 应用窗口中打开链接，而我们想实现的效果是点击 a 标签后用系统默认浏览器打开链接。
+
+```html
+<a href="https://zoeeying.github.io" id="blogLinkBtn">小畅叙的博客</a>
+<script src="render/events.js"></script>
+```
+
+```javascript
+// events.js文件中
+// shell可以使用在渲染进程中
+const { shell } = require('electron')
+const blogLinkBtn = document.querySelector('#blogLinkBtn')
+blogLinkBtn.onclick = function (e) {
+  // 因为要在函数体中使用this，所以不能使用箭头函数
+  e.preventDefault()
+  const href = this.getAttribute('href')
+  shell.openExternal(href)
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
