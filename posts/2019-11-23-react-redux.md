@@ -5,7 +5,7 @@ date: 2019-11-23
 
 # react-redux
 
-一个 React 插件库，专门用来简化在 React 应用中使用 Redux。
+react-redux 是一个 React 插件库，专门用来简化在 React 应用中使用 Redux。
 
 ## 1 理解
 
@@ -13,7 +13,7 @@ react-redux 将所有组件分为两大类：
 
 #### (1) UI 组件
 
-只负责 UI 的呈现，不带任何业务逻辑，通过 props 接收数据（一般数据和函数），不使用 Redux 的 API，一般保存在 components 文件夹下。如下面案例中的 Counter 组件。
+UI 组件只负责 UI 的呈现，不带任何业务逻辑，通过 props 接收数据（一般数据和函数），不使用 Redux 的 API，一般保存在 components 文件夹下。如下面案例中的 Counter 组件。
 
 #### (2) 容器组件
 
@@ -60,7 +60,7 @@ const mapStateToProps = state => ({ count: state })
 
 ## 3 使用步骤
 
-**步骤一：** 下载依赖包。
+**步骤1：** 下载依赖包。
 
 ```bash
 npm install --save react-redux
@@ -68,19 +68,18 @@ npm install --save prop-types
 npm install --save redux-thunk
 ```
 
-**步骤二：** 在 redux 文件夹中新建 action-types.js、actions.js、reducers.js、store.js 文件。
+**步骤2：** 在 redux 文件夹中新建 action-types.js、actions.js、reducers.js、store.js 文件。
 
 ```jsx
 // store.js
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
+import { counter } from './reducers' 
 
-// import { counter } from './reducers' // 如果reducers.js中只有一个reducer比如counter
-import reducers from './reducers' // 如果reducers.js中包含多个reducer
 // 生成一个store对象
 const store = createStore(
   counter,
-  applyMiddleware(thunk), // 应用上异步的中间件
+  applyMiddleware(thunk), // 应用异步的中间件
 ) // 内部会第一次调用reducer函数得到初始state
 export default store
 ```
@@ -95,7 +94,6 @@ export const DECREMENT = 'DECREMENT'
 ```jsx
 // actions.js
 /**
- * 包含所有action creator
  * 同步的action返回一个对象
  * 异步的action返回一个函数
  **/
@@ -105,7 +103,7 @@ export const increment = (number) => ({ type: INCREMENT, data: number })
 export const decrement = (number) => ({ type: DECREMENT, data: number })
 /**
  * 异步action
- * 在store.js中applyMiddleware(thunk)，才可以返回一个函数，默认只能返回对象
+ * 在store.js中应用异步的中间件applyMiddleware(thunk)，才可以返回一个函数，默认只能返回对象
  */
 export const incrementAsync = (number) => (
   dispatch => {
@@ -155,7 +153,7 @@ export default combineReducers({ counter, comments })
 // { counter: 12, comments: [] }
 ```
 
-**步骤三：** 在主组件中，比如本案例 index.js 中，从 react-redux 中引入组件 Provider，把 App 组件包起来，同时把 store 对象传给组件 Provider。
+**步骤3：** 在主组件中，比如本案例 index.js 中，从 react-redux 中引入组件 Provider，把 App 组件包起来，同时把 store 对象传给组件 Provider。
 
 ```jsx
 import React from 'react'
@@ -172,7 +170,7 @@ ReactDOM.render((
 ), document.getElementById('root'))
 ```
 
-**步骤四：** 在子组件中，比如本案例 Counter.js 中，通过 props 获取状态和 actions。
+**步骤4：** 在子组件中，比如本案例 Counter.js 中，通过 props 获取状态和 actions。
 
 ```jsx
 import PropTypes from 'prop-types'
@@ -195,7 +193,7 @@ export default class Counter extends Component {
 }
 ```
 
-**步骤五：** 新建一个 containers 文件夹，在文件夹中新建文件 App.js，在 App.js 中引入 react-redux 中的 connect 方法，引入 actions、Counter 组件，用 connect 方法把 Counter 组件包装一下（把状态和 actions 注入 Counter 组件），然后暴露出去。
+**步骤5：** 新建一个 containers 文件夹，在文件夹中新建文件 App.js，在 App.js 中引入 react-redux 中的 connect 方法，引入 actions、Counter 组件，用 connect 方法把 Counter 组件包装一下（把状态和 actions 注入 Counter 组件），然后暴露出去。
 
 ```jsx
 import { connect } from 'react-redux'
@@ -211,15 +209,15 @@ export default connect(
 
 ## 4 使用 Redux 调试工具
 
-**步骤一：** 安装 Chrome 浏览器插件
+**步骤1：** 安装 Chrome 浏览器插件
 
-**步骤二：** 下载工具依赖包
+**步骤2：** 下载工具依赖包
 
 ```bash
 npm install --save-dev redux-devtools-extension
 ```
 
-**步骤三：** 在 store.js 中使用插件把中间件包起来
+**步骤3：** 在 store.js 中使用插件把中间件包起来
 
 ```jsx
 import { createStore, applyMiddleware } from 'redux'
@@ -230,7 +228,7 @@ import { counter } from './reducers'
 // 生成一个store对象
 const store = createStore(
   counter,
-  composeWithDevTools(applyMiddleware(thunk)), // 应用上异步的中间件
+  composeWithDevTools(applyMiddleware(thunk)), // 应用异步的中间件
 ) // 内部会第一次调用reducer函数得到初始state
 export default store
 ```

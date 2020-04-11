@@ -5,17 +5,17 @@ date: 2019-11-17
 
 # React Hooks
 
-React Hooks 是用**函数的形式**代替原来的**继承类的形式**来定义组件，并且使用**预函数**的形式管理 state。React Hooks 可以在无需修改组件结构的情况下**复用状态逻辑**，将组件中相互关联的部分拆分成更小的函数（比如设置订阅或请求数据）。
+React Hooks 是用**函数的形式**代替原来的**继承类的形式**来定义组件的。React Hooks 可以在无需修改组件结构的情况下**复用状态逻辑**，将组件中相互关联的部分拆分成更小的函数（比如设置订阅或请求数据），而并非强制按照生命周期划分。
 
 **组件类的缺点：** 大型组件很难拆分和重构，也很难测试；业务逻辑分散在组件的各个方法之中，导致重复逻辑或关联逻辑；组件类引入了复杂的编程模式，比如 render props 和高阶组件。
 
 **使用 Hooks 的规则：** 只能在**函数最外层**调用 Hooks，不要在循环、条件判断或者嵌套函数中调用；只能在 **React 的函数组件**中调用 Hooks；不要在其他普通 JavaScript 函数中调用（自定义的 Hooks 中也可以调用 Hooks）。
 
-只要 Hooks 的调用顺序在多次渲染之间保持一致，React 就能正确地将内部 state 和对应的 Hooks 进行关联。**这就是为什么 Hooks 需要在我们组件的最顶层调用。**  
+只要 Hooks 的调用顺序在多次渲染之间保持一致，React 就能正确地将内部 state 和对应的 Hooks 进行关联。**这就是为什么 Hooks 需要在我们组件的最顶层调用。**
 
 ## 1 小案例
 
-**步骤一：** 安装 create-react-app，使用 create-react-app 创建一个项目
+**步骤1：** 安装 create-react-app，使用 create-react-app 创建一个项目
 
 ```bash
 cnpm install create-react-app -g
@@ -24,7 +24,7 @@ cd demo01
 npm start
 ```
 
-**步骤二：** 使用组件类的计数器例子
+**步骤2：** 使用组件类的计数器例子
 
 ```jsx
 import React, { Component } from 'react'
@@ -36,22 +36,21 @@ export default class Counter extends Component {
     }
   }
   render () {
+    const { count } = this.state
     return (
       <>
-        <p>点击了 {this.state.count} 次</p>
+        <p>点击了 {count} 次</p>
         <button onClick={this.addCount}>点击</button>
       </>
     )
   }
   addCount = () => {
-    this.setState({
-      count: this.state.count + 1
-    })
+    this.setState(prevState => ({ count: prevState.count + 1 }))
   }
 }
 ```
 
-**步骤三：** 使用 React Hooks 改写上面的计数器例子
+**步骤3：** 使用 React Hooks 改写上面的计数器例子
 
 ```jsx
 import React, { useState } from 'react'
@@ -92,7 +91,7 @@ React 可以在调用每个组件之前设置 Hooks 数组，它开始是空的�
 
 #### (1) 给 useState 传递函数
 
-如果初始 state 需要通过复杂计算获得，则可以传入一个函数，在函数中计算并返回初始的 state，此函数只在初始渲染时被调用。
+如果初始 state 需要通过复杂计算获得，则可以传入一个函数，在函数中计算并返回初始的 state，此函数只在**初始渲染**时被调用。
 
 ```jsx
 const [state, setState] = useState(() => {
@@ -155,7 +154,7 @@ npm install eslint-plugin-react-hooks --save-dev
 
 ## 4 useContext
 
-React Context 提供了一种在组件之间**共享状态**的方法，而不必显式地通过组件树逐层传递 props。React Context 的设计目的是为了共享那些对于一个组件树而言是**全局**的状态。我们可以使用 useContext 来改写传统的类组件中的 Context 写法，useContext 接收一个 Context 对象（`React.createContext` 的返回值）并返回该 Context 的当前值。
+React Context 提供了一种在组件之间**共享状态**的方法，而不必显式地通过组件树逐层传递 props。React Context 的设计目的是为了共享那些对于一个组件树而言是**全局**的状态。我们可以使用 useContext 来改写传统的类组件中的 Context 写法，useContext 接收一个 **Context 对象**（`React.createContext` 的返回值）并返回该 Context 的当前值。
 
 ```jsx
 // Context可以让我们无须明确地传遍每一个组件，就能将值深入传递进组件树
@@ -248,7 +247,7 @@ function App() {
 
 [使用 useReducer 和 useContext 代替 Redux 的小案例：]( https://github.com/zoeeying/react-redux-learning )
 
-**步骤一：** 新建一个文件 redux.js，用于放使用 Context 管理的状态以及使用 useReducer 改变状态的操作。
+**步骤1：** 新建一个文件 redux.js，用于放使用 Context 管理的状态以及使用 useReducer 改变状态的操作。
 
 ```jsx
 import React, { createContext, useReducer } from 'react'
@@ -280,7 +279,7 @@ export const Color = props => {
 }
 ```
 
-**步骤二：** 新建 ShowText.js 文件，创建 ShowText 组件。
+**步骤2：** 新建 ShowText.js 文件，创建 ShowText 组件。
 
 ```jsx
 import React, { useContext } from 'react'
@@ -294,7 +293,7 @@ export default () => {
 }
 ```
 
-**步骤三：** 新建 Buttons.js 文件，创建 Buttons 组件。
+**步骤3：** 新建 Buttons.js 文件，创建 Buttons 组件。
 
 ```jsx
 import React, { useContext } from 'react'
@@ -314,7 +313,7 @@ export default () => {
 }
 ```
 
-**步骤四：** 新建 index.js 文件作为入口文件。
+**步骤4：** 新建 index.js 文件作为入口文件。
 
   ```jsx
   import React from 'react'
@@ -339,7 +338,7 @@ export default () => {
 
 使用类组件进行 React 开发时，经常会遇到组件重复渲染的问题，父组件中一个 state 发生了变化，会导致该组件的所有子组件都重写 render，即使绝大多数子组件的 props 没有变化，shouldComponentUpdate 生命周期函数可以减少这种重复渲染。如果使用 React Hooks 的话，也会遇到类似的问题，可以使用 useMemo 这个钩子函数。
 
-useMemo 是缓存状态，useCallback 是缓存方法。
+如果一个函数不想在每次重新渲染的时候都执行，可以使用 useMemo 来让其只在某个 state 改变时才执行。
 
 ```jsx
 import React, { useState, useMemo } from 'react'
@@ -380,7 +379,45 @@ const Child = ({ button1, button2 }) => {
 }
 ```
 
-## 6 useRef
+## 7 useCallback
+
+useCallback 和 useMemo 的参数跟 useEffect（用于处理副作用，而 useCallback 和 useMemo 不可以）一致。
+
+useMemo 和 useCallback 都会在组件第一次渲染的时候执行，之后会在其依赖的变量发生改变时再次执行，并且它们都返回缓存的值，useMemo 返回缓存的变量，useCallback 返回缓存的函数。
+
+有一个父组件，其中包含子组件，子组件接收一个函数作为 props，通常而言，如果父组件更新了，子组件也会执行更新，但是大多数场景下，更新是没有必要的，可以借助 useCallback 来返回函数，然后把这个函数作为 props传递给子组件，这样，子组件就能避免不必要的更新。
+
+```react
+import React, { useState, useCallback, useEffect } from 'react'
+function Parent() {
+  const [count, setCount] = useState(1)
+  const [val, setVal] = useState('')
+
+  const callback = useCallback(() => {
+    return count
+  }, [count])
+  return (
+    <div>
+      <h4>{count}</h4>
+      <Child callback={callback} />
+      <div>
+        <button onClick={() => setCount(count + 1)}>+</button>
+        <input value={val} onChange={(event) => setVal(event.target.value)} />
+      </div>
+    </div>
+  )
+}
+
+function Child({ callback }) {
+  const [count, setCount] = useState(() => callback())
+  useEffect(() => {
+    setCount(callback())
+  }, [callback])
+  return <div>{count}</div>
+}
+```
+
+## 8 useRef
 
 useRef 可以用来获取 DOM 元素，也可以用来保存变量。
 
@@ -415,7 +452,7 @@ export default () => {
 }
 ```
 
-## 7 自定义 Hooks
+## 9 自定义 Hooks
 
 通过自定义 Hooks，可以将组件逻辑提取到可重用的函数中来复用状态逻辑，但是它不复用 state 本身，在复用状态逻辑的组件中，各自的 state 是相互独立的。事实上 Hooks 的每次调用都有一个完全独立的 state，因此可以在单个组件中多次调用同一个自定义 Hook。
 
@@ -462,3 +499,6 @@ export default () => {
   )
 }
 ```
+
+
+

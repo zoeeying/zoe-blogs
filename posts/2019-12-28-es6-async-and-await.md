@@ -29,15 +29,7 @@ async function foo () {
 }
 ```
 
-**async&await 的特点如下：**
-
-a. 不需要像 Generator 那样去调用 next 方法，遇到 await 等待当前的异步操作完成再往下执行。
-
-b. 返回的是 Promise 对象，可以用 then 方法进行下一步操作。
-
-c. 取代 Generator 函数的星号，await 取代 Generator 函数的 yield。
-
-d. 语义上更为明确，使用简单，暂时没有什么缺点。
+**async&await 的特点：**不需要像 Generator 那样去调用 next 方法，遇到 await 等待当前的异步操作完成再往下执行；返回的是 Promise 对象，可以用 then 方法进行下一步操作，进一步说，async 函数可以看作是由多个异步操作包装成的一个 Promise 对象，而 await 命令就是内部 then 命令的语法糖；取代 Generator 函数的星号，await 取代 Generator 函数的 yield；语义上更为明确，使用简单，暂时没有什么缺点。
 
 ## 2 基本用法
 
@@ -70,7 +62,7 @@ async function test () {
 test()
 ```
 
-await 也可以等待普通函数来模拟异步，普通函数必须返回 Promise 对象。
+await 也可以等待普通函数来模拟异步，**普通函数必须返回 Promise 对象**。
 
 ```javascript
 function takeLongTime () {
@@ -129,7 +121,7 @@ Flutter 中支持 async&await 。这一点和 ES7 很像，如下代码所示，
 ```dart
 // 模拟等待两秒，返回OK
 request() async {
-  await Future.delayed(Duration(seconds: 1))
+  await Future.delayed(Duration(seconds: 2))
     return "ok!"
 }
 

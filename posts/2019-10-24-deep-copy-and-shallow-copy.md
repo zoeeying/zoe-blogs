@@ -29,22 +29,38 @@ JavaScript 数据类型分为基本类型和引用类型。
 
 #### (1) 遍历
 
+遍历的方法有很多，这里只是使用了 map 方法，它会返回一个新数组，数组中的元素为原始数组元素调用函数处理后的值。
+
+```javascript
+let arr = [1, 2, 3, 4, 5]
+let arrCopy = arr.map(item => item)
+arrCopy[0] = 100
+console.log(arr) // [ 1, 2, 3, 4, 5 ]
+console.log(arrCopy) // [ 100, 2, 3, 4, 5 ]
+```
+
 #### (2) ES6 扩展运算符
+
+```javascript
+let arr = [1, 2, 3, 4, 5]
+let arrCopy = [...arr]
+arrCopy[0] = 100
+console.log(arr) // [ 1, 2, 3, 4, 5 ]
+console.log(arrCopy) // [ 100, 2, 3, 4, 5 ]
+```
 
 #### (3) slice
 
-`Array.prototype.slice()`，从已有的数组中返回选定的元素组成的新数组，不改变原数组。
+`Array.prototype.slice(start, end)`，从已有的数组中返回选定的元素组成的新数组，不改变原数组。
+
+start 表示起始元素的下标，end 表示终止元素的下标，新数组不包括 end；如果不带任何参数，默认返回一个和原数组元素相同的新数组；如果有负数参数，则用数组长度加上该负数来确定相应的值；如果 end 小于 start，则返回空数组。
 
 ```javascript
-// 用法，start表示起始元素的下标，end表示终止元素的下标，新数组不包括end
-// 如果不带任何参数，默认返回一个和原数组元素相同的新数组
-array.slice(start, end)
-
 let arr = [1, 2, 3, 4]
-let copyArr = arr.slice()
-copyArr[0] = 100
+let arrCopy = arr.slice()
+arrCopy[0] = 100
 console.log(arr) // [1, 2, 3, 4]
-console.log(copyArr) // [100, 2, 3, 4]
+console.log(arrCopy) // [100, 2, 3, 4]
 ```
 
 #### (4) concat
@@ -58,14 +74,14 @@ array.concat(array1, array2, ......, arrayN)
 
 let arr = [1, 2, 3, 4]
 let copyArr = arr.concat()
-copyArr[0] = 100
+arrCopy[0] = 100
 console.log(arr) //[1, 2, 3, 4]
-console.log(copyArr) //[100, 2, 3, 4]
+console.log(arrCopy) //[100, 2, 3, 4]
 
 // 如果数组中的元素有对象（数组），那么修改对象（数组），会影响原数组
 let arr = [1, 3, { username: 'zoe' }]
-let copyArr = arr.concat() // 不传入参数，相当于拷贝原数组
-copyArr[2].username = 'chao'
+let arrCopy = arr.concat() // 不传入参数，相当于拷贝原数组
+arrCopy[2].username = 'chao'
 console.log(arr) // [ 1, 3, { username: 'chao' } ]
 ```
 
@@ -75,13 +91,38 @@ console.log(arr) // [ 1, 3, { username: 'chao' } ]
 
 #### (1) 遍历
 
+```javascript
+let obj = {
+  name: '小畅叙',
+  job: '程序员'
+}
+let objCopy = {}
+Object.keys(obj).forEach(item => {
+  objCopy[item] = obj[item]
+})
+objCopy.job = '画家'
+console.log(obj) // { name: '小畅叙', job: '程序员' }
+console.log(objCopy) // { name: '小畅叙', job: '画家' }
+```
+
 #### (2) 扩展运算符
 
 ES6 扩展运算符，用于取出参数对象的所有可遍历属性，拷贝到当前对象之中。
 
+```javascript
+let obj = {
+  name: '小畅叙',
+  job: '程序员'
+}
+let objCopy = { ...obj }
+objCopy.job = '画家'
+console.log(obj) // { name: '小畅叙', job: '程序员' }
+console.log(objCopy) // { name: '小畅叙', job: '画家' }
+```
+
 #### (3) Object.assign
 
-ES6 的 `Object.assign()` 用于对象的合并，将源对象（source）的所有可枚举属性复制到目标对象（target），并返回 target。
+ES6 的 `Object.assign()` 用于对象的合并，将源对象（source）的所有**可枚举属性**复制到目标对象（target），并返回 target。
 
 ```javascript
 // 用法
@@ -97,16 +138,17 @@ copyObj.name = '我不是小畅叙'
 console.log(obj) // {name: '小畅叙', job: '程序员'}
 console.log(copyObj) // {name: '我不是小畅叙', job: '程序员'}
 
-// 把obj作为目标对象
+// 把obj作为目标对象，修改obj2会影响obj
 let obj = { name: 'zoe' }
 let obj2 = Object.assign(obj)
 obj2.name = 'chao'
 console.log(obj) // { name: 'chao' }
+console.log(obj2) // { name: 'chao' }
 ```
 
 ## 4 深拷贝数组和对象
 
-如果第一层级对象属性或数组元素中有引用类型数据，那么如果改变这些引用类型数据，还是会导致原对象或者原数组改变。可以采用下面的方法实现完全的深拷贝：
+如果对象属性或数组元素中有引用类型数据，上面的方法都不行，如果改变这些引用类型数据，还是会导致原对象或者原数组改变。可以采用下面的方法实现完全的深拷贝：
 
 #### (1) JSON 转换
 
@@ -115,6 +157,7 @@ console.log(obj) // { name: 'chao' }
 #### (2) 使用 lodash 库
 
 ```javascript
+import _ from 'lodash'
 _.cloneDeep(obj)
 ```
 

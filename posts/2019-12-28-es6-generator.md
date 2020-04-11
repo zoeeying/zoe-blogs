@@ -7,29 +7,17 @@ date: 2019-12-28
 
 ## 1 简介
 
-#### (1) 基本概念
+Generator 函数是 ES6 提供的解决异步编程的方案之一，语法行为与传统完全不同。从语法上，可以把 Generator 函数理解成一个状态机，封装了多个内部状态。执行 Generator 函数会返回一个遍历器对象，也就是说 Generator 函数不仅是状态机，还是一个遍历器对象生成函数，返回的遍历器对象可以依次遍历 Generator 函数内部的每一个状态。
 
-a. 是 ES6 提供的解决异步编程的方法之一。
+Generator 函数也可称为**可暂停函数（惰性求值函数）**，yield 可暂停，next 方法可启动，每次返回的是 yield 后面的表达式结果。
 
-b. 是一个状态机，内部封装了不同状态的数据。
+从形式上看，Generator 函数是一个普通函数，但是它有两个**特征**：一是 function 命令与函数名之间有一个星号；二是函数内部使用 yield 语句定义不同的内部状态。
 
-c. 是用来生成遍历器对象的。
+Generator 函数的调用方法与普通函数一样，不同的是，调用 Generator 函数后，该函数并不执行，返回的也不是函数运行结果，而是一个指向内部状态的指针对象（遍历器对象）。
 
-d. 也可称为**可暂停函数（惰性求值函数）**，yield 可暂停，next 方法可启动，每次返回的是 yield 后面的表达式结果。
+必须调用遍历器对象的 next 方法，使得指针移向下一个状态，也就是说，每次调用 next 方法，内部指针就从函数头部或上一次停下来的地方开始执行，直到遇到下一条 yield 语句（或者 return 语句）为止。遇到 yield 语句会暂停执行，返回 `{ value: yield后表达式结果/undefined, done: true/false }`，yield 语句返回值通常为 undefined，当调用 next 方法时，传参内容会作为被启动的 yield 语句的返回值。
 
-#### (2) 特征
-
-a. function 与函数名之间有一个星号。
-
-b. 函数体内部使用 yield 语句定义不同的状态。
-
-c. Generator 函数返回的是指针对象，而不会执行函数内部的逻辑。
-
-d. 调用 next 方法函数内部逻辑开始执行，遇到 yield 暂停执行，返回 `{ value: yield后表达式结果/undefined, done: true/false }`。
-
-e. 再次调用 next 方法会从上一次停止时的 yield 处开始，直到最后。
-
-f. yield 语句返回值通常为 undefined，当调用 next 方法时，传参内容会作为被启动的 yield 语句的返回值。
+Generator 函数是分段执行的，yield 语句是暂停执行的标记，而 next 方法可以恢复执行。
 
 ```js
 function* myGenerator() {
