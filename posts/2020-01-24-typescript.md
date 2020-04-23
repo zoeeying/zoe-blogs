@@ -9,21 +9,24 @@ date: 2020-01-24
 
 Node 之父 Ryan Dahl 开源来了一个项目叫作 Deno，并且宣称 Deno 将是 Node 的代替品。Deno is a secure runtime for JavaScript and TypeScript and it aims to provide a productive and secure scripting environment for the modern programmer. It is built on top of V8, Rust, and TypeScript.
 
-TypeScript 是 JavaScript 的一个超集，是静态类型语言，是由微软开发的自由和开源的编程语言，设计目标是开发大型应用。TypeScript 不可以直接运行在浏览器环境或者 node 环境，必须编译成 JavaScript 才行。
+TypeScript 是 JavaScript 的一个超集，是**静态类型语言**，是由微软开发的自由和开源的编程语言，设计目标是开发大型应用。TypeScript 不可以直接运行在浏览器环境或者 node 环境，必须编译成 JavaScript 才行。
 
-**补充：** TypeScript 是静态类型语言，即在运行之前的编译阶段就检查数据类型；JavaScript 是动态类型语言，即在运行时才去做数据类型检查。
+**补充：** TypeScript 是静态类型语言，即在运行之前的编译阶段就检查数据类型；JavaScript 是动态类型语言，即在运行时才去检查数据类型。
 
 **TypeScript 相对于 JavaScript 的优势：**
 
-a. 有更好的错误提示，可以让我们在开发过程中，就发现错误。
+有更好的错误提示，可以让我们在编写代码过程中就发现错误；开发的时候，编辑器可以提供更友好的代码提示；通过静态类型的声明，可以让代码语义更清晰易懂，可读性更强。
 
-b. 开发的时候，编辑器可以提供更友好的代码提示。
-
-c. 通过静态类型的声明，可以让代码语义更清晰易懂，可读性更强。
+```typescript
+function tsDemo(data: {x: number, y: number}) {
+  return Math.sqrt(data.x ** 2 + data.y ** 2)
+}
+tsDemo({ x: 3, y: 4 })
+```
 
 ```typescript
 // 在函数外边声明静态类型
-// type Point = { x: number; y: number } // 类型别名
+// type Point = { x: number; y: number } // 类型别名语法
 // interface接口可以替代上面的类型别名写法
 interface Point {
   x: number
@@ -37,58 +40,47 @@ tsDemo({ x: 3, y: 4 })
 
 ## 2 环境搭建
 
-**步骤一：** 安装 Node
+**步骤1：** 安装 Node
 
-**步骤二：** 全局安装 TS
-
-```bash
-cnpm install typescript -g
-```
-
-**步骤三：** 查看版本号
+**步骤2：** 全局安装 TypeScript，可以通过命令 `tsc --version` 查看 TS 的版本号，同时检查 TS 是否安装成功
 
 ```bash
-tsc --version
+npm install -g typescript
 ```
 
-**步骤四：** 初始化项目，生成 package.json 文件
-
-```bash
-npm init -y
-```
-
-**步骤五：** 生成 tsconfig.json 文件，用于配置如何将 TS 编译成 JS
-
-```bash
-tsc --init
-```
-
-**步骤六：** 安装 @types/node 包
-
-```bash
-cnpm install @types/node -S
-```
-
-**步骤七：** 新建 hello.ts 文件
+**步骤3：** 新建项目目录，在项目目录中新建文件 demo.ts
 
 ```typescript
-var a: string = 'Hello Zoe'
-console.log(a)
+function tsDemo(data: {x: number, y: number}) {
+  return Math.sqrt(data.x ** 2 + data.y ** 2)
+}
+tsDemo({ x: 3, y: 4 })
 ```
 
-**步骤八：** 构建一下，把 TS 文件转换成 JS 文件：在 VSCode 中使用命令 Ctrl+Shift+B，选择 tsc: build - tsconfig.json。
+**步骤4：** 在项目目录下执行命令 `tsc demo.ts`（使用 TypeScript 对 demo.ts 进行编译），生成 demo.js 文件，通过命令 `node demo.js` 运行该文件。其实可以使用工具可以简化这些步骤，需要全局安装 ts-node，然后通过命令 `ts-node demo.ts` 即可以完成对 demo.ts 文件的编译和运行
 
-**步骤九：** 使用 Node 运行 JS 文件。
+## 3 静态类型
 
-```bash
-node hello.js
+通过 `let count: number = 10` 可以声明一个 count 变量，它的类型只能是 number，同时，count 也会具备 number 静态类型所有的属性和方法。
+
+静态类型也可以自定义，如下：
+
+```typescript
+interface Point {
+  x: number
+  y: number
+}
+const point: Point = {
+  x: 3,
+  y: 4,
+}
 ```
 
-## 2 数据类型
+如果一个变量是静态类型，那么该变量的类型是不能修改的，同时也确定了该变量上的属性和方法。
 
-TypeScript 中的数据类型：
+#### (1) 基础类型
 
-| 数据类型  | 描述                                                     |
+| 基础类型  | 描述                                                     |
 | --------- | -------------------------------------------------------- |
 | undefined | 声明一个变量，没有赋值，默认就是 undefined               |
 | number    | 数值类型，既支持整型，也支持浮点型，NaN 也是 number 类型 |
@@ -102,16 +94,16 @@ TypeScript 中的数据类型：
 | null      | 空类型                                                   |
 
 ```typescript
-var a: number
+let a: number
 console.log(a) // undefined
 
-var age: number = 18
+let age: number = 18
 console.log(age)
 
-var myName: string = '小畅叙'
+let myName: string = '小畅叙'
 console.log(myName)
 
-var b: boolean = false
+let b: boolean = false
 console.log(b)
 
 // enum枚举类型，比如四季(春、夏、秋、冬)
@@ -120,24 +112,68 @@ console.log(SEASON.qiu) // 2，索引
 enum SEASON2 { chun = '春', xia = '夏', qiu = '秋', dong = '冬' }
 console.log(SEASON2.qiu) // 秋
 
-var t: any = 28
+let t: any = 28
 t = 'Zoe'
 ```
 
-## 3 函数
+#### (2) 对象类型
 
-### 3.1 函数定义的三种方式
+```typescript
+// 对象
+const student: { name: string; age: number } = { name: 'zoe', age: 28 }
+// 数组
+const numbers: number[] = [1, 2, 3]
+// 类
+class Person {}
+const zoe: Person = new Person()
+// 函数
+const getTotal: () => number = () => {
+  return 4869
+}
+```
+
+#### (3) 类型注解
+
+类型注解的英文是 type annotation，是指显式地声明一个固定类型的变量。
+
+#### (4) 类型推断
+
+类型推断的英文是 type inference，是指 TypeScript 会自动地去尝试分析变量的类型。
+
+#### (5) 总结
+
+写 TypeScript 代码的时候，就是希望每个对象的属性以及每个变量的类型都是固定的。如果 TS 能够自动分析出变量类型，就不需要使用类型注解，但是如果 TS 无法分析变量类型的话，就需要使用类型注解了。
+
+比如函数中的形参以及函数的返回值，需要使用类型注解：
+
+```typescript
+function getTotal(first: number, second: number): number {
+  return first + second
+}
+const total = getTotal(3, 5)
+```
+
+## 4 函数
+
+### 4.1 三种定义方式
 
 #### (1) 函数声明法
 
 ```typescript
-// 必须使用 function 关键字来定义函数，:string表示函数返回的数据类型是string
+// 使用 function 关键字来定义函数，:string表示函数返回的数据类型是string
 // age: number是形参
 function searchPerson(age: number): string {
   return '找到了' + age + '岁的人'
 }
 // 28是实参
 console.log(searchPerson(28))
+```
+
+```javascript
+// 该函数没有返回值
+function sayHello(): void {
+  console.log('Hello')
+}
 ```
 
 #### (2) 函数表达式法
@@ -158,7 +194,7 @@ const searchPerson = (age: number): string => '找到了' + age + '岁的人'
 console.log(searchPerson(28))
 ```
 
-### 3.3 函数分类
+### 3.2 函数分类
 
 #### (1) 有可选参数的函数
 

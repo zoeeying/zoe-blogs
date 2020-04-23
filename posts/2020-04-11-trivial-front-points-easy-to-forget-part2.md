@@ -1,12 +1,34 @@
-# 前端琐碎知识点
+# 前端琐碎知识点2
 
-## 1 CSS3 
+## 1 CSS3 选择器
 
- `:nth-of-type(n)` 选择器匹配同类型中的第 n 个同级兄弟元素。`:nth-of-type` 中也可以放 odd  或者 even 表示匹配奇数索引元素或者偶数索引元素（索引从 1 开始）。 
+`:nth-of-type(n)`  选择器匹配同类型中的第 n 个同级兄弟元素，同类型可以嵌套，但是只要满足要求都会被查找到。`:nth-of-type`  中也可以放 odd 或者 even 表示匹配奇数索引元素或者偶数索引元素（索引从 1 开始）。
 
 ```css
-div:nth-of-type(odd){
+div:nth-of-type(odd) {
   background: red;
+}
+```
+
+```html
+<div class="container">
+  <div>
+    <div>1</div>
+    <div>红色</div>
+    <span>
+      <div>1</div>
+      <div>红色</div>
+      <div>1</div>
+    </span>
+    <div>1</div>
+  </div>
+  <div>红色</div>
+</div>
+```
+
+```css
+.container div:nth-of-type(2) {
+  color: red;
 }
 ```
 
@@ -15,7 +37,7 @@ div:nth-of-type(odd){
 `require.resolve(moduleName)` 可以用来获取模块的完整路径，一个模块一旦被加载就会被缓存起来，也就是多次加载只会返回同一个对象，一个模块内加载的所有模块都存储在 require.cache 这个对象中，这个对象以模块完整路径为 key，以模块内容为 value。所以可以通过下面的方法来删除缓存，从而每次都能拿到 paths.js 文件中最新的内容。
 
 ```javascript
-delete require.cache[require.resolve('./paths')];
+delete require.cache[require.resolve('./paths')]
 ```
 
 `process.cwd()` 是当前执行 node 命令时的文件夹地址（当前 node 进程的工作目录），保证了文件在不同的目录下执行时，路径始终不变。而 `__dirname` 指的是被执行的 JS 文件的地址（文件所在目录），它不是全局变量，而是每个模块内部的。`realpathSync()` 方法以同步的方式查看文件或者目录的绝对路径。
@@ -23,13 +45,13 @@ delete require.cache[require.resolve('./paths')];
 node 中有个全局变量 process，表示的是当前的 node 进程，它是一个对象，process.env 包含了用户环境信息。下面的代码表示往 process.env 中增加了两个变量（属性） BABEL_ENV 和 NODE_ENV，值都为 `'production'`。在整个 node 执行过程中，都可以读取到这两个变量。
 
 ```javascript
-process.env.BABEL_ENV = 'production';
-process.env.NODE_ENV = 'production';
+process.env.BABEL_ENV = 'production'
+process.env.NODE_ENV = 'production'
 ```
 
 ## 3 单竖杠
 
-在 JS 中，`Number | 0 ` 就是把 Number 后面的小数点全部去掉，无论正负数。
+在 JS 中，`Number | 0` 就是把 Number 后面的小数点全部去掉，无论正负数。
 
 Vue.js 中的过滤器也使用到了单竖杠。
 
@@ -41,5 +63,13 @@ Vue.js 中的过滤器也使用到了单竖杠。
 
 事件代理是指通过事件冒泡把所点击的元素代理在他的父元素上。
 
+## 6 快速生成一个数组
 
+比如我们想快速生成一个长度为 20 的对象数组，脑子里第一个想法是使用 for 循环，看到别人的写法，爱了爱了。
 
+```javascript
+Array.apply(null, { length: 20 }).map((item, index) => ({
+  id: index + 1,
+  name: `name${index + 1}`,
+}))
+```

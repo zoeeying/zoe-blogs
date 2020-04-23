@@ -120,13 +120,13 @@ react-transition-group 动画库可以实现在元素隐藏掉的时候，把 DO
 
 TransitionGroup 可以实现多 DOM 动画：每个 DOM 都用 CSSTransition 包裹起来，最外边再用 TransitionGroup 包裹起来。
 
-**步骤一：** 安装
+**步骤1：** 安装
 
 ```bash
 npm install react-transition-group -S
 ```
 
-**步骤二：** App.js
+**步骤2：** App.js
 
 ```react
 import React, { Component } from 'react'
@@ -150,7 +150,7 @@ class App extends Component {
           classNames="avatar" // CSS类名的前缀
           unmountOnExit // 最后元素隐藏掉的时候，删掉DOM元素
           appear // 出现的时候就有动画效果
-          >
+        >
           <div className="divBox" />
         </CSSTransition>
         <div>
@@ -168,7 +168,7 @@ class App extends Component {
 export default App
 ```
 
-**步骤三：** index.css
+**步骤3：** index.css
 
 ```css
 .divBox {

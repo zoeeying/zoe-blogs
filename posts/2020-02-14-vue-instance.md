@@ -5,24 +5,63 @@ date: 2020-02-14
 
 # Vue 实例
 
+## 1 简介
+
 代码地址：<https://github.com/zoeeying/vue-learning>
 
-## 1 实例入门
+Vue 是一套用于构建用户界面的**渐进式框架**。Vue.js 的核心是一个允许采用简洁的模板语法来**声明式**地将数据渲染进 DOM 的系统。
 
-通过实例我们可以在构造器外部操作构造器内部的属性和方法，这就给其它框架一个融合的机会，让 Vue 可以和其它框架一起使用。
+一个 Vue 应用由一个通过 `new Vue()` 创建的**根 Vue 实例**，以及可选的、嵌套的、可复用的组件树组成。所有的 Vue 组件都是 Vue 实例，并且接受相同的**选项对象**（一些根实例特有的选项除外）。
+
+使用 Vue，我们可以把数据绑定到 DOM 文本或 attribute，还可以绑定到 DOM **结构**（比如，通过 v-if 指令控制 DOM 元素的显示与消失）。
+
+当一个 Vue 实例被创建时，它将 `data` 对象中的所有的属性加入到 Vue 的**响应式系统**中，当这些属性的值发生改变时，视图将会产生**响应**，即匹配更新为新的值，进行重渲染。data 中的属性会成为 Vue 实例（一般用 vm 表示）的属性。值得注意的是只有当实例被创建时就已经存在于 `data` 中的属性才是**响应式**的，比如，通过 `vm.b = 'hi'` 添加的属性，即使修改了 b，也不会触发任何视图的更新。
+
+Vue 实例暴露了一些有用的**实例属性与方法**，它们都有前缀 `$`，以便与用户定义的属性区分开来，可以直接通过 `vm.$xxx` 的方式来使用。
+
+```javascript
+var data = { a: 1 }
+var vm = new Vue({
+  el: '#example',
+  data: data
+})
+
+// 获得这个实例上的属性，返回源数据中对应的字段
+vm.a == data.a // => true
+
+// 设置属性也会影响到原始数据
+vm.a = 2
+data.a // => 2
+
+// 反之亦然
+data.a = 3
+vm.a // => 3
+
+vm.$data === data // => true
+vm.$el === document.getElementById('example') // => true
+
+// $watch是一个实例方法
+vm.$watch('a', function (newValue, oldValue) {
+  // 这个回调将在vm.a改变后调用
+})
+```
+
+## 2 使用 jQuery
+
+通过实例我们可以在构造器外部操作构造器内部的数据和方法，这就给其它框架一个融合的机会，让 Vue 可以和其它框架一起使用。
 
 下面通过一个例子来看一下 Vue 和 jQuery 是怎么结合的。
 
-**步骤一：** 下载 jQuery，放在 assets/js 目录中
+**步骤1：** 下载 jQuery，放在 assets/js 目录中
 
-**步骤二：** 在 HTML 中引用一下 jQuery
+**步骤2：** 在 HTML 中引用一下 jQuery
 
 ```html
 <script type="text/javascript" src="../assets/js/vue.js"></script>
 <script type="text/javascript" src="../assets/js/jquery.min.js"></script>
 ```
 
-**步骤三：** 在 Vue 的 mounted 生命周期中使用 jQuery。只能在 DOM 元素挂载到页面上后才能使用 jQuery 操作 DOM 元素，比如 Vue 的 mounted 和 updated 生命周期中。
+**步骤3：** 在 Vue 的 mounted 生命周期函数中使用 jQuery。只能在 DOM 元素挂载到页面上后才能使用 jQuery 操作 DOM 元素，比如 Vue 的 mounted 和 updated 生命周期函数中。
 
 ```vue
 <div id="app">
@@ -50,12 +89,12 @@ date: 2020-02-14
 
 ## 2 实例方法（生命周期）
 
-| 方法         | 描述                                                                                                  |
-| ------------ | ----------------------------------------------------------------------------------------------------- |
-| $mount       | 用于挂载扩展                                                                                          |
-| $destroy     | 用于销毁（卸载）                                                                                      |
-| $forceUpdate | 用于更新                                                                                              |
-| $nextTick    | 用于数据修改。当构造器中的 data 被修改后会调用这个方法，也相当于一个钩子函数，跟 updated 生命周期很像 |
+| 方法         | 描述                                                         |
+| ------------ | ------------------------------------------------------------ |
+| $mount       | 如果 Vue 实例在实例化时没有收到 el 选项，则它处于**未挂载**状态，没有关联的 DOM 元素，可以使用 `vm.$mount()` 手动地挂载一个未挂载的实例。返回实例自身，因而可以链式调用其它实例方法。 |
+| $destroy     | 完全销毁一个实例，清理它与其它实例的连接，解绑它的全部指令及事件监听器，触发 `beforeDestroy` 和 `destroyed` 的钩子。 |
+| $forceUpdate | 迫使 Vue 实例重新渲染，注意它仅仅影响实例本身和插入插槽内容的子组件，而不是所有子组件。 |
+| $nextTick    | 将回调延迟到下次 DOM 更新循环之后执行。在修改数据之后立即使用它，然后等待 DOM 更新。 |
 
 ```vue
 <div id="app"></div>
@@ -84,7 +123,15 @@ date: 2020-02-14
       console.log('扩展被更新了')
     },
   })
+
+  // 创建并挂载到#app（会替换#app）
   var vm = new zoeExtend().$mount('#app')
+  // 同上
+  // var vm = new zoeExtend({ el: '#app' })
+  // 或者，在文档之外渲染并且随后挂载
+  // var component = new zoeExtend().$mount()
+  // document.getElementById('app').appendChild(component.$el)
+
   function destroy() {
     vm.$destroy()
   }
@@ -92,9 +139,12 @@ date: 2020-02-14
     vm.$forceUpdate()
   }
   function tick() {
+    // 修改数据
     vm.zoeName = '无敌小畅叙'
-    vm.$nextTick(() => {
-      console.log('数据修改后的回调')
+    // DOM还没有更新
+    vm.$nextTick(function () {
+      // DOM现在更新了
+      vm.doSomethingElse()
     })
   }
 </script>
@@ -102,14 +152,14 @@ date: 2020-02-14
 
 ## 3 实例方法（事件）
 
-实例事件是指，在构造器外部增加的事件，可以调用构造器内部的数据。
+实例事件是指在构造器外部增加的事件，可以调用构造器内部的数据。
 
-| 事件  | 描述                                                                                                                                                                     |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| $on   | 监听当前实例上的自定义事件。事件可以由 `vm.$emit` 触发。接收两个参数，第一个参数是事件函数名称，第二个参数是一个回调函数，回调函数会接收所有传入事件触发函数的额外参数。 |
-| $once | 监听一个自定义事件，但是只触发一次。一旦触发之后，监听器就会被移除。                                                                                                     |
-| $off  | 移除自定义事件监听器。如果没有提供参数，则移除所有的事件监听器；如果只提供了事件，则移除该事件所有的监听器；如果同时提供了事件与回调，则只移除这个回调的监听器。         |
-| $emit | 触发当前实例上的事件。附加参数都会传给监听器回调。                                                                                                                       |
+| 事件  | 描述                                                         |
+| ----- | ------------------------------------------------------------ |
+| $on   | 监听当前实例上的**自定义事件**。事件可以由 `vm.$emit` 触发。接收两个参数，第一个参数是事件函数名称，第二个参数是一个回调函数，回调函数会接收所有传入事件触发函数的额外参数。 |
+| $once | 监听一个自定义事件，但是只触发一次，一旦触发之后，监听器就会被移除。 |
+| $off  | 移除自定义事件监听器。如果没有提供参数，则移除所有的事件监听器；如果只提供了事件，则移除该事件所有的监听器；如果同时提供了事件与回调，则只移除这个回调的监听器。 |
+| $emit | 触发当前实例上的事件。附加参数都会传给监听器回调。           |
 
 ```vue
 <div id="app">
@@ -139,7 +189,7 @@ date: 2020-02-14
     }
   })
 
-  // 在构造器外部添加事件函数
+  // 在构造器外部添加自定义事件
   app.$on('reduce', function() {
     this.count--
   })
@@ -168,11 +218,40 @@ date: 2020-02-14
 </script>
 ```
 
+下面还有一个官方的例子，看起来会更明了一点：
+
+```javascript
+Vue.component('welcome-button', {
+  template: `
+    <button v-on:click="$emit('welcome')">
+      Click me to be welcomed
+    </button>
+  `
+})
+```
+
+```html
+<div id="emit-example-simple">
+  <welcome-button v-on:welcome="sayHi"></welcome-button>
+</div>
+```
+
+```javascript
+new Vue({
+  el: '#emit-example-simple',
+  methods: {
+    sayHi: function () {
+      alert('Hi!')
+    }
+  }
+})
+```
+
 ## 4 组件间通讯
 
-#### (1) props 和 $emit
+#### (1) 子组件向父组件传值
 
-在 VueCLI 项目中，我们可以通过**事件形式**实现子组件向父组件传值。使用 props 和 $emit。
+在 VueCLI 项目中，我们可以通过**事件形式**实现子组件向父组件传值。
 
 ```vue
 <!-- 子组件 -->
@@ -321,17 +400,18 @@ date: 2020-02-14
 下面看一个例子，使用 $ref 来访问子组件实例：
 
 ```vue
+<template id="zoe">
+	<div>
+  	<slot></slot>
+  </div>
+</template>
 
 <div id="app">
   <zoe ref="zoeRef">
     <p>我是小畅叙吖</p>
   </zoe>
 </div>
-<template id="zoe">
-	<div>
-    <slot></slot>
-  </div>
-</template>
+
 <script type="text/javascript">
   const zoe = {
     template: '#zoe',

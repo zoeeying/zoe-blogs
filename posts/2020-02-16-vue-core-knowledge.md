@@ -7,11 +7,21 @@ date: 2020-02-16
 
 代码地址：<https://github.com/zoeeying/vue-learning>
 
-## 1 全局 API
+## 1 模板语法
 
-全局 API 是指在构造器外部用 Vue 提供给我们的 API 函数定义新的功能，Vue 内置了一些全局 API，比如 Vue.directive（自定义指令）等。
+双大括号的文本插值语法也叫 **Mustache 语法**。使用 `v-once` 指令，可以执行一次性的插值，即数据改变的时候，插值处的内容不会改变，但要注意这会影响到该节点上的其它数据绑定。
 
-### 1.1 Vue.directive 自定义指令
+```vue
+<span v-once>这个将不会改变: {{ msg }}</span>
+```
+
+## 2 全局 API
+
+全局 API 是指在构造器外部用 Vue 提供给我们的 API 函数定义新的功能。
+
+### 2.1 Vue.directive
+
+Vue.directive 用于注册或获取全局指令。
 
 ```vue
 <div id="app">
@@ -24,15 +34,17 @@ date: 2020-02-16
   <button onclick="unbind()">解绑</button>
 </p>
 <script type="text/javascript">
-  // 解绑不能使用Vue的方法，需要使用原生的onclick以及定义函数的方式，且按钮要写在id为app的div外边
+  // 销毁不能使用Vue的方法，需要使用原生的onclick以及定义函数的方式，且按钮要写在id为app的div外边
   function unbind() {
-    app.$destroy() // 解绑
+    app.$destroy() // 销毁
   }
+  
   // Vue.directive('zoe', function (el, binding, vnode) {
-  //   // el是dom元素
+  //   // el是dom元素，这里将会被bind和update调用
   //   el.style = "color:" + binding.value
   //   console.log(binding)
   // })
+  
   Vue.directive('zoe', {
     bind: function (el, binding) {
       console.log('1 - bind')
@@ -51,6 +63,10 @@ date: 2020-02-16
       console.log('5 - unbind')
     }
   })
+  
+  // getter，返回已注册的指令
+  // var myDirective = Vue.directive('zoe')
+  
   var app = new Vue({
     el: '#app',
     data: {
@@ -95,14 +111,15 @@ Vue.directive 中传递的回调函数中的 binding 对象：
 
 **unbind：** 只调用一次，指令与元素解绑时调用。
 
-### 1.2 Vue.extend 构造器的延伸
+### 2.2 Vue.extend
 
-Vue.extend 返回的是**扩展实例构造器**，经常服务于 Vue.component 用来生成组件，可以简单理解为当在模板中遇到该组件名称作为标签的自定义元素时，会自动调用**扩展实例构造器**来生产组件实例，并挂载到自定义元素上。
+Vue.extend 使用基础 Vue 构造器，创建一个**子类**，参数是一个包含组件选项的对象。`data` 选项是特例，需要注意，在 `Vue.extend()` 中它必须是函数。
 
 ```vue
 <div id="zoe"></div>
 <zoe></zoe>
 <script type="text/javascript">
+  // 创建构造器
   var zoeExtend = Vue.extend({
     template: "<p><a :href='zoeUrl'>{{zoeName}}</a></p>",
     data: function () {
@@ -112,14 +129,15 @@ Vue.extend 返回的是**扩展实例构造器**，经常服务于 Vue.component
       })
     }
   })
+  // 创建zoeExtend实例，并挂载到一个元素上
   new zoeExtend().$mount('#zoe') // 挂载到id为zoe的div元素上，推荐使用
   new zoeExtend().$mount('zoe') // 挂载到自定义的zoe元素上
 </script>
 ```
 
-### 1.3 Vue.set 全局操作
+### 2.3 Vue.set
 
-Vue.set 的作用是在构造器外部操作构造器内部的数据、属性或者方法。
+`Vue.set(target, propertyName/index, value)` 向**响应式对象**中添加一个属性，并确保这个新属性同样是响应式的，且触发视图更新。它必须用于向响应式对象上添加新属性，因为 Vue 无法探测普通的新增属性。返回设置的值。注意对象不能是 Vue 实例，或者 Vue 实例的根数据对象。
 
 **构造器外部数据**是指在构造器外部声明，然后被构造器内部的 data 引用。
 
@@ -163,7 +181,7 @@ Vue.set 的作用是在构造器外部操作构造器内部的数据、属性或
 
 ## 2 Lifecycle 生命周期
 
-Vue 有 10 个生命周期函数（钩子函数），它们是在某些特定阶段会被自动触发的函数。我们可以利用这些函数在 Vue 的不同阶段操作数据或者改变内容。
+Vue 的生命周期函数（钩子函数）是在某些特定阶段会被自动触发的函数，我们可以利用这些函数在 Vue 的不同阶段操作数据或者改变内容。
 
 ```vue
 <div id="app">
@@ -186,8 +204,8 @@ Vue 有 10 个生命周期函数（钩子函数），它们是在某些特定阶
       console.log('1-beforeCreate 创建之前');
     },
     created: function () {
-      // data准备好了
-      // 可以在这里加载loading动画
+      // 用来在一个实例被创建之后执行代码
+      // data准备好了，可以在这里加载loading动画
       console.log('2-created 创建完成');
     },
     beforeMount: function () {
@@ -204,16 +222,11 @@ Vue 有 10 个生命周期函数（钩子函数），它们是在某些特定阶
     updated: function () {
       console.log('6-updated 更新后');
     },
-    activated: function () {
-      console.log('7-activated');
-    },
-    deactivated: function () {
-      console.log('8-deactivated');
-    },
     beforeDestroy: function () {
       console.log('9-beforeDestroy 销毁之前');
     },
     destroyed: function () {
+      // 解除绑定，销毁子组件以及事件监听器
       console.log('10-destroyed 销毁之后')
     }
   })
@@ -277,7 +290,9 @@ Vue 有 10 个生命周期函数（钩子函数），它们是在某些特定阶
 
 ## 4 Component 组件
 
-组件其实就是我们自定义的标签，这些标签在 HTML 中是没有的。需要与自定义指令区分开。
+组件系统是 Vue 的一个重要概念，因为它是一种抽象，允许我们使用小型、独立和通常可复用的组件构建大型应用，几乎任意类型的应用界面都可以抽象为一个组件树。在 Vue 里，一个组件本质上是一个拥有**预定义选项**的一个 **Vue 实例**。
+
+从使用的角度来说，组件其实就是我们自定义的标签，这些标签在 HTML 中是没有的。需要与自定义指令区分开。
 
 ### 4.1 全局组件
 

@@ -5,34 +5,28 @@ date: 2020-02-27
 
 # React Router
 
-React Router 是一个基于 React 之上的强大的路由库，专门用来实现一个 SPA 应用，可以让我们向应用中快速添加视图和数据流，同时保持页面与 URL 间的同步。
+React Router 是一个基于 React 之上的强大的路由库，可以让我们向 SPA 应用中快速添加**视图**和**数据流**，同时保持页面与 URL 间的同步。
 
-React Router 是完整的 React 路由解决方案，它拥有简单的 API 与强大的功能例如代码缓冲加载、动态路由匹配、以及建立正确的位置过渡处理。
+React Router 是完整的 React 路由解决方案，它保持 UI 与 URL 同步，拥有简单的 API 与强大的功能，例如代码缓冲加载、动态路由匹配以及建立正确的位置过渡处理。
 
 React Router 是官方维护的，事实上也是唯一可选的路由库，它通过管理 URL，实现组件的切换和状态的变化，开发复杂的应用几乎肯定会用到。
 
 **什么是 SPA 应用？**
 
-a. 单页 web 应用（single page application，SPA），整个应用只有一个完整的页面
-
-b. `<a></a>` 是页面跳转，页面刷新了，不属于 SPA
-
-c. 单页应用链接，也称为路由链接，不会刷新页面，只做页面的局部更新，本身也不会向服务器发请求
-
-d. 在组件内部，通过 ajax 请求获取数据，并在前端异步展现
+单页 web 应用（single page application，SPA），整个应用只有一个完整的页面；`<a></a>` 是页面跳转，页面刷新了，不属于 SPA；单页应用链接，也称为路由链接，不会刷新页面，只做页面的局部更新，本身也不会向服务器发请求；在组件内部，通过 ajax 请求获取数据，并在前端异步展现。
 
 ## 1 入门小案例
 
-**步骤一：** 安装 create-react-app，使用 create-react-app 创建项目，安装 react-router-dom。
+**步骤1：** 安装 create-react-app，使用 create-react-app 创建项目，安装 react-router-dom：
 
 ```bash
-cnpm install create-react-app -g
+npm install create-react-app -g
 npx create-react-app demo01 # 在某个空文件夹下使用该命令创建demo01项目
 cd demo01
-cnpm install react-router-dom -S
+npm install react-router-dom -S
 ```
 
-**步骤二：** 案例完整代码。
+**步骤2：** 案例完整代码：
 
 ```react
 import React from 'react'
@@ -97,19 +91,19 @@ router.get(path, function(req, res))
 
 ## 3 动态传值
 
-**步骤一：** 通过 Route 设置规则，`path="/list/:id"` 是一个路径匹配规则，路由跳转的时候必须传 id 值，否则会匹配失败
+**步骤1：** 通过 Route 设置规则，`path="/list/:id"` 是一个路径匹配规则，路由跳转的时候必须传 id 值，否则会匹配失败
 
 ```react
 <Route path="/list/:id" component={List} />
 ```
 
-**步骤二：** 通过 Link 标签传递值
+**步骤2：** 通过 Link 标签传递值
 
 ```react
 <Link to="/list/4869">列表</Link>
 ```
 
-**步骤三：** 在组件的 componentDidMount 生命周期函数中接收值
+**步骤3：** 在组件的 componentDidMount 生命周期函数中接收值
 
 ```react
 componentDidMount() {
@@ -155,7 +149,7 @@ constructor(props) {
 
 我们直接通过一个案例来学习嵌套路由。案例地址：<https://github.com/zoeeying/react-router-learning>。
 
-**步骤一：** App.js 文件写一级导航和一级导航对应的二级页面
+**步骤1：** App.js 文件写一级导航和一级导航对应的二级页面
 
 ```jsx
 import React from 'react'
@@ -194,7 +188,7 @@ export default () => {
 }
 ```
 
-**步骤二：** components/Blog/index.js 文件中写二级导航和二级导航对应的三级页面
+**步骤2：** components/Blog/index.js 文件中写二级导航和二级导航对应的三级页面
 
 ```react
 import React from 'react'
@@ -232,7 +226,7 @@ export default () => {
 }
 ```
 
-**步骤三：** 在 components/Blog 目录中写三个三级页面 FlutterBlog、ReactBlog、VueBlog。
+**步骤3：** 在 components/Blog 目录中写三个三级页面 FlutterBlog、ReactBlog、VueBlog。
 
 ## 6 动态获取路由
 

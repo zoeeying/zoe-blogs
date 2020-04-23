@@ -5,13 +5,19 @@ date: 2020-01-26
 
 # Vue 指令
 
+代码地址：<https://github.com/zoeeying/vue-learning>
+
 Vue 是一套用于构建用户界面的渐进式 JavaScript 框架。与其它大型框架不同的是，Vue 被设计为可以自底向上的逐层应用。Vue 的核心库只关注视图层，方便与第三方库或既有项目整合。
 
-代码地址：<https://github.com/zoeeying/vue-learning>
+指令带有前缀 `v-`，以表示它们是 Vue 提供的特殊 attribute，指令 attribute 的值预期是**单个 JavaScript 表达式**（`v-for` 除外）。指令的职责是，当表达式的值改变时，将其产生的连带影响，响应式地作用于 DOM。
+
+一些指令能够接收一个**参数**，在指令名称之后以冒号表示，比如 `v-on:click`，`v-on` 用于监听 DOM 事件，click 参数是监听的事件名。
+
+**动态参数：** 可以用方括号括起来的 JavaScript 表达式作为一个指令的参数。动态参数预期会求出一个字符串，异常情况下值为 `null`，这个特殊的 `null` 值可以被显性地用于移除绑定，任何其它非字符串类型的值都将会触发一个警告。动态参数表达式中不能有空格和引号，可以用计算属性替代复杂的表达式。
 
 ## 1 入门
 
-新建项目目录，在目录下新建文件夹 assets（assets 文件夹在 Linux 和 Unix 系统中不会被编译），在 assets 文件夹下新建文件夹 js 和 css，把官网下载的 vue.js 和 vue.min.js 拷贝到 js 文件夹下。使用命令 `npm init` 在项目中初始化一个 package.json 文件。
+新建项目目录，在目录下新建文件夹 assets（assets 文件夹在 Linux 和 Unix 系统中不会被编译），在 assets 文件夹下新建文件夹 js 和 css，把官网下载的 vue.js 和 vue.min.js 拷贝到 js 文件夹下。在项目根目录中使用命令 `npm init` 在项目中初始化一个 package.json 文件。
 
 下载安装 live-server，它是一个开发级的 Web 服务器。我们也可以使用 VSCode 的 Live Server 插件来实现同样的效果。
 
@@ -29,12 +35,12 @@ live-server # 命令，用于启动一个服务，并且打开当前目录下的
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Hello world</title>
+    <title>Hello Vue</title>
     <script type="text/javascript" src="../assets/js/vue.js"></script>
   </head>
 
   <body>
-    <h1>Hello world</h1>
+    <h1>Hello Vue</h1>
     <hr>
     <div id="app">
       {{message}}
@@ -43,8 +49,8 @@ live-server # 命令，用于启动一个服务，并且打开当前目录下的
       // 构造器
       var app = new Vue({
         el: '#app', // 是上面的div的id
-        data: {
-          message: 'Hello World!'
+        data: { 
+          message: 'Hello Vue!'
         }
       })
     </script>
@@ -110,16 +116,13 @@ live-server # 命令，用于启动一个服务，并且打开当前目录下的
       // computed表示在输出items之前做的操作
       // 这里不能直接用items作为属性名，会报错，需要重新取个名字sortItems
       sortItems: function () {
-        return this.items.sort(sortNumber)
+        return this.items.sort((a, b) => a - b)
       },
       sortStudents: function () {
         return sortArrByKey(this.students, 'age')
       }
     },
   })
-  function sortNumber(a, b) {
-    return a - b
-  }
   // 对象数组排序方法
   function sortArrByKey(arr, key) {
     return arr.sort(function (a, b) {
@@ -135,7 +138,9 @@ live-server # 命令，用于启动一个服务，并且打开当前目录下的
 
 `{{}}` 是有弊端的，比如在网速很差或者 JS 代码出错的时候，会在网页中显示 `{{}}`，这样很不友好，我们可以使用 `v-text` 指令代替 `{{}}`。
 
-如果 message 中有 h2 等 html 标签，使用 `{{}}` 会直接把 h2 当作字符串显示出来，但是使用 `v-html` 指令就可以把 message 中的 h2 渲染成 html 标签。工作中尽量少用这种方式，可能会引起黑客的 xss 攻击，特别是不要在表单中使用。
+如果 message 中有 h2 等 html 标签，使用 `{{}}` 会直接把 h2 当作字符串显示出来。使用 `v-html` 指令，可以把对应 span 中的内容替换成属性值 h2Message，直接作为 HTML，但是会忽略解析属性值中的数据绑定。
+
+站点上动态渲染的任意 HTML 可能会非常危险，因为它很容易导致 [XSS 攻击](https://en.wikipedia.org/wiki/Cross-site_scripting)，因此尽量只对可信内容使用 HTML 插值，**绝不要**对用户提供的内容使用插值。
 
 ```vue
 <div id="app">
@@ -169,11 +174,11 @@ live-server # 命令，用于启动一个服务，并且打开当前目录下的
 <input type="text" v-on:keyup.enter="addMore" v-model="inputScores">
 ```
 
-上面的 add、minus 和 addMore 方法都在构造器的 methods 属性中。
+上面的 add、minus 和 addMore 方法都在构造器的 methods 选项中。
 
 ## 6 v-model
 
-`v-model` 用于绑定数据源，实现双向数据绑定。
+`v-model` 可以实现表单输入和应用状态之间的双向绑定。
 
 #### (1) 不同表单的数据绑定
 
@@ -300,6 +305,14 @@ live-server # 命令，用于启动一个服务，并且打开当前目录下的
 </script>
 ```
 
+对于布尔 attribute（它们只要存在就意味着值为 true），v-bind 有点区别：
+
+```vue
+<button v-bind:disabled="isButtonDisabled">Button</button>
+```
+
+如果 `isButtonDisabled` 的值是 `null`、`undefined` 或 `false`，则 `disabled` attribute 甚至不会被包含在渲染出来的 button 元素中。
+
 ## 8 其它指令
 
 `v-pre` 指令用于原样输出，如下，表示会把 `{{messag}}` 显示在页面上，而不是把 message 的值渲染出来。
@@ -320,3 +333,39 @@ live-server # 命令，用于启动一个服务，并且打开当前目录下的
 <div v-once>{{message}}</div>
 <input type="text" v-model="message">
 ```
+
+## 9 修饰符
+
+修饰符是以半角句号 `.` 指明的特殊后缀，用于指出一个指令应该以特殊方式绑定，例如 `.prevent` 修饰符告诉 `v-on` 指令对于触发的事件调用 `event.preventDefault()`。
+
+```vue
+<!-- 阻止单击事件继续传播 -->
+<a v-on:click.stop="doThis"></a>
+
+<!-- 提交事件不再重载页面 -->
+<form v-on:submit.prevent="onSubmit"></form>
+
+<!-- 修饰符可以串联 -->
+<a v-on:click.stop.prevent="doThat"></a>
+
+<!-- 只有修饰符 -->
+<form v-on:submit.prevent></form>
+
+<!-- 添加事件监听器时使用事件捕获模式 -->
+<!-- 即内部元素触发的事件先在此处理，然后才交由内部元素进行处理 -->
+<div v-on:click.capture="doThis"></div>
+
+<!-- 只当在event.target是当前元素自身时触发处理函数 -->
+<!-- 即事件不是从内部元素触发的 -->
+<div v-on:click.self="doThat"></div>
+
+<!-- 点击事件将只会触发一次，能被用到自定义组件事件上，而不像其它修饰符只能对原生的DOM事件起作用 -->
+<a v-on:click.once="doThis"></a>
+```
+
+**注意：** 使用修饰符顺序很重要，相应的代码会以同样的顺序产生。因此，`v-on:click.prevent.self` 会阻止**所有的点击**，而 `v-on:click.self.prevent` 只会阻止对元素自身的点击。
+
+
+
+
+

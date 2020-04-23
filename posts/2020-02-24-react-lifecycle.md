@@ -7,86 +7,181 @@ date: 2020-02-24
 
 React 生命周期可以用如下两个图来示意。
 
-![React生命周期](http://a1.qpic.cn/psc?/V10mSDSc0CUQs4/QNsgOSLzUrTyB8UN2gSlSE0d7W3hGPDz0.B4Da9PaE*UHTgy1Fevn0AMsSYJwoJVMc877OajkUQh6uHgFw3PNA!!/c&ek=1&kp=1&pt=0&bo=.QIgA*kCIAMDFzI!&tl=1&vuin=511616698&tm=1582318800&sce=60-2-2&rf=viewer_4)
-
-![React生命周期](http://m.qpic.cn/psc?/V10mSDSc0CUQs4/6RAq0V9V8Td2AB7JS6C71DW2b9uIRnhJpYBBow39vqTAqzjdozS4.nmtSx4JOFFcFVqWLdzuk4uAYj3zfcixdYObTu0k9q481y7Sg3TAt50!/b&bo=0AecA9AHnAMDByI!&rf=viewer_4)
-
-React 生命周期可以分为四个大的阶段：
-
-a. Initialization，初始化阶段；
-
-b. Mounting，挂载阶段
-
-c. Updation，更新阶段
-
-d. Unmounting，卸载阶段
+![React生命周期](https://wx4.sinaimg.cn/mw690/600a9336gy1gdsbdkb8whj20o90dlt9d.jpg)
 
 生命周期函数（钩子函数），通俗的说就是在某一时刻会被自动调用执行的函数。
 
-## 1 初始化阶段
+## 1 挂载
 
-初始化阶段，会获取 props 并且对 state 进行初始化，在 ES6 类中是通过 constructor 构造函数来完成的。constructor 其实并不是生命周期函数，它是 ES6 类中的构造函数，但是我们为了整体理解生命周期，可以把 constructor 当作是初始化阶段。当挂载某个组件的时候，constructor 永远都是第一个被触发的。
+当组件实例被创建并插入 DOM 中时，其生命周期函数执行顺序如下：
 
-## 2 挂载阶段
+* `constructor()`
+* `static getDerivedStateFromProps()`
+* `render()`
+* `componentDidMount()`
 
-**执行顺序：**componentWillMount > render > componentDidMount
+#### (1) constructor
 
-#### (1) componentWillMount
+如果不初始化 state 或不进行方法绑定，则不需要为 React 组件**实现**构造函数。
 
-一旦属性被获取并且也初始化了 state，componentWillMount 会被触发，它是在组件被挂载到页面之前触发的，只执行一次。在该函数中，可以调用 setState 方法修改状态，可以异步请求数据。
+在 React 组件挂载之前，会调用它的构造函数。在为 React.Component 子类实现构造函数时，应在其他语句之前调用 `super(props)`，否则，`this.props` 在构造函数中可能会出现未定义的 bug。
 
-在组件被渲染完毕之前调用 setState 方法将**不会启动更新生命周期**，在组件更新完毕之后调用 setState 方法将**会启动更新生命周期**。如果在 componentWillMount 方法中定义的回调函数中调用 setState 方法，那么该函数将会在组件被渲染完毕之后被触发，并且会启动更新生命周期。
+通常，在 React 中，构造函数一般用于以下两种情况：初始化内部 state（为 this.state 赋值一个对象）；为事件处理函数绑定实例。
 
-#### (2) render
+要避免在构造函数中引入任何副作用或订阅。
 
-state 或 props 发现变化时，render 会执行（更新生命周期）。React 在 render 中创建虚拟 DOM，进行 diff 算法，更新 DOM 树。注意不要在 render 中修改 state，会导致死循环。
+**注意：** 避免将 props 的值复制给 state！这是一个常见的错误！只有在刻意忽略 props 更新的情况下使用。此时，应将 props 重命名为 `initialColor` 或 `defaultColor`。
 
-`substring()`，第二个参数是结束位置；第一个参数是负数，转换为 0；第二个参数是负数，同样转换为 0。这个方法还有一个怪异的地方，如果传递了两个参数（如果参数有负数，会先把负数转换为 0），会比较这两个参数，把较小的参数作为开始位置。
+```javascript
+constructor(props) {
+ super(props)
+ // 不要这样做
+ this.state = { color: props.color }
+}
+```
 
-组件被挂载到页面之后触发，只执行一次。在 componentDidMount 中，可以异步请求数据、修改状态、初始化任何需要用到 DOM 的第三方 JavaScript 库、启动诸如 intervals 或 timers 这样的后台进程。
+#### (2) getDerivedStateFromProps
 
-该方法中的任意 setState 都将启动更新生命周期，并且重新渲染组件。但是不推荐在这个函数中使用 setState，它会触发一次额外的渲染，而且是在浏览器刷新屏幕之前执行，用户看不到这个状态，会导致性能问题。
+```jsx
+static getDerivedStateFromProps(props, state)
+```
 
-## 3 更新阶段
+生命周期函数 `componentWillReceiveProps` 是响应 props 变化之后进行更新的方式，但是在16.3 版本中，使用了一个替代版的生命周期函数 `getDerivedStateFromProps`。`getDerivedStateFromProps` 的存在只有一个目的：让组件在 **props 变化**时更新 state。
 
-**state 改变的执行顺序：**shouldComponentUpdate > componentWillUpdate > render > componentDidUpdate
+在每次渲染前都会触发 getDerivedStateFromProps 方法，componentWillReceiveProps 仅在父组件重新渲染时触发，而不是在内部调用 `setState` 时。
 
-**props 改变的执行顺序：**componentWillReceiveProps > shouldComponentUpdate > componentWillUpdate > render > componentDidUpdate
+`getDerivedStateFromProps` 会在调用 render 方法之前调用，并且在初始挂载及后续更新时都会被调用。它应返回一个对象来更新 state，如果返回 null 则不更新任何内容。
 
-注意以上的执行顺序中，只要 shouldComponentUpdate 返回 false，后面的生命周期函数都不会执行了。
+此方法无权访问组件实例。
 
-#### (1) componentWillReceiveProps(nextProps)
+#### (3) render
 
-组件第一次存在于 DOM 中，该函数不会执行；组件已经存在于 DOM 中了，该函数才会执行。
+render 方法是 class 组件中唯一必须实现的方法。
 
-组件从父组件中接收了新的 props（只要父组件重新渲染，那么都会给子组件传递一个新的 props，即使值没有发生变化）才会触发。
+当 render 被调用时，它会检查 this.props 和 this.state 的变化并**返回**以下类型之一：
 
-可以根据 props 的变化，调用 setState 方法来更新子组件的状态，旧的属性还是可以通过 props 获取到，在这个函数中调用 setState 是安全的，并且不会触发额外的 render。
+* React 元素，通常通过 JSX 创建，包括自定义组件和 DOM 标签
+* 数组或 fragments，使得 render 方法可以返回多个元素
+* 字符串或数值类型，在 DOM 中会被渲染为文本节点
+* 布尔类型或 `null`，什么都不渲染
+* Portals，可以渲染子节点到不同的 DOM 子树中
 
-注意：更新阶段只在 componentWillReceiveProps 中可以调用 setState 方法来修改状态。
+render 函数应该为纯函数，这意味着在不修改组件 state 的情况下，每次调用时都返回相同的结果，并且它不会直接与浏览器交互。如需与浏览器进行交互，需要在 `componentDidMount()` 或其他生命周期方法中执行操作。保持 render 为纯函数，可以使组件更容易思考。
 
-#### (2) shouldComponentUpdate(nextProps, nextState)
+#### (4) componentDidMount
 
-这个生命周期函数在组件每次更新之前触发，是更新生命周期的门卫，是可以取消更新操作的谓词（必须返回布尔值，返回 true  才会更新组件）。
+`componentDidMount()` 会在组件挂载后（插入 DOM 树中）立即调用。依赖于 DOM 节点的初始化应该放在这里，如需通过网络请求获取数据，此处是实例化请求和比较适合添加订阅（不要忘记在 `componentWillUnmount()` 里取消订阅）的地方。
+
+在 componentDidMount 中可以 setState 方法，它将触发额外渲染，但此渲染会发生在浏览器更新屏幕之前（如此保证了即使在 `render()` 两次调用的情况下，用户也不会看到中间状态）。不建议在这个生命周期函数中使用 setState，会导致性能问题。
+
+**问题：那如果我想把请求到的后台数据作为初始化 state 呢？**
+
+## 2 更新
+
+当组件的 props 或 state 发生变化时会触发更新，组件更新的生命周期函数执行顺序如下：
+
+* `static getDerivedStateFromProps()`
+* `shouldComponentUpdate()`
+* `render()`
+* `getSnapshotBeforeUpdate()`
+* `componentDidUpdate()`
+
+注意以上的执行顺序中，只要 shouldComponentUpdate 返回 false，后面的生命周期函数就都不会执行了。
+
+#### (1) shouldComponentUpdate
+
+根据 `shouldComponentUpdate()` 的返回值，判断 React 组件的输出是否受当前 state 或 props 更改的影响。
+
+首次渲染或使用 `forceUpdate()` 时不会调用该方法。
+
+`shouldComponentUpdate(nextProps, nextState)` 会在组件每次更新之前触发，是更新生命周期的门卫，是可以取消更新操作的谓词（必须返回布尔值，返回 true  才会更新组件）。
 
 实际开发中，父组件的 render 执行的时候，子组件的 render 也会执行，这会导致一些性能问题，可以在子组件的 shouldComponentUpdate 中判断新旧 state/props 是否相同，相同则返回 false（阻止不必要的更新），从而优化性能。
 
-#### (3) componentWillUpdate(nextProps, nextState)
+#### (2) getSnapshotBeforeUpdate
 
-这个生命周期函数在组件每次更新之前触发，和 componentWillMount 类似，只是 componentWillMount  只会执行一次。
+`getSnapshotBeforeUpdate(prevProps, prevState)` 在最近一次渲染输出（提交到 DOM 节点）之前调用，它使得组件能在发生更改之前从 DOM 中捕获一些信息（比如滚动位置）。此生命周期的任何返回值（应返回 snapshot 的值或 null）将作为参数传递给 `componentDidUpdate()`。
 
-#### (4) componentDidUpdate(prevProps, prevState)
+#### (3) componentDidUpdate
 
-这个生命周期函数在组件每次更新完成之后触发，和 componentDidMount 类似，只是 componentDidMount  只会执行一次。
+`componentDidUpdate(prevProps, prevState, snapshot)` 会在更新后会被立即调用，首次渲染不会执行此方法。
 
-## 4 卸载阶段（componentWillUnmount）
+当组件更新后，可以在此处对 DOM 进行操作。如果对更新前后的 props 进行了比较，也可以选择在此处进行网络请求。
 
-componentWillUnmount 生命周期函数只会在组件被卸载之前触发。可以在该生命周期函数中清除 componentDidMount 或者 componentWillMount 中启动的后台进程（比如一些监听，计时器等）。
+```jsx
+componentDidUpdate(prevProps) {
+  // 典型用法，不要忘记比较props
+  if (this.props.userID !== prevProps.userID) {
+    this.fetchData(this.props.userID)
+  }
+}
+```
+
+可以在 `componentDidUpdate()` 中**直接调用 `setState()`**，但注意**它必须被包裹在一个条件语句里**，否则会导致死循环。它还会导致额外的重新渲染，虽然用户不可见，但会影响组件性能。不要将 props 镜像给 state，请考虑直接使用 props。
+
+如果组件实现了 `getSnapshotBeforeUpdate()` 生命周期（不常用），则它的返回值将作为 `componentDidUpdate()` 的第三个参数 snapshot 传递，否则此参数将为 undefined。
+
+## 3 卸载
+
+组件从 DOM 中移除时会调用 componentWillUnmount 方法，可以在该生命周期函数中清除 componentDidMount 中启动的后台进程（比如一些监听、计时器、订阅等）。
+
+`componentWillUnmount()` 中**不应调用 `setState()`**，因为该组件将永远不会重新渲染。组件实例卸载后，将永远不会再挂载它。
+
+## 4 错误处理
+
+当渲染过程、生命周期或子组件的构造函数中抛出错误时，会调用如下方法：
+
+* `static getDerivedStateFromError(error)`
+* `componentDidCatch()`
+
+如果 class 组件定义了生命周期方法 `static getDerivedStateFromError()` 或 `componentDidCatch()` 中的任何一个（或两者），它就成为了 Error boundaries，通过生命周期更新 state 可让组件捕获树中未处理的 JavaScript 错误并展示降级 UI。
+
+Error boundaries 组件会捕获**子组件**在渲染期间，在生命周期方法以及其整个树的构造函数中发生的错误，并记录这些错误，展示降级 UI 而不是崩溃的组件树。
+
+#### (1) getDerivedStateFromError
+
+`static getDerivedStateFromError(error)` 生命周期会在后代组件抛出错误后被调用，它将抛出的错误作为参数，并返回一个值以更新 state。`getDerivedStateFromError()` 会在渲染阶段调用，因此不允许出现副作用。
+
+#### (2) componentDidCatch
+
+`componentDidCatch(error, info)` 生命周期在后代组件抛出错误后被调用。`componentDidCatch()` 会在**提交**阶段被调用，因此允许执行副作用，它应该用于记录错误之类的情况。
+
+```jsx
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { hasError: false }
+  }
+
+  static getDerivedStateFromError(error) {
+    // 更新state使下一次渲染可以显示降级UI
+    return { hasError: true }
+  }
+
+  componentDidCatch(error, info) {
+    // "组件堆栈"例子:
+    //   in ComponentThatThrows (created by App)
+    //   in ErrorBoundary (created by App)
+    //   in div (created by App)
+    //   in App
+    logComponentStackToMyService(info.componentStack)
+  }
+
+  render() {
+    if (this.state.hasError) {
+      // 你可以渲染任何自定义的降级UI
+      return <h1>Something went wrong.</h1>
+    }
+
+    return this.props.children
+  }
+}
+```
 
 ## 5 补充
 
 不要在 PureComponent 中使用 shouldComponentUpdate。
 
-PureComponent 的原理是继承了 Component类，自动执行 shouldComponentUpdate 函数，当组件更新时，shouldComponentUpdate 会对 props 和 state 进行了一层**浅比较**，如果组件的 props 和 state 都没有发生改变，render 方法就不会执行，省去 Virtual DOM 的生成和对比过程，达到提升性能的目的。
+PureComponent 的原理是继承了 Component 类，自动执行 shouldComponentUpdate 函数，当组件更新时，shouldComponentUpdate 会对 props 和 state 进行了一层**浅比较**，如果组件的 props 和 state 都没有发生改变，render 方法就不会执行，省去 Virtual DOM 的生成和对比过程，达到提升性能的目的。
 
 如果 state 和 props 一直变化的话，还是建议使用 Component，PureComponent 最好用于展示组件。
