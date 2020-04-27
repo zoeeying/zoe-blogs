@@ -13,10 +13,9 @@ CSS3 弹性盒（flexible box 或 flexbox），是一种当页面需要适应不
 
 ## 1 概览
 
-弹性盒子由弹性容器（flex container）和弹性子元素（flex item）组成。弹性容器通过设置 display 属性的值为 flex 或 inline-flex 将其定义为弹性容器。弹性容器内包含了一个或多个弹性子元素。
+弹性盒子由弹性容器（flex container）和弹性子元素（flex item）组成。弹性容器通过设置 display 属性的值为 flex 或 inline-flex 将其定义为弹性容器，这时，子元素的 float、clear 和 vertical-align 属性将失效。弹性容器内包含了一个或多个弹性子元素。
 
-**注意：** 弹性容器外及弹性子元素内是正常渲染的。
-弹性盒子只定义了弹性子元素如何在弹性容器内布局。
+**注意：** 弹性容器外及弹性子元素内是正常渲染的。弹性盒子只定义了弹性子元素如何在弹性容器内布局。
 弹性子元素通常在弹性盒子内一行显示。默认情况每个容器只有一行。
 
 **注意：** 如果我们设置 direction 属性为 rtl（right-to-left），弹性子元素的排列方式是从右往左；direction 属性为 ltr（left-to-right），弹性子元素的排列方式是从左往右。

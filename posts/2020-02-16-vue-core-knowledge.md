@@ -660,25 +660,6 @@ render 函数可以用 JS 来描述一个标签。
 </script>
 ```
 
-#### (4) tyler 是一个对象
-
-如果 tyler 只是一个对象，我们需要在构造器中配置 components 选项和 template 选项才能达到 `render: h => h(tyler)` 的效果。
-
-```vue
-<div id="app">
-</div>
-<script type="text/javascript">
-  const tyler = {
-    template: '<input/>'
-  }
-  var app = new Vue({
-    el: '#app',
-    components: { tyler },
-    template: '<tyler></tyler>'
-  })
-</script>
-```
-
 ### 6.2 利用 JavaScript 编程能力
 
 有的情况下，使用 render 函数，利用 JavaScript 完全编程能力，可以避免写很多重复的代码。
@@ -845,15 +826,15 @@ render: function (h) {
 
 ### 6.4 在 render 函数中使用 JSX
 
-在 Vue 中使用 JSX 语法，我们必须要使用一个 Babel 插件：
+在 Vue 中使用 JSX 语法，我们必须要使用一个 Babel 插件。
 
-**步骤一：** 安装
+首先安装 Babel 插件：
 
 ```bash
 npm install @vue/babel-preset-jsx @vue/babel-helper-vue-jsx-merge-props
 ```
 
-**步骤二：** 添加到 .babelrc
+把 Babel 插件添加到 .babelrc：
 
 ```javascript
 {
@@ -861,7 +842,7 @@ npm install @vue/babel-preset-jsx @vue/babel-helper-vue-jsx-merge-props
 }
 ```
 
-**步骤三：** 在 render  函数中使用 JSX
+然后，我们就可以在 render  函数中使用 JSX 了：
 
 ```vue
 import Zoe from './Zoe.vue'
