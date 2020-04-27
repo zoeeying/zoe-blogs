@@ -224,7 +224,9 @@ export default connect(({ areas, loading }) => ({
   areas,
   loading,
 }))(Form.create({ name: 'add_areas' })(AddAreas))
+```
 
+```javascript
 @connect(({ common, loading }) => ({ common, loading }))
 @Form.create()
 ```
