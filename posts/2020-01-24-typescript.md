@@ -194,7 +194,7 @@ const searchPerson = (age: number): string => '找到了' + age + '岁的人'
 console.log(searchPerson(28))
 ```
 
-### 3.2 函数分类
+### 4.2 函数分类
 
 #### (1) 有可选参数的函数
 

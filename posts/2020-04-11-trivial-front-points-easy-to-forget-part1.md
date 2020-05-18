@@ -512,3 +512,41 @@ import imgURL from './images/avatar.jpg'
 ```react
 <img src={require('./images/avatar.jpg')} alt="" />
 ```
+
+## 33 交换两个变量的值
+
+#### (1) 中间变量法
+
+```javascript
+let x = 3
+let y = 4
+let  mid = 0
+mid = x
+x = y
+y = mid
+```
+
+#### (2) 数学法
+
+```javascript
+let x = 3
+let y = 4
+y = y - x
+x = x + y
+y = x - y
+```
+
+#### (3) 解构赋值
+
+```javascript
+let x = 3
+let y = 4
+[x, y] = [y, x]
+```
+
+
+
+
+
+
+
