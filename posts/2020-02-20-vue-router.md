@@ -15,9 +15,9 @@ date: 2020-02-20
 cnpm install vue-router -S
 ```
 
-**步骤一：** 在 components 中创建两个模板页面 HelloZoe.vue、HelloWorld.vue
+1、在 components 中创建两个模板页面 HelloZoe.vue、HelloWorld.vue
 
-**步骤二：** 修改 App.vue
+2、修改 App.vue
 
 ```vue
 <template>
@@ -53,7 +53,7 @@ export default {
 </style>
 ```
 
-**步骤三：** 修改 router/index.js
+3、修改 router/index.js
 
 ```javascript
 import Vue from 'vue'
@@ -89,7 +89,7 @@ export default new Router({
 })
 ```
 
-**步骤四：** main.js
+4、main.js
 
 ```javascript
 import Vue from 'vue'
@@ -108,9 +108,9 @@ new Vue({
 
 子路由即子菜单的路由方式。子路由一般用在一个页面有它的基础模板，它下面的页面都隶属于这个模板，只是部分改变样式。
 
-**步骤一：** 在 components 中创建两个模板页面 Zoe1.vue、Zoe2.vue
+1、在 components 中创建两个模板页面 Zoe1.vue、Zoe2.vue
 
-**步骤二：** 修改 HelloZoe.vue，增加 router-link 标签和 router-view 标签，router-view 标签用于显示 Zoe1.vue 和 Zoe2.vue 中的内容。
+2、修改 HelloZoe.vue，增加 router-link 标签和 router-view 标签，router-view 标签用于显示 Zoe1.vue 和 Zoe2.vue 中的内容。
 
 ```vue
 <template>
@@ -123,7 +123,7 @@ new Vue({
 </template>
 ```
 
-**步骤三：** 修改 router/index.js
+3、修改 router/index.js
 
 ```javascript
 // ...
@@ -161,9 +161,9 @@ export default new Router({
 
 这种方法在实际开发中不常用。
 
-**步骤一：** 路由配置文件 router/index.js 中，为需要传参的路由设置 name（如果一个路由有 children，那么就不能为其设置 name）
+1、路由配置文件 router/index.js 中，为需要传参的路由设置 name（如果一个路由有 children，那么就不能为其设置 name）
 
-**步骤二：** 模板页面中通过 `$route.name` 接收参数
+2、模板页面中通过 `$route.name` 接收参数
 
 ```vue
 <p>{{ $route.name }}</p>
@@ -171,7 +171,7 @@ export default new Router({
 
 #### (2) 用 router-link 传递参数
 
-**步骤一：** 传递参数
+1、传递参数
 
 ```vue
 <router-link
@@ -181,7 +181,7 @@ export default new Router({
   }">Zoe2</router-link>
 ```
 
-**步骤二：** 模板页面中通过 `$route.params.xxxx` 接收参数
+2、模板页面中通过 `$route.params.xxxx` 接收参数
 
 ```vue
 <div>
@@ -192,7 +192,7 @@ export default new Router({
 
 #### (3) 通过 url 传参
 
-**步骤一：** 路由配置文件
+1、路由配置文件
 
 ```javascript
 // ...
@@ -209,7 +209,7 @@ export default new Router({
 })
 ```
 
-**步骤二：** 模板页面中通过 router-link 跳转页面并且传递参数，注意第一个参数必须是数字
+2、模板页面中通过 router-link 跳转页面并且传递参数，注意第一个参数必须是数字
 
 ```vue
 <router-link to="/params/12/无敌小畅叙">传参</router-link>
@@ -219,7 +219,7 @@ export default new Router({
 
 一个模板页面中有多个 router-view（多个路由区域）
 
-**步骤一：** 模板页面，设置 router-view 标签的 name 属性（路由配置文件中需要用）
+1、模板页面，设置 router-view 标签的 name 属性（路由配置文件中需要用）
 
 ```vue
 <div>
@@ -235,7 +235,7 @@ export default new Router({
 </div>
 ```
 
-**步骤二：** 路由配置文件 router/index.js
+2、路由配置文件 router/index.js
 
 ```javascript
 // ...

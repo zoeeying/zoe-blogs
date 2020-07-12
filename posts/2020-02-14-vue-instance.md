@@ -52,16 +52,16 @@ vm.$watch('a', function (newValue, oldValue) {
 
 下面通过一个例子来看一下 Vue 和 jQuery 是怎么结合的。
 
-**步骤1：** 下载 jQuery，放在 assets/js 目录中
+1、下载 jQuery，放在 assets/js 目录中
 
-**步骤2：** 在 HTML 中引用一下 jQuery
+2、在 HTML 中引用一下 jQuery
 
 ```html
 <script type="text/javascript" src="../assets/js/vue.js"></script>
 <script type="text/javascript" src="../assets/js/jquery.min.js"></script>
 ```
 
-**步骤3：** 在 Vue 的 mounted 生命周期函数中使用 jQuery。只能在 DOM 元素挂载到页面上后才能使用 jQuery 操作 DOM 元素，比如 Vue 的 mounted 和 updated 生命周期函数中。
+3、在 Vue 的 mounted 生命周期函数中使用 jQuery。只能在 DOM 元素挂载到页面上后才能使用 jQuery 操作 DOM 元素，比如 Vue 的 mounted 和 updated 生命周期函数中。
 
 ```vue
 <div id="app">

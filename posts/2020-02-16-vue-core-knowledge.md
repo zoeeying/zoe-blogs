@@ -878,7 +878,7 @@ message 和 rawId 就是过滤器函数中的 value。
 
 **定义过滤器有两种方法：**
 
-**方法一：** 在组件的选项中通过 filters（filters 选项包含 Vue 实例可用过滤器的哈希表） 定义局部过滤器。
+1、在组件的选项中通过 filters（filters 选项包含 Vue 实例可用过滤器的哈希表） 定义局部过滤器。
 
 ```javascript
 filters: {
@@ -888,7 +888,7 @@ filters: {
 }
 ```
 
-**方法二：** 在创建 Vue 实例之前全局定义过滤器。
+2、在创建 Vue 实例之前全局定义过滤器。
 
 ```javascript
 // 注册过滤器

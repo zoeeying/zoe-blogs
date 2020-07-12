@@ -40,15 +40,15 @@ tsDemo({ x: 3, y: 4 })
 
 ## 2 环境搭建
 
-**步骤1：** 安装 Node
+1、安装 Node
 
-**步骤2：** 全局安装 TypeScript，可以通过命令 `tsc --version` 查看 TS 的版本号，同时检查 TS 是否安装成功
+2、全局安装 TypeScript，可以通过命令 `tsc --version` 查看 TS 的版本号，同时检查 TS 是否安装成功
 
 ```bash
 npm install -g typescript
 ```
 
-**步骤3：** 新建项目目录，在项目目录中新建文件 demo.ts
+3、新建项目目录，在项目目录中新建文件 demo.ts
 
 ```typescript
 function tsDemo(data: {x: number, y: number}) {
@@ -57,7 +57,7 @@ function tsDemo(data: {x: number, y: number}) {
 tsDemo({ x: 3, y: 4 })
 ```
 
-**步骤4：** 在项目目录下执行命令 `tsc demo.ts`（使用 TypeScript 对 demo.ts 进行编译），生成 demo.js 文件，通过命令 `node demo.js` 运行该文件。其实可以使用工具可以简化这些步骤，需要全局安装 ts-node，然后通过命令 `ts-node demo.ts` 即可以完成对 demo.ts 文件的编译和运行
+4、在项目目录下执行命令 `tsc demo.ts`（使用 TypeScript 对 demo.ts 进行编译），生成 demo.js 文件，通过命令 `node demo.js` 运行该文件。其实可以使用工具可以简化这些步骤，需要全局安装 ts-node，然后通过命令 `ts-node demo.ts` 即可以完成对 demo.ts 文件的编译和运行
 
 ## 3 静态类型
 

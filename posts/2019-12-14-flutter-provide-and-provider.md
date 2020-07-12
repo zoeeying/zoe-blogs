@@ -23,9 +23,9 @@ date: 2019-12-14
 
 **Provider：** 取代 Provide 的状态管理方案，基于 InheritedWidget 实现的。
 
-## 2 Provide
+## 2 Provide 使用步骤
 
-#### (1) 步骤一：新建数据仓库
+#### (1) 新建数据仓库
 
 在 lib 下新建一个文件夹 provide，在 provide 中新建文件 counter.dart，相当于一个数据仓库。
 
@@ -46,7 +46,7 @@ class Counter with ChangeNotifier {
 }
 ```
 
-#### (2) 步骤二：main.dart 文件
+#### (2) main.dart 文件
 
 在 App 的顶层 main.dart 文件中。
 
@@ -71,7 +71,7 @@ void main() {
 }
 ```
 
-#### (3) 步骤三：获取和修改状态
+#### (3) 获取和修改状态
 
 在 cart_page.dart 文件可以获取状态数据，也可以修改状态数据。修改状态数据是调用的 counter.dart 中的 increment 方法。
 
@@ -133,7 +133,7 @@ class MyButton extends StatelessWidget {
 }
 ```
 
-## 3 Provider
+## 3 Provider 使用步骤
 
 Provider 是 Flutter 官方新推荐的状态管理方式之一，特点是不复杂、好理解，在代码量不大的情况下，可以方便组合和控制刷新颗粒度。
 
@@ -141,15 +141,15 @@ Provider 从名字上就很容易理解，它就是用于提供数据，无论�
 
 使用 Provider 的注意事项：
 
-a. 保证 build 方法无副作用
+* 保证 build 方法无副作用
 
-b. 不要所有状态都放在全局
+* 不要所有状态都放在全局
 
-c. 尽量在 Model 中使用私有变量 `_`
+* 尽量在 Model 中使用私有变量 `_`
 
-d. 控制刷新范围
+* 控制刷新范围
 
-#### (1) 步骤一：创建数据 Model
+#### (1) 创建数据 Model
 
 这里的 Model 实际上就是我们的状态，它不仅储存了我们的**数据模型**，而且还包含了更改数据的方法，并暴露出它想要暴露出的数据。在 lib 下新建文件夹 model，在 model 文件夹下新建文件 CounterModel.dart 文件。
 
@@ -172,7 +172,7 @@ class CounterModel with ChangeNotifier {
 }
 ```
 
-#### (2) 步骤二：创建顶层共享数据
+#### (2) 创建顶层共享数据
 
 在 main 方法中初始化全局数据。`Provider.value` 还提供了 `UpdateShouldNotify` 函数，用于控制刷新时机。
 
@@ -248,7 +248,7 @@ class MyApp extends StatelessWidget {
 
 ```
 
-#### (3) 步骤三：在子页面中获取状态和修改状态
+#### (3) 在子页面中获取状态和修改状态
 
 获取顶层数据最简单的方法就是 `Provider.of(context)`，这里的范型 T 指定了获取 FirstScreen 向上寻找最近的储存了 T 的祖先节点的数据。通过这个方法，我们获取了顶层的 CounterModel 及 textSize，并在 Text 组件中进行使用。
 
@@ -286,7 +286,7 @@ class FirstScreen extends StatelessWidget {
 }
 ```
 
-#### (4) 步骤四：Consumer
+#### (4) Consumer
 
 除了上面的 `Provider.of(context)` 获取状态的方法以外，我们还可以使用 Consumer 来获取祖先节点中的数据。Consumer 内部其实也是通过 `Provider.of(context)` 实现的。在复杂项目中，Consumer 可以极大地缩小控件刷新范围。`Provider.of(context)` 会导致调用的 context 页面范围的刷新。而使用 Consumer 的话，可以只刷新 Consumer 的部分。
 

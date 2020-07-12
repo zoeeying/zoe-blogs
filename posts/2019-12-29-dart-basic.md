@@ -26,13 +26,13 @@ Dart 中有类型校验。
 
 **Dart 中的标识符（变量名称）命名规则如下：**
 
-a. 变量名称必须由数字、字母、下划线或 $ 组成；
+* 变量名称必须由数字、字母、下划线或 $ 组成；
 
-b. 标识符开头不能是数字；标识符不能是保留字和关键字；
+* 标识符开头不能是数字；标识符不能是保留字和关键字；
 
-c. 变量的名称是区分大小写的，比如 age 和 Age 就是不同的变量，建议在实际的运用中不要用一个单词大小写区分两个变量；
+* 变量的名称是区分大小写的，比如 age 和 Age 就是不同的变量，建议在实际的运用中不要用一个单词大小写区分两个变量；
 
-d. 标识符一定要见名思意，**变量名称建议用名词，方法名称建议用动词**。
+* 标识符一定要见名思意，**变量名称建议用名词，方法名称建议用动词**。
 
 ## 3 常量
 
@@ -655,13 +655,13 @@ b();
 
 #### (1) Dart 中的库有三种
 
-a. 我们自定义的库
+1、我们自定义的库
 
 ```dart
 import 'lib/xxx.dart';
 ```
 
-b. 系统内置库
+2、系统内置库
 
 ```dart
 import 'dart:math';
@@ -695,7 +695,7 @@ getDataFromZhihuAPI() async {
 }
 ```
 
-c. pub 包管理系统中的库
+3、pub 包管理系统中的库
 
 <https://pub.dev/packages>
 <https://pub.flutter-io.cn/packages>
@@ -703,9 +703,9 @@ c. pub 包管理系统中的库
 
 #### (2) pub 包管理系统中的库的使用步骤
 
-**步骤一：** 需要在项目根目录下新建一个 pubspec.yaml 文件
+1、需要在项目根目录下新建一个 pubspec.yaml 文件
 
-**步骤二：** 在 pubspec.yaml 文件中配置名称 、描述、依赖等信息
+2、在 pubspec.yaml 文件中配置名称 、描述、依赖等信息
 
   ```yaml
 name: xxx
@@ -715,11 +715,11 @@ dependencies:
   date_format: ^1.0.6
   ```
 
-**步骤三：** 运行 pub get 获取包下载到本地
+3、运行 pub get 获取包下载到本地
 
-**步骤四：** 项目中引入库 `import 'package:date_format/date_format.dart';`
+4、项目中引入库 `import 'package:date_format/date_format.dart';`
 
-**步骤五：** 看文档使用
+5、看文档使用
 
   ```dart
 print(formatDate(DateTime(1989, 2, 21), [yyyy, '-', mm, '-', dd]));
@@ -741,13 +741,13 @@ lib2.Element element2 = new lib2.Element(); // 使用lib2中的Element
 
 如果只需要导入库的一部分，有两种模式：
 
-a. 只导入需要的部分，使用 show 关键字
+1、只导入需要的部分，使用 show 关键字
 
 ```dart
 import 'package:lib1/lib1.dart' show foo;
 ```
 
-b. 隐藏不需要的部分，使用 hide 关键字
+2、隐藏不需要的部分，使用 hide 关键字
 
 ```dart
 import 'package:lib2/lib2.dart' hide foo;

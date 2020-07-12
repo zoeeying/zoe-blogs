@@ -5,7 +5,7 @@ date: 2019-12-18
 
 # 在 Flutter 中使用 Fluro 管理路由
 
-**步骤一：** 在入口文件 main.dart 中的 MyApp 类的 build 方法中初始化 fluro，声明路由。
+1、在入口文件 main.dart 中的 MyApp 类的 build 方法中初始化 fluro，声明路由。
 
   ```dart
   import 'package:fluro/fluro.dart';
@@ -36,9 +36,9 @@ date: 2019-12-18
   }
   ```
 
-**步骤二：** 在 lib 文件夹下面新建文件夹 routers。
+2、在 lib 文件夹下面新建文件夹 routers。
 
-**步骤三：** 在 routers 文件夹下新建文件 router_handler.dart，用于放置所有 handler（路由规则）。
+3、在 routers 文件夹下新建文件 router_handler.dart，用于放置所有 handler（路由规则）。
 
   ```dart
   import 'package:flutter/material.dart';
@@ -54,7 +54,7 @@ date: 2019-12-18
   });
   ```
 
-**步骤四：** 上面的 handler 只是针对单个路由的配置，所有 handler 配置好后，还需要总体路由配置。在 routers 文件夹下新建文件 routes.dart，用于总体路由配置。
+4、上面的 handler 只是针对单个路由的配置，所有 handler 配置好后，还需要总体路由配置。在 routers 文件夹下新建文件 routes.dart，用于总体路由配置。
 
   ```dart
   import 'package:flutter/material.dart';
@@ -78,7 +78,7 @@ date: 2019-12-18
   }
   ```
 
-**步骤五：** 在 routers 文件夹下新建一个文件 application.dart，把 fluro 静态化。
+5、在 routers 文件夹下新建一个文件 application.dart，把 fluro 静态化。
 
   ```dart
   import 'package:fluro/fluro.dart';
@@ -88,7 +88,7 @@ date: 2019-12-18
   }
   ```
 
-**步骤六：** 在需要使用路由的文件中，比如 home_page.dart 文件，引入上面的静态化文件 application.dart
+6、需要使用路由的文件中，比如 home_page.dart 文件，引入上面的静态化文件 application.dart
 
   ```dart
   onTap: () {

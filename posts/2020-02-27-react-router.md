@@ -17,7 +17,7 @@ React Router 是官方维护的，事实上也是唯一可选的路由库，它�
 
 ## 1 入门小案例
 
-**步骤1：** 安装 create-react-app，使用 create-react-app 创建项目，安装 react-router-dom：
+1、安装 create-react-app，使用 create-react-app 创建项目，安装 react-router-dom：
 
 ```bash
 npm install create-react-app -g
@@ -26,7 +26,7 @@ cd demo01
 npm install react-router-dom -S
 ```
 
-**步骤2：** 案例完整代码：
+2、案例完整代码：
 
 ```react
 import React from 'react'
@@ -91,19 +91,19 @@ router.get(path, function(req, res))
 
 ## 3 动态传值
 
-**步骤1：** 通过 Route 设置规则，`path="/list/:id"` 是一个路径匹配规则，路由跳转的时候必须传 id 值，否则会匹配失败
+1、通过 Route 设置规则，`path="/list/:id"` 是一个路径匹配规则，路由跳转的时候必须传 id 值，否则会匹配失败
 
 ```react
 <Route path="/list/:id" component={List} />
 ```
 
-**步骤2：** 通过 Link 标签传递值
+2、通过 Link 标签传递值
 
 ```react
 <Link to="/list/4869">列表</Link>
 ```
 
-**步骤3：** 在组件的 componentDidMount 生命周期函数中接收值
+3、在组件的 componentDidMount 生命周期函数中接收值
 
 ```react
 componentDidMount() {
@@ -149,7 +149,7 @@ constructor(props) {
 
 我们直接通过一个案例来学习嵌套路由。案例地址：<https://github.com/zoeeying/react-router-learning>。
 
-**步骤1：** App.js 文件写一级导航和一级导航对应的二级页面
+1、App.js 文件写一级导航和一级导航对应的二级页面
 
 ```jsx
 import React from 'react'
@@ -188,7 +188,7 @@ export default () => {
 }
 ```
 
-**步骤2：** components/Blog/index.js 文件中写二级导航和二级导航对应的三级页面
+2、components/Blog/index.js 文件中写二级导航和二级导航对应的三级页面
 
 ```react
 import React from 'react'
@@ -226,7 +226,7 @@ export default () => {
 }
 ```
 
-**步骤3：** 在 components/Blog 目录中写三个三级页面 FlutterBlog、ReactBlog、VueBlog。
+3、在 components/Blog 目录中写三个三级页面 FlutterBlog、ReactBlog、VueBlog。
 
 ## 6 动态获取路由
 

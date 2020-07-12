@@ -108,13 +108,13 @@ module.exports = {
 
 ## 3 使用 ElementUI
 
-**步骤 1：** 安装
+1、安装
 
 ```bash
 npm install --save element-ui
 ```
 
-**步骤 2：** 在 main.js 中**完整引入** Element，样式文件需要单独引入。[官网](https://element.eleme.cn/#/zh-CN/component/quickstart)还有一种**按需引入**的方式，即只引入需要的组件，从而达到减小项目体积的目的
+2、在 main.js 中**完整引入** Element，样式文件需要单独引入。[官网](https://element.eleme.cn/#/zh-CN/component/quickstart)还有一种**按需引入**的方式，即只引入需要的组件，从而达到减小项目体积的目的
 
 ```javascript
 import Vue from 'vue'
@@ -132,7 +132,7 @@ new Vue({
 }).$mount('#app')
 ```
 
-**步骤 3：** 在组件实例中使用 Element 组件
+3、在组件实例中使用 Element 组件
 
 ```vue
 <template>
@@ -167,13 +167,13 @@ export default {
 
 在 Vue 中，官方推荐使用 Axios 来请求后台接口，获取远程数据。
 
-**步骤 1：** 安装
+1、安装
 
 ```bash
 npm install axios -S
 ```
 
-**步骤 2：** 在组件实例中使用
+2、在组件实例中使用
 
 ```vue
 <script>

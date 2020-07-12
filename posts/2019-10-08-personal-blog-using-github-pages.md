@@ -23,23 +23,23 @@ Jekyll 是一个简单的免费的博客生成工具，类似 WordPress。但是
 
 ## 2 准备工作
 
-**步骤1：** 在 GitHub 上找到自己喜欢的博客模板（[模板](https://github.com/xudailong/xudailong.github.io) ），fork 到我的仓库。
+1、在 GitHub 上找到自己喜欢的博客模板（[模板](https://github.com/xudailong/xudailong.github.io) ），fork 到我的仓库。
 
-**步骤2：** 在 settings 中 rename 为 zoeeying.github.io，zoeeying 是我的 GitHub 用户名。此时，通过地址 zoeeying.github.io 就可以访问我的博客了。但是现在博客里的内容都是 fork 过来的模板中的内容。
+2、在 settings 中 rename 为 zoeeying.github.io，zoeeying 是我的 GitHub 用户名。此时，通过地址 zoeeying.github.io 就可以访问我的博客了。但是现在博客里的内容都是 fork 过来的模板中的内容。
 
-**步骤3：** 把项目 clone 下来。
+3、把项目 clone 下来。
 
 ## 3 环境搭建  
 
-**步骤1：** 下载安装 Ruby。
+#### (1) 下载安装 Ruby
 
 下载安装包，傻瓜式 next 安装，记住，安装过程中需要勾选一下添加到环境变量的选项。安装成功后，在命令行中输入 `ruby -v` 得到 Ruby 版本号，即表示安装成功。
 
-**步骤2：** 下载安装 RubyGems。
+#### (2) 下载安装 RubyGems
 
 在解压后的 RubyGems 文件夹中，打开命令窗口，执行命令：`ruby setup.rb`
 
-**步骤3：** 用 RubyGems 安装 Jekyll。
+#### (3) 用 RubyGems 安装 Jekyll
 
 通过 `gem install jekyll` 命令安装 Jekyll。
 
@@ -50,7 +50,7 @@ gem sources --remove
 gem sources -a http://gems.ruby-china.com
 ```
 
-**步骤4：** 开启服务。
+#### (4) 开启服务
 
 在 clone 下来的博客项目中，通过命令 `jekyll serve --watch` 开启服务。watch 是为了监测文件夹内的变化，修改后不需要重新启动 Jekyll。
 
@@ -60,10 +60,10 @@ gem sources -a http://gems.ruby-china.com
 
 ## 4 提交代码到 GitHub
 
-**步骤1：** 通过 `git clone` 命令将代码 clone 到本地
+1、通过 `git clone` 命令将代码 clone 到本地
 
-**步骤2：** 修改或者添加文件后，使用 `git add .` 命令将文件 add 到本地缓冲区
+2、修改或者添加文件后，使用 `git add .` 命令将文件 add 到本地缓冲区
 
-**步骤3：** 通过 `git commit -m "some info"` 命令将文件提交到本地仓库
+3、通过 `git commit -m "some info"` 命令将文件提交到本地仓库
 
-**步骤4：** 通过 `git push origin master` 命令 push 到 GitHub 仓库中
+4、通过 `git push origin master` 命令 push 到 GitHub 仓库中

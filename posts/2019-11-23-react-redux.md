@@ -60,7 +60,7 @@ const mapStateToProps = state => ({ count: state })
 
 ## 3 使用步骤
 
-**步骤1：** 下载依赖包。
+1、下载依赖包。
 
 ```bash
 npm install --save react-redux
@@ -68,7 +68,7 @@ npm install --save prop-types
 npm install --save redux-thunk
 ```
 
-**步骤2：** 在 redux 文件夹中新建 action-types.js、actions.js、reducers.js、store.js 文件。
+2、在 redux 文件夹中新建 action-types.js、actions.js、reducers.js、store.js 文件。
 
 ```jsx
 // store.js
@@ -153,7 +153,7 @@ export default combineReducers({ counter, comments })
 // { counter: 12, comments: [] }
 ```
 
-**步骤3：** 在主组件中，比如本案例 index.js 中，从 react-redux 中引入组件 Provider，把 App 组件包起来，同时把 store 对象传给组件 Provider。
+3、在主组件中，比如本案例 index.js 中，从 react-redux 中引入组件 Provider，把 App 组件包起来，同时把 store 对象传给组件 Provider。
 
 ```jsx
 import React from 'react'
@@ -170,7 +170,7 @@ ReactDOM.render((
 ), document.getElementById('root'))
 ```
 
-**步骤4：** 在子组件中，比如本案例 Counter.js 中，通过 props 获取状态和 actions。
+4、在子组件中，比如本案例 Counter.js 中，通过 props 获取状态和 actions。
 
 ```jsx
 import PropTypes from 'prop-types'
@@ -193,7 +193,7 @@ export default class Counter extends Component {
 }
 ```
 
-**步骤5：** 新建一个 containers 文件夹，在文件夹中新建文件 App.js，在 App.js 中引入 react-redux 中的 connect 方法，引入 actions、Counter 组件，用 connect 方法把 Counter 组件包装一下（把状态和 actions 注入 Counter 组件），然后暴露出去。
+5、新建一个 containers 文件夹，在文件夹中新建文件 App.js，在 App.js 中引入 react-redux 中的 connect 方法，引入 actions、Counter 组件，用 connect 方法把 Counter 组件包装一下（把状态和 actions 注入 Counter 组件），然后暴露出去。
 
 ```jsx
 import { connect } from 'react-redux'
@@ -209,15 +209,15 @@ export default connect(
 
 ## 4 使用 Redux 调试工具
 
-**步骤1：** 安装 Chrome 浏览器插件
+1、安装 Chrome 浏览器插件
 
-**步骤2：** 下载工具依赖包
+2、下载工具依赖包
 
 ```bash
 npm install --save-dev redux-devtools-extension
 ```
 
-**步骤3：** 在 store.js 中使用插件把中间件包起来
+3、在 store.js 中使用插件把中间件包起来
 
 ```jsx
 import { createStore, applyMiddleware } from 'redux'

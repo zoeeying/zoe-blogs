@@ -120,13 +120,13 @@ react-transition-group 动画库可以实现在元素隐藏掉的时候，把 DO
 
 TransitionGroup 可以实现多 DOM 动画：每个 DOM 都用 CSSTransition 包裹起来，最外边再用 TransitionGroup 包裹起来。
 
-**步骤1：** 安装
+1、安装
 
 ```bash
 npm install react-transition-group -S
 ```
 
-**步骤2：** App.js
+2、App.js
 
 ```react
 import React, { Component } from 'react'
@@ -168,7 +168,7 @@ class App extends Component {
 export default App
 ```
 
-**步骤3：** index.css
+3、index.css
 
 ```css
 .divBox {

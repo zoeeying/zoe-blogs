@@ -81,7 +81,7 @@ Web Worker 处在一个自包含的执行环境（WorkerGlobalScope）中，无�
 
 **下面是一个小案例：**
 
-**步骤1：** 创建在分线程执行的 JS 文件，比如 worker.js
+1、创建在分线程执行的 JS 文件，比如 worker.js
 
 ```javascript
 function fibonacci(n) {
@@ -97,7 +97,7 @@ const onmessage = function (event) {
 }
 ```
 
-**步骤2：** 在主线程的 JS 中发消息并设置回调
+2、在主线程的 JS 中发消息并设置回调
 
 ```javascript
 // 实例化Worker对象，传递想在分线程执行的脚本的scriptURL

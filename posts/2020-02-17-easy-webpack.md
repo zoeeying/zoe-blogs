@@ -9,9 +9,9 @@ date: 2020-02-17
 
 编写一个 Webpack Loader 小案例，用于替换源码里面的某个字符串。
 
-**步骤一：** 新建并初始化项目
+1、新建并初始化项目
 
-**步骤二：** 新建一个目录 loaders，在目录下新建文件 replaceLoader.js
+2、新建一个目录 loaders，在目录下新建文件 replaceLoader.js
 
 ```javascript
 const loaderUtils = require('loader-utils')
@@ -43,7 +43,7 @@ module.exports = function (source) {
 }
 ```
 
-**步骤三：** 配置 webpack.config.js
+3、配置 webpack.config.js
 
 ```javascript
 const path = require('path')
@@ -84,9 +84,9 @@ Webpack Plugin 的核心机制是事件驱动或发布订阅的设计模式。
 
 编写一个小案例，用于在打包结束后，在 dist 目录下生成一个版权信息文件 copyright.txt。
 
-**步骤一：** 新建并初始化项目
+1、新建并初始化项目
 
-**步骤二：** 新建一个目录 plugins，在目录下新建文件 copyright-webpack-plugin.js
+2、新建一个目录 plugins，在目录下新建文件 copyright-webpack-plugin.js
 
 ```javascript
 class CopyrightWebpackPlugin {
@@ -123,7 +123,7 @@ class CopyrightWebpackPlugin {
 module.exports = CopyrightWebpackPlugin
 ```
 
-**步骤三：** 配置 webpack.config.js
+3、配置 webpack.config.js
 
 ```javascript
 const path = require('path')
@@ -164,7 +164,7 @@ debug 和 build 所做的事情是一样的，debug 中使用 node 显式执行 
 
 ### 3.1 模块分析
 
-**步骤一：** 安装必要的工具
+1、安装必要的工具
 
 ```bash
 cnpm install cli-highlight -g # 高亮显示在控制台打印出来的文件中的内容
@@ -174,11 +174,11 @@ cnpm install @babel/core -D # babel核心模块
 cnpm install @babel/preset-env -D # 可以把ES6转换为ES5的插件
 ```
 
-**步骤二：** 新建项目 bundler
+2、新建项目 bundler
 
-**步骤三：** 新建目录 src，在 src 目录下写源代码，index.js 是入口文件，用于测试我们编写的打包工具
+3、新建目录 src，在 src 目录下写源代码，index.js 是入口文件，用于测试我们编写的打包工具
 
-**步骤四：** 新建文件 bundler.js
+4、新建文件 bundler.js
 
 ```javascript
 const fs = require('fs')
@@ -229,7 +229,7 @@ const moduleInfo = moduleAnalyser('./src/index.js')
 console.log(moduleInfo)
 ```
 
-**步骤五：** 在项目目录下使用命令 `node bundler.js | highlight` 对入口文件（模块）进行代码分析
+5、在项目目录下使用命令 `node bundler.js | highlight` 对入口文件（模块）进行代码分析
 
 ### 3.2 依赖图谱（Dependencies Graph）
 

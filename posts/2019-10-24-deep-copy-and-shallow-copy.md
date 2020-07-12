@@ -163,7 +163,7 @@ _.cloneDeep(obj)
 
 #### (3) 递归
 
-**步骤1：** 检测数据类型
+1、检测数据类型
 
 ```javascript
 // -1表示倒数第一个字符，slice截取字符串，包括end处的字符
@@ -178,11 +178,11 @@ const checkType = target => {
 console.log([].constructor === Array) // true
 ```
 
-**步骤2：** for...in...循环
+2、for...in...循环
 
 循环对象，得到属性名。循环数组，得到下标。
 
-**步骤3：** 实现深拷贝功能函数
+3、实现深拷贝功能函数
 
 ```javascript
 let arr = [{ number: 1 }, { number: 2 }, { number: 3 }]

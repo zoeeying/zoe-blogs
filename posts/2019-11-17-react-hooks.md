@@ -15,7 +15,7 @@ React Hooks 是用**函数的形式**代替原来的**继承类的形式**来定
 
 ## 1 小案例
 
-**步骤1：** 安装 create-react-app，使用 create-react-app 创建一个项目
+1、安装 create-react-app，使用 create-react-app 创建一个项目
 
 ```bash
 cnpm install create-react-app -g
@@ -24,7 +24,7 @@ cd demo01
 npm start
 ```
 
-**步骤2：** 使用组件类的计数器例子
+2、使用组件类的计数器例子
 
 ```jsx
 import React, { Component } from 'react'
@@ -50,7 +50,7 @@ export default class Counter extends Component {
 }
 ```
 
-**步骤3：** 使用 React Hooks 改写上面的计数器例子
+3、使用 React Hooks 改写上面的计数器例子
 
 ```jsx
 import React, { useState } from 'react'
@@ -247,7 +247,7 @@ function App() {
 
 [使用 useReducer 和 useContext 代替 Redux 的小案例：]( https://github.com/zoeeying/react-redux-learning )
 
-**步骤1：** 新建一个文件 redux.js，用于放使用 Context 管理的状态以及使用 useReducer 改变状态的操作。
+1、新建一个文件 redux.js，用于放使用 Context 管理的状态以及使用 useReducer 改变状态的操作。
 
 ```jsx
 import React, { createContext, useReducer } from 'react'
@@ -279,7 +279,7 @@ export const Color = props => {
 }
 ```
 
-**步骤2：** 新建 ShowText.js 文件，创建 ShowText 组件。
+2、新建 ShowText.js 文件，创建 ShowText 组件。
 
 ```jsx
 import React, { useContext } from 'react'
@@ -293,7 +293,7 @@ export default () => {
 }
 ```
 
-**步骤3：** 新建 Buttons.js 文件，创建 Buttons 组件。
+3、新建 Buttons.js 文件，创建 Buttons 组件。
 
 ```jsx
 import React, { useContext } from 'react'
@@ -313,7 +313,7 @@ export default () => {
 }
 ```
 
-**步骤4：** 新建 index.js 文件作为入口文件。
+4、新建 index.js 文件作为入口文件。
 
   ```jsx
   import React from 'react'
