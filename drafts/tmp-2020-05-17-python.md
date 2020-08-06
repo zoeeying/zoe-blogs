@@ -513,7 +513,54 @@ for 循环一般用于遍历（循环）序列、集合、字典。
 
 `__init__.py` 也是一个模块，`包名` 就代表这个模块，而无需用 `包名.__init__` 表示。
 
+### 9.1 import 导入模块
 
+在 test1.py 中定义变量 a，在 test2.py 中如果想使用变量 a，需要在 test2.py 中通过 `import test1` 导入 test1 模块，然后通过 `test1.a` 来使用变量 a；如果 test1.py 在目录 t 下，那么需要在 test2.py 中通过 `import t.test1` 导入 test1 模块，然后通过 `t.test1.a` 来使用变量 a。
+
+```python
+# test2.py
+import test1
+print(test1.a)
+```
+
+```python
+# test2.py
+import t.test1
+print(t.test1.a)
+
+# 命名空间简化成一个标识符
+import t.test1 as m
+print(m.a)
+```
+
+注意，`import` 只能导入**模块**。
+
+`import` 的优势在于可以清晰地看出来使用的变量来自于哪个包下面的哪个模块。
+
+### 9.2 from import 导入变量
+
+如果 test1.py 在目录 t 下，那么可以在 test2.py 中通过 `from t.test1 import a` 导入变量 a，也可以通过 `import t from test1` 导入模块 test1，通过 `test1.a` 来使用变量 a：
+
+```python
+from t.test1 import a # 导入变量a
+print(a)
+
+from t import test1 # 导入模块test1
+print(test1.a)
+
+from t.test1 import * # 导入test1模块中的所有变量
+print(a)
+```
+
+如果在 test1.py 中增加**模块内置变量**如下，那么通过 `from t.test1 import *` 导入的变量不包括变量 d。
+
+```python
+# test1.py
+__all__ = ['a', 'c']
+a = 2
+c = 3
+d = 4
+```
 
 
 
