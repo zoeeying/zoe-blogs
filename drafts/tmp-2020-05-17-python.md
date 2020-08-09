@@ -171,7 +171,7 @@ len({1,2,3,4,5}) # => 5
 # 找出两个集合中所共有的元素，即求两个集合的交集
 {1,2,3,4,5,6} & {3,4} # => {3，4}
 # 合并两个集合，并且去除重复元素，即求两个集合的合集（并集）
-{1,2,3,4,5,6} | {3,4，7} # => {1,2,3,4,5,6,7} 
+{1,2,3,4,5,6} | {3,4，7} # => {1,2,3,4,5,6,7}
 ```
 
 ```python
@@ -336,7 +336,7 @@ j == k # => False
 j is k # => False
 
 a = 'hello'
-type(a) == str # => True	
+type(a) == str # => True
 isinstance(a, str) # => True
 # 判断a是否是int/float类型
 isinstance(a, (int, float)) # => False
@@ -365,15 +365,9 @@ a | b # => 3
 
 **左结合：** 一般表达式的解析都是从左到右的。
 
-## 7 补充
+## 7 流程控制语句
 
-可以通过命令 `pip install pylint` 安装 pylint。pip 是 Python 自带的包管理工具。pylint 是语法检测工具，也可以使用 flake8 来检测语法。
-
-Python 中，单行注释使用 `#`，多行注释使用 `'''`；单行注释快捷键是 `ctrl+/`，多行注释快捷键是 `alt+shift+a`。
-
-## 8 流程控制语句
-
-### 8.1 条件控制
+### 7.1 条件控制
 
 条件控制语句用于解决选择性问题。
 
@@ -431,7 +425,7 @@ else:
 
 **补充：** input 方法用于在命令行收集数据。
 
-### 8.2 循环控制
+### 7.2 循环控制
 
 ```python
 counter = 1
@@ -455,8 +449,8 @@ else:
 
 for x in a:
     for y in x:
-      	if y == 'orange':
-          	break # 注意这里的break只是终止了内部的循环
+        if y == 'orange':
+            break # 注意这里的break只是终止了内部的循环
         print(y)
 else:
     print('EOF') # 会执行
@@ -481,7 +475,7 @@ for x in b:
 # 循环执行10次
 for x in range(0, 10):
     print(x)
-    
+
 for x in range(0, 10, 2):
     print(x) # 会打印出0、2、4、6、8，range函数的第三个参数表示步长
 
@@ -493,7 +487,7 @@ for x in range(10, 0, -2):
 c = [1, 2, 3, 4, 5, 6, 7, 8]
 for i in range(0, len(c), 2):
     print(c[i])
-    
+
 # 扩展学习一下序列的切片用法，第三个参数表示步长
 d = c[0: len(c): 2]
 print(d) # [1, 3, 5, 7]
@@ -501,7 +495,206 @@ print(d) # [1, 3, 5, 7]
 
 for 循环一般用于遍历（循环）序列、集合、字典。
 
-## 9 Python 项目的组织结构
+## 8 函数
+
+#### (1) 内置函数
+
+Python 中内置了很多函数，比如 round 函数和 print 函数：
+
+```python
+a = 1.12386
+result = round(a, 3) # 对变量a四舍五入，保留三位小数
+print(result) # 1.124
+```
+
+#### (2) 函数定义
+
+在 Python 中，定义函数的方式如下：
+
+```python
+def funcname(parameter_list):
+    pass
+```
+
+parameter_list 不是必须的。
+
+函数体中可以 `return value`；如果函数体中没有 `return` 语句，那么该函数默认返回 None；如果 return 后面没有 value，那么该函数也是返回 None。
+
+#### (3) 返回多个结果
+
+在 Python 中，函数可以返回多个结果：
+
+```python
+def damage(skill1, skill2):
+    damage1 = skill1 * 3
+    damage2 = skill2 * 2 + 10
+    return damage1, damage2
+
+damages = damage(3, 6) # 结果是元祖类型
+print(damages)  # (9, 22)
+
+skill1_damage, skill2_damage = damage(3, 6) # 序列解包
+print(skill1_damage)
+print(skill2_damage)
+```
+
+#### (4) 序列解包
+
+```python
+a, b, c = 1, 2, 3
+a = b = c = 1 # 链式赋值
+d = 1, 2, 3 # b变量是元祖类型的
+e, f, g = d # 序列解包
+h, i, j = [1, 2, 3] # 序列解包
+```
+
+注意，序列解包要保证元素的个数相等，不然会报错。
+
+#### (5) 函数参数
+
+1、必须参数
+
+**必须参数**是指在函数的参数列表中定义的参数，在函数调用时必须传入，即定义了多少个形参，就要传递多少个实参，不然会报错。
+
+```python
+# x和y是必须参数
+def add(x, y):
+    return x + y
+
+print(add(1, 2))
+```
+
+2、关键字参数
+
+**关键字参数**允许我们在函数调用的时候，明确告知函数我们传递的实参是给哪个形参赋值的。
+
+```python
+def add(x, y):
+    return x + y
+
+print(add(y=1, x=2)) # 使用关键字参数的形式来调用函数，可以无需关注函数调用时传入参数的顺序
+```
+
+必须参数和关键字参数的区别在于函数的调用。
+
+3、默认参数
+
+```python
+def print_student_files(name, gender='女', age=18, college='光明小学'):
+    print('我叫' + name)
+    print('我是' + gender + '生')
+    print('我今年' + str(age) + '岁')
+    print('我在' + college + '上学')
+
+print_student_files('叙叙')
+print_student_files('秋秋', age=19) # 使用关键字参数
+print_student_files('远远', gender='男', 20, college='人民路小学') # 报错，positional argument follows keyword argument，不能混合调用
+```
+
+如果没有给某个形参设置默认值，那么在函数调用的时候必须传入该参数，即该参数是必须参数。
+
+设置了默认值的形参也叫可选参数。
+
+定义函数的时候，默认参数后面不能再跟必须参数。
+
+4、可变参数
+
+```python
+def demo(*param):
+    print(param) # (1, 2, 3)
+    print(type(param)) # 元祖类型
+
+# Python会自动把可变参数列表所对应的实参组成一个元祖
+demo(1, 2, 3)
+
+# a变量不能直接传入demo函数，param会变成二维元祖，需要在变量a前面加上*
+# *a的作用其实就是把元祖中的元素平铺出来，然后传递给可变参数函数
+a = (1, 2, 3)
+demo(*a)
+```
+
+```python
+# 等同于上面的可变参数函数
+def demo(param):
+    pass
+
+demo((1, 2, 3))
+```
+
+注意必须参数、默认参数、关键字参数、可变参数混合应用的场景：
+
+```python
+def demo(param1, param2=2, *param):
+    print(param1)
+    print(param2)
+    print(param)
+
+demo('a', 1, 2, 3, 4)
+
+
+def demo2(param1, *param, param2=2):
+    print(param1)
+    print(param)
+    print(param2)
+
+demo2('a', 1, 2, 3, 'param')
+demo2('a', 1, 2, 3, param2='param')
+```
+
+可变参数列表一般使用 for 循环遍历列表中的每个参数：
+
+```python
+def squsum(*param):
+    sum = 0
+    for i in param:
+        sum += i * i
+    print(sum)
+
+squsum(1, 2, 3, 4, 5, 6)
+squsum(*[1, 2, 3, 4, 5, 6])
+```
+
+具有任意个数的关键字参数（关键字可变参数列表）的函数：
+
+```python
+def city_temp(**param):
+    print(param) # {'beijing': 32, 'nanjing': 31, 'shanghai': 35}
+    print(type(param)) # <class 'dict'>
+
+city_temp(beijing=32, nanjing=31, shanghai=35)
+```
+
+```python
+# 遍历字典
+def city_temp(**param):
+    for key, value in param.items():
+        print(key, ':', value)
+
+city_temp(beijing=32, nanjing=31, shanghai=35)
+
+# 函数调用时传入字典类型的数据
+a = {'beijing': 32, 'nanjing': 31, 'shanghai': 35}
+city_temp(**a)
+
+# 如果不传递参数就调用函数，那么不会打印出任何东西，因为不会进入for循环
+# 如果在for循环前面print(param)，那么会打印出{}
+city_temp()
+```
+
+#### (6) 补充
+
+如果想查看 Python 的内置函数，首先在 Windows 命令行下通过命令 `python` 进入 Python 命令行（也可以通过直接打开 Python IDLE 来进入 Python 命令行），然后通过命令 `help(round)` 查看内置函数 round 的描述。
+
+在 Python 命令行下，通过命令 `import this` 可以查看 Python 之禅。
+
+通过下面的代码，可以设置允许的最大的函数递归次数：
+
+```python
+import sys
+sys.setrecursionlimit(9999)
+```
+
+## 9 Python 包和模块
 
 **组织结构：** 包 => 模块 => 类 => 函数、变量
 
@@ -511,9 +704,44 @@ for 循环一般用于遍历（循环）序列、集合、字典。
 
 如何区分普通文件夹和包呢？普通文件夹中如果有特定的文件 `__init__.py`，那么 Python 会把该文件夹认为是一个包。
 
-`__init__.py` 也是一个模块，`包名` 就代表这个模块，而无需用 `包名.__init__` 表示。
+Python 程序在执行后，会生成 `__pycache__` 目录，目录中有 xxx.pyc 文件，它是由 Python 解释器自动生成的字节码文件，它可以提升 Python 程序的执行效率。如果想在 VSCode 的资源管理器中隐藏 `__pycache__` 目录，可以在 VSCode 中设置 files.exclude，如下：
 
-### 9.1 import 导入模块
+```json
+"files.exclude": {
+  "**/__pycache__": true
+}
+```
+
+### 9.1 `__init__.py`
+
+`__init__.py` 文件也是一个模块，`包名` 就代表这个模块，而无需用 `包名.__init__` 表示。
+
+当一个包或者包中的变量被导入的时候，`__init__.py` 文件会首先被自动执行，可以在该文件中做一些包和模块的初始化工作。
+
+可以在 `__init__.py` 文件中通过 `__all__` 变量来控制哪些模块能被导出：
+
+```python
+__all__ = ['模块名']
+```
+
+如果包中的多个模块都需要导入相同的一些类库，如果在每个模块顶部通过 `import sys` 的形式导入，会很啰嗦，可以在 `__init__.py` 文件中**批量导入**这些类库，然后在每个模块中 `import t`（t 是 `__init__.py` 文件所在的目录名，即包名），再通过 `t.sys` 来使用：
+
+```python
+# t/__init__.py
+import sys
+import datetime
+import io
+```
+
+```python
+# 模块
+import t
+print(t.sys.path)
+```
+
+### 9.2 导入
+
+#### (1) import 导入
 
 在 test1.py 中定义变量 a，在 test2.py 中如果想使用变量 a，需要在 test2.py 中通过 `import test1` 导入 test1 模块，然后通过 `test1.a` 来使用变量 a；如果 test1.py 在目录 t 下，那么需要在 test2.py 中通过 `import t.test1` 导入 test1 模块，然后通过 `t.test1.a` 来使用变量 a。
 
@@ -537,7 +765,7 @@ print(m.a)
 
 `import` 的优势在于可以清晰地看出来使用的变量来自于哪个包下面的哪个模块。
 
-### 9.2 from import 导入变量
+#### (2) from import 导入
 
 如果 test1.py 在目录 t 下，那么可以在 test2.py 中通过 `from t.test1 import a` 导入变量 a，也可以通过 `import t from test1` 导入模块 test1，通过 `test1.a` 来使用变量 a：
 
@@ -550,25 +778,98 @@ print(test1.a)
 
 from t.test1 import * # 导入test1模块中的所有变量
 print(a)
+
+from t.test1 import a, b # 导入test1模块中的变量a、b
+
+# 如果导入变量太多，一行放不下，可以在行尾加上\，也可以在变量外边加上括号
+from t.test1 import a, b, \
+c
+from t.test1 from (a, b,
+c)
 ```
 
 如果在 test1.py 中增加**模块内置变量**如下，那么通过 `from t.test1 import *` 导入的变量不包括变量 d。
 
 ```python
 # test1.py
-__all__ = ['a', 'c']
+__all__ = ['a', 'c'] # 只会导出变量a和c
 a = 2
 c = 3
 d = 4
 ```
 
+#### (3) 相对导入和绝对导入
 
+对于顶级包，不可能是入口文件外边的目录，而是跟入口文件的位置相关的，一般跟入口文件平级的目录有可能成为某个模块的顶级包。
 
+```python
+# main.py入口文件
+import package2.package4.m2 #绝对导入（绝对路径），package2是顶级包
+```
 
+相对导入用 `.` 表示当前目录，`..` 表示上级目录，`...` 表示上上级目录，在入口文件中无法使用相对导入，且只能使用 from import 语法来实现相对导入。
 
+入口文件中无法使用相对导入，是因为，相对导入能找到对应的模块是根据当前模块的 `__name__` 变量来定位的，由于入口文件的 `__name__`变量值为 `__main__`，所以无法定位到相对导入的模块。
 
+相对导入只能在普通模块中使用，但是如果在普通模块中相对导入的模块跟该普通模块的顶级包平级（也可以这样理解，相对导入的模块没有顶级包），会报错 `ValueError: attempted relative import beyond top-level package`。
 
+#### (4) 注意事项
 
+包和模块是**不会被重复导入**的，比如 9-1 的例子中，如果多个模块导入 t， `__init__.py` 文件中的 import 不会被重复执行。
 
+在实际开发中，我们一定要**避免循环导入**，比如在 p1.py 中导入 p2.py，在 p2.py 中导入 p1.py。
 
+如果一个模块被导入了，该模块中的代码会被执行。在一个应用程序中，如果某个模块被导入多次，该模块中的代码只会被执行一次。
 
+### 9.3 模块内置变量
+
+`__name__`：模块名，包括命名空间，入口文件中该变量值为 `__main__`
+
+`__package__`：包名，入口文件中该变量值为 NoneType
+
+`__doc__`：模块文档注释，如果没有文档注释，该变量值为 NoneType
+
+`__file__`：模块的绝对路径，如果通过命令 `python z\zoe.py` 执行 zoe.py 入口文件，那么该变量值为 `z\zoe.py`
+
+```python
+# 通过python zoe.py执行zoe.py文件，zoe.py文件会被当作应用程序的入口文件，且该文件中没有文档注释
+print('name: ' + __name__) # __main__
+print('package: ' + (__package__ or '当前模块不属于任何包')) # package: 当前模块不属于任何包
+print('doc: ' + (__doc__ or '当前模块没有文档注释')) # doc: 当前模块没有文档注释
+print('file: ' + __file__) # zoe.py
+```
+
+**入口文件：** 通过命令 `python zoe.py` 执行的 zoe.py 文件会被当作应用程序的入口文件。
+
+在使用模块的内置变量的时候，需要区分开入口文件和普通的模块文件。
+
+通过命令 `python -m z.zoe` 可以把 zoe.py 文件当作模块来执行，前提必须在 z 目录外边的目录中执行该命令，因为要让 zoe.py 成为一个普通模块，该模块必须要有包。注意 `-m` 后面是 `命名空间.模块名`，而不是路径。
+
+#### (1) `dir()` 函数
+
+```python
+print(dir()) # 打印出当前模块中的所有变量字符串组成的列表，包括自定义的变量
+```
+
+```python
+import sys
+print(dir(sys)) # 打印sys类库中的变量
+```
+
+可以向 `dir()` 函数中传入类名或者模块名，返回该类或者模块中的所有变量。
+
+#### (2) `__name__` 经典用法
+
+Make a script both importable and executable（让一个 Python 脚本既可以被当作普通模块提供给其它应用程序来调用，也可以让其成为一个可执行的文件）：
+
+```python
+if __name__ == '__main__':
+    print('This is APP')
+print('This is module')
+```
+
+## 10 补充
+
+可以通过命令 `pip install pylint` 安装 pylint。pip 是 Python 自带的包管理工具。pylint 是语法检测工具，也可以使用 flake8 来检测语法。
+
+Python 中，单行注释使用 `#`，多行注释使用 `'''`；单行注释快捷键是 `ctrl+/`，多行注释快捷键是 `alt+shift+a`。
