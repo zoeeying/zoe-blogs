@@ -48,7 +48,7 @@
 
 - [Webpack4.0 基础](/posts/2020-01-05-webpack4.0-basic.md)
 - [Webpack4.0 高级](/posts/2020-02-07-webpack4.0-advanced.md)
-- [实现简易的 Webpack](/posts/2020-02-17-easy-loader-and-plugin-and-bundler.md)
+- [实现简易的 Webpack](/posts/2020-02-17-easy-webpack.md)
 
 ## Dart
 

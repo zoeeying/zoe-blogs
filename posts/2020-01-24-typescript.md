@@ -1,8 +1,3 @@
----
-title: TypeScript 入门
-date: 2020-01-24
----
-
 # TypeScript 入门
 
 ## 1 简介
@@ -57,7 +52,7 @@ function tsDemo(data: {x: number, y: number}) {
 tsDemo({ x: 3, y: 4 })
 ```
 
-4、在项目目录下执行命令 `tsc demo.ts`（使用 TypeScript 对 demo.ts 进行编译），生成 demo.js 文件，通过命令 `node demo.js` 运行该文件。其实可以使用工具可以简化这些步骤，需要全局安装 ts-node，然后通过命令 `ts-node demo.ts` 即可以完成对 demo.ts 文件的编译和运行
+4、在项目目录下执行命令 `tsc demo.ts`（使用 TypeScript 对 demo.ts 进行编译），生成 demo.js 文件，通过命令 `node demo.js` 运行该文件。其实可以使用工具可以简化这些步骤，需要全局安装 ts-node，然后通过命令 `ts-node demo.ts` 即可完成对 demo.ts 文件的编译和运行
 
 ## 3 静态类型
 
@@ -92,6 +87,7 @@ const point: Point = {
 | array     | 数组类型                                                 |
 | tuple     | 元祖类型                                                 |
 | null      | 空类型                                                   |
+| symbol    | symbol 类型                                              |
 
 ```typescript
 let a: number
@@ -113,34 +109,51 @@ enum SEASON2 { chun = '春', xia = '夏', qiu = '秋', dong = '冬' }
 console.log(SEASON2.qiu) // 秋
 
 let t: any = 28
-t = 'Zoe'
+t = 'Zoe' // 可以赋值
+
+// 可以是number也可以是sring
+let temp: number | string = 123
+temp = 'hello'
 ```
 
 #### (2) 对象类型
 
 ```typescript
-// 对象
+// 对象：{}
 const student: { name: string; age: number } = { name: 'zoe', age: 28 }
-// 数组
+
+// 数组：[]
 const numbers: number[] = [1, 2, 3]
-// 类
+
+// 类：Class
 class Person {}
 const zoe: Person = new Person()
-// 函数
+
+// 函数：function
 const getTotal: () => number = () => {
   return 4869
 }
+
+interface Person {
+  name: string
+}
+const rawData = '{"name": "zoe"}'
+const newData: Person = JSON.parse(rawData)
 ```
 
-#### (3) 类型注解
+#### (3) 补充
 
-类型注解的英文是 type annotation，是指显式地声明一个固定类型的变量。
+**类型注解**的英文是 type annotation，是指显式地声明一个固定类型的变量。
 
-#### (4) 类型推断
+**类型推断**的英文是 type inference，是指 TypeScript 会自动地去尝试分析变量的类型。
 
-类型推断的英文是 type inference，是指 TypeScript 会自动地去尝试分析变量的类型。
-
-#### (5) 总结
+```typescript
+// 可以类型推断出count变量是number类型
+let count = 123
+// 如果变量声明和变量赋值分开写，无法推断出变量num的类型，会认为是any
+let num
+num = 123
+```
 
 写 TypeScript 代码的时候，就是希望每个对象的属性以及每个变量的类型都是固定的。如果 TS 能够自动分析出变量类型，就不需要使用类型注解，但是如果 TS 无法分析变量类型的话，就需要使用类型注解了。
 
@@ -160,12 +173,10 @@ const total = getTotal(3, 5)
 #### (1) 函数声明法
 
 ```typescript
-// 使用 function 关键字来定义函数，:string表示函数返回的数据类型是string
-// age: number是形参
+// 使用function关键字来定义函数，:string表示函数返回的数据类型是string
 function searchPerson(age: number): string {
   return '找到了' + age + '岁的人'
 }
-// 28是实参
 console.log(searchPerson(28))
 ```
 
@@ -173,6 +184,24 @@ console.log(searchPerson(28))
 // 该函数没有返回值
 function sayHello(): void {
   console.log('Hello')
+}
+```
+
+```typescript
+// 下面两个函数永远不可能执行到最后
+function errorEmitter(): never {
+  throw new Error()
+}
+
+function whileFunc(): never {
+  while (true) {}
+}
+```
+
+```typescript
+// 解构赋值的类型注解写法
+function add({ first, second }: { first: number; second: number }): number {
+  return first + second
 }
 ```
 
@@ -190,8 +219,11 @@ console.log(searchPerson(28))
 #### (3) 箭头函数
 
 ```typescript
+// 方式1，:string可以省略，因为通过类型推断可以推断出来
 const searchPerson = (age: number): string => '找到了' + age + '岁的人'
-console.log(searchPerson(28))
+// 方式2
+const searchPerson2: (age: number) => string = (age) =>
+  '找到了' + age + '岁的人'
 ```
 
 ### 4.2 函数分类
@@ -268,9 +300,6 @@ let arr1: number[] = [1, 2, 3, 2] // 数值数组
 let arr2: Array<string> = ['Zoe', '小畅叙', '颖颖'] // 字符串数组
 let arr3: Array<boolean> = [true, false, false] // 布尔数组
 // let arr4: number[] = [1, true] // 报错，不允许有非number的数据
-// 元祖，允许数组中有不同类型的数据，赋值需要注意顺序
-// 不推荐使用
-let arr5: [string, number] = ['Zoe', 28]
 ```
 
 ```typescript
@@ -279,6 +308,67 @@ let arr1: number[] = new Array(1, 2, 3, 2)
 let arr2: Array<string> = new Array('Zoe', '小畅叙', '颖颖')
 let arr3: Array<boolean> = new Array(true, false, false)
 ```
+
+```typescript
+const arr: (number | string)[] = [1, 2, 'hello']
+const undefinedArr: undefined[] = [undefined, undefined]
+const objectArr: { name: string }[] = [
+  {
+    name: 'zoe',
+  },
+]
+
+// 类型别名type alias
+type User = { name: string; age: number }
+const userArr: User[] = [
+  {
+    name: 'zoe',
+    age: 18,
+  },
+]
+
+class Teacher {
+  name: string
+  age: number
+}
+const teacherArr: Teacher[] = [
+  new Teacher(),
+  // 并不要求数组中每个元素都是Teacher的实例，普通对象只要有name属性和age属性也可以
+  {
+    name: 'zoe',
+    age: 18,
+  },
+]
+```
+
+```typescript
+// 元祖tuple，允许数组中有不同类型的数据，赋值需要注意顺序
+// userInfo是一个元祖
+let userInfo: [string, number, string] = ['Zoe', 28, 'female']
+
+// 处理csv文件
+const teacherList: [string, number, string][] = [
+  ['zoe', 18, 'female'],
+  ['yuan', 19, 'male'],
+  ['qiu', 20, 'female'],
+]
+```
+
+一个数组的长度是固定的，数组中的每个元素的数据类型也是固定的，该数组也可以被叫作**元祖**。
+
+## 6 interface
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## 6 字符串
 
@@ -535,3 +625,20 @@ let girl2: badGirl.Girl = new badGirl.Girl()
 girl1.talk()
 girl2.talk()
 ```
+
+## 10 在 React 项目中使用 TypeScript
+
+通过下面的命令可以创建基于 TypeScript 的 React 项目，并且使用 npm 安装依赖：
+
+```bash
+npx create-react-app my-app --template typescript --use-npm
+```
+
+
+
+
+
+
+
+
+

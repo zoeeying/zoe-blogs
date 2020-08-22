@@ -58,10 +58,20 @@ Simple React Snippets 插件可以让我们通过快捷方式快速生成 React 
 create-react-app 是官方出的一个快速构建 React 单页面应用的脚手架工具，它本身集成了 Webpack，并配置了一系列 loader 和默认的 npm 脚本，可以让我们零配置直接上手开发 React 应用。
 
 ```bash
-cnpm install create-react-app -g
-npx create-react-app demo01 # 在某个空文件夹下使用该命令创建demo01项目
-cd demo01
-npm start # 启动项目
+npx create-react-app my-app
+cd my-app
+npm start
+```
+
+```bash
+# 创建基于TypeScript的React项目，并且使用npm安装依赖
+npx create-react-app my-app --template typescript --use-npm
+```
+
+```bash
+npm init react-app my-app
+cd my-app
+npm start
 ```
 
 ## 5 非受控组件
