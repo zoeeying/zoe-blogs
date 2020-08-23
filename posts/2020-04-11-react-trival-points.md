@@ -249,7 +249,7 @@ class Example extends PureComponent {
 }
 ```
 
-上面使用 PureComponent 的例子在过滤很大的列表时，效率不是很好，可以添加 memoization（仅在输入变化时，重新计算 `render` 需要使用的值，这个技术叫做 memoization）帮助函数来阻止非必要的过滤。
+上面使用 PureComponent 的例子在过滤很大的列表时，效率不是很好，可以添加 memoization（仅在输入变化时，重新计算 `render` 需要使用的值，这个技术叫做 memoization，帮助函数来阻止非必要的过滤。
 
 ```jsx
 import memoize from "memoize-one"
@@ -281,7 +281,22 @@ class Example extends Component {
 }
 ```
 
+## 7 React.memo
 
+React.memo 是高阶组件，它与 React.PureComponent 很相似，但只适用于函数组件。如果函数组件在给定相同 props 的情况下渲染相同的结果，那么可以用 React.memo 来将其包装一下，以此通过记忆组件渲染结果的方式来提高组件的性能表现。这意味着在这种情况下，React 将跳过渲染组件的操作并直接复用最近一次渲染的结果。
+
+React.memo 仅检查 props 变更。
+
+```jsx
+function MyComponent(props) {
+  // 使用props渲染
+}
+function areEqual(prevProps, nextProps) {
+  // 如果把nextProps传入render方法的返回结果与
+  // 将prevProps传入render方法的返回结果一致则返回true，否则返回false
+}
+export default React.memo(MyComponent, areEqual)
+```
 
 
 

@@ -48,11 +48,25 @@ static getDerivedStateFromProps(props, state)
 
 生命周期函数 `componentWillReceiveProps` 是响应 props 变化之后进行更新的方式，但是在16.3 版本中，使用了一个替代版的生命周期函数 `getDerivedStateFromProps`。`getDerivedStateFromProps` 的存在只有一个目的：让组件在 **props 变化**时更新 state。
 
-在每次渲染前都会触发 getDerivedStateFromProps 方法，componentWillReceiveProps 仅在父组件重新渲染时触发，而不是在内部调用 `setState` 时。
+在每次 re-rendering 前都会触发 getDerivedStateFromProps 方法，componentWillReceiveProps 仅在父组件重新渲染时触发，而不是在内部调用 `setState` 时。
 
 `getDerivedStateFromProps` 会在调用 render 方法之前调用，并且在初始挂载及后续更新时都会被调用。它应返回一个对象来更新 state，如果返回 null 则不更新任何内容。
 
 此方法无权访问组件实例。
+
+```jsx
+static getDerivedStateFromProps(props, state) {
+  // 当传入的type发生变化的时候，更新state
+  if (props.type !== state.type) {
+    return {
+      type,
+    }
+  }
+  // 否则返回null，表示props传入的内容会影响到state，即对于state不进行任何操作
+  // 这个返回值是必须的，所以尽量将其写在函数的末尾
+  return null
+}
+```
 
 #### (3) render
 

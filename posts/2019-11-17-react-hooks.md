@@ -336,58 +336,45 @@ export default () => {
 
 ## 6 useMemo
 
-使用类组件进行 React 开发时，经常会遇到组件重复渲染的问题，父组件中一个 state 发生了变化，会导致该组件的所有子组件都重写 render，即使绝大多数子组件的 props 没有变化，shouldComponentUpdate 生命周期函数可以减少这种重复渲染。如果使用 React Hooks 的话，也会遇到类似的问题，可以使用 useMemo 这个钩子函数。
-
-如果一个函数不想在每次重新渲染的时候都执行，可以使用 useMemo 来让其只在某个 state 改变时才执行。
+如果某个函数执行比较耗时，在组件重新渲染的时候不希望重复执行该函数，可以使用 useMemo 钩子函数将其执行结果返回值缓存起来。useMemo 的第一个参数是一个函数，该函数返回的值会被缓存起来，同时这个值会作为 useMemo 的返回值；useMemo 的第二个参数是一个依赖数组，如果数组中的值有变化，那么就会去重新执行第一个参数中的函数，并将函数返回值缓存起来作为 useMemo 的返回值。
 
 ```jsx
 import React, { useState, useMemo } from 'react'
-
 export default () => {
-  const [button1, setButton1] = useState('我是button1')
-  const [button2, setButton2] = useState('我是button2')
-  return (
-    <>
-      <button onClick={
-        () => { setButton1(`${new Date().getTime()}button1改变了`) }
-      }>button1</button>
-      <button onClick={
-        () => { setButton2(`${new Date().getTime()}button2改变了`) }
-      }>button2</button>
-      <Child button1={button1} button2={button2} />
-    </>
-  )
-}
+	const [num, setNum] = useState(0)
 
-const Child = ({ button1, button2 }) => {
+	const expensiveFn = () => {
+		let result = 0
+		for (let i = 0; i < 100000; i++) {
+			result += i
+		}
+		console.log(result)
+		return result
+	}
+	const base = useMemo(expensiveFn, [])
 
-  const button1Change = tmp => {
-    console.log('button1不变化，button2变化，子组件是否重复渲染了？？？？？')
-    return tmp
-  }
-
-  // 只有button1变化了才会执行button1Change方法
-  const renderButton1 = useMemo(() => { button1Change(button1) }, [button1])
-
-  return (
-    <>
-      {/* <div>{button1Change(button1)}</div> */}
-      <div>{renderButton1}</div>
-      <div>{button2}</div>
-    </>
-  )
+	return (
+		<div className="App">
+			<h1>count：{num}</h1>
+			<button onClick={() => setNum(num + base)}>+1</button>
+		</div>
+	)
 }
 ```
 
-## 7 useCallback
+## 7 React.memo
+
+## 8 useCallback
+
+使用类组件进行 React 开发时，经常会遇到组件重复渲染的问题，父组件中一个 state 发生了变化，会导致该组件的所有子组件都重写 render，即使绝大多数子组件的 props 没有变化，shouldComponentUpdate 生命周期函数可以减少这种重复渲染。如果使用 React Hooks 的话，也会遇到类似的问题，可以使用 useCallback 这个钩子函数。
 
 useCallback 和 useMemo 的参数跟 useEffect（用于处理副作用，而 useCallback 和 useMemo 不可以）一致。
 
 useMemo 和 useCallback 都会在组件第一次渲染的时候执行，之后会在其依赖的变量发生改变时再次执行，并且它们都返回缓存的值，useMemo 返回缓存的变量，useCallback 返回缓存的函数。
 
-有一个父组件，其中包含子组件，子组件接收一个函数作为 props，通常而言，如果父组件更新了，子组件也会执行更新，但是大多数场景下，更新是没有必要的，可以借助 useCallback 来返回函数，然后把这个函数作为 props传递给子组件，这样，子组件就能避免不必要的更新。
+有一个父组件，其中包含子组件，子组件接收一个函数作为 props，如果父组件重新渲染了，该父组件（函数组件）中的代码都会重新执行，每次执行都会创建新的 callback 函数，导致子组件接收到的 props 发生改变，从而触发重新渲染，而这种情况下的重新渲染其实是没有必要的，我们可以借助 useCallback 把 callback 函数缓存起来，在父组件的重新渲染的时候保持两个 callback 函数的引用一致，从而避免子组件的不必要的更新。
 
-```react
+```jsx
 import React, { useState, useCallback, useEffect } from 'react'
 function Parent() {
   const [count, setCount] = useState(1)
@@ -396,6 +383,7 @@ function Parent() {
   const callback = useCallback(() => {
     return count
   }, [count])
+
   return (
     <div>
       <h4>{count}</h4>
@@ -410,14 +398,16 @@ function Parent() {
 
 function Child({ callback }) {
   const [count, setCount] = useState(() => callback())
+
   useEffect(() => {
     setCount(callback())
   }, [callback])
+
   return <div>{count}</div>
 }
 ```
 
-## 8 useRef
+## 9 useRef
 
 useRef 可以用来获取 DOM 元素，也可以用来保存变量。
 
@@ -426,8 +416,8 @@ import React, { useRef, useState, useEffect } from 'react'
 export default () => {
   // 用来获取DOM元素
   const inputElement = useRef()
-  const textRef = useRef()
   // 用来保存变量
+  const textRef = useRef()
   const [text, setText] = useState('Zoe')
 
   useEffect(() => {
@@ -452,7 +442,7 @@ export default () => {
 }
 ```
 
-## 9 自定义 Hooks
+## 10 自定义 Hooks
 
 通过自定义 Hooks，可以将组件逻辑提取到可重用的函数中来复用状态逻辑，但是它不复用 state 本身，在复用状态逻辑的组件中，各自的 state 是相互独立的。事实上 Hooks 的每次调用都有一个完全独立的 state，因此可以在单个组件中多次调用同一个自定义 Hook。
 

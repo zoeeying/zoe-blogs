@@ -124,7 +124,7 @@ class MyComponent extends React.Component {
 const node = this.myRef.current
 ```
 
-如果 ref 属性用于 HTML 元素，ref 对象接收底层 DOM 元素作为其 current 属性；如果 ref 属性用于自定义的 class 组件，ref 对象接收组件的挂载实例作为其 current 属性；不能在函数组件上使用 ref 属性，因为函数组件没有实例。
+如果 ref 属性用于 HTML 元素，ref 对象接收底层 DOM 元素作为其 current 属性；如果 ref 属性用于自定义的 class 组件，ref 对象接收组件的挂载实例作为其 current 属性；**不能在函数组件上使用 ref 属性，因为函数组件没有实例。**
 
 组件卸载的时候，React 会给 current 属性传入 null 值。
 
@@ -137,10 +137,9 @@ class CustomTextInput extends React.Component {
     super(props);
     // 创建一个ref来存储textInput的DOM元素
     this.textInput = React.createRef()
-    this.focusTextInput = this.focusTextInput.bind(this)
   }
 
-  focusTextInput() {
+  focusTextInput = () => {
     // 直接使用原生API使text输入框获得焦点
     // 注意：我们通过current来访问DOM节点
     this.textInput.current.focus()
@@ -166,7 +165,7 @@ class CustomTextInput extends React.Component {
 
 ```jsx
 // ref属性用于自定义的class组件
-// CustomTextInput是上面的自定义的class组件，组件的构造器中的focusTextInput实例方法可以通过this.textInput.current.focusTextInput来调用，即this.textInput.current表示的是组件的实例
+// CustomTextInput是上面的自定义的class组件，组件的构造器中的focusTextInput实例方法可以在父组件中通过this.textInput.current.focusTextInput来调用，即this.textInput.current表示的是组件的实例
 class AutoFocusTextInput extends React.Component {
   constructor(props) {
     super(props);
