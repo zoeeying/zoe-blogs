@@ -358,17 +358,72 @@ const teacherList: [string, number, string][] = [
 
 ## 6 interface
 
+```typescript
+// 类型别名
+type Person = { name: string }
 
+// interface
+interface Person {
+  name: string
+}
+```
 
+interface 可以代表对象和函数，无法代表基础类型，而类型别名可以代表基础类型：
 
+```typescript
+type Point = number 
+```
 
+```typescript
+interface Person {
+  // readonly name: string // name属性只能读，不能修改
+  // [propName: string]: any // 允许有其它属性，属性名字是string类型，属性值是任意类型
+  // say(): string // say方法，返回值是string类型
+  name: string
+  age?: number // age属性可有可无
+}
+const getPersonName = (person: Person): void => {
+  console.log(person.name)
+}
+const person = {
+  name: 'zoe',
+  sex: 'female',
+}
+getPersonName(person) // 只需要保证必须有name属性即可，允许多出sex属性
+// 传递字面量形式的参数（对象字面量直接赋值），会进行类型强校验，不允许多出sex属性
+getPersonName({
+  name: 'zoe',
+  sex: 'female', // 报错，如果在interface中增加[propName: string]: any，就不会报错了
+})
 
+// 使用接口来约束类的属性和方法
+class User implements Person {
+  name = 'zoe'
+  say() {
+    return 'Hello'
+  }
+}
 
+// 接口继承
+interface Teacher extends Person {
+  teach(): string
+}
+```
 
+interface 除了可以用来定义属性和方法以外，还可以用来定义函数类型：
 
+```typescript
+interface SayHi {
+  (word: string): string
+}
+const say: SayHi = (word: string) => {
+  return word
+}
+```
 
+interface 也可以用来定义数组这样的索引类型，参考文档。
 
-
+interface 只是用来帮助我们做语法校验的工具，并不会真正地编译成 JavaScript 代码。
 
 ## 6 字符串
 
