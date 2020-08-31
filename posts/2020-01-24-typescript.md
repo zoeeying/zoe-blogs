@@ -1,4 +1,4 @@
-# TypeScript 入门
+# TypeScript 入门学习笔记
 
 ## 1 简介
 
@@ -519,9 +519,9 @@ console.log(reg5.test(str)) // true
 console.log(reg5.exec(str))
 ```
 
-## 9 面向对象
+## 9 类
 
-### 9.1 类的声明
+### 9.1 声明
 
 类是具体事物（对象）的抽象，对象是类的具体表现。
 
@@ -543,53 +543,7 @@ console.log(ming) // Person { name: '小明', age: 28 }
 ming.say() // 这人说话了
 ```
 
-### 9.2 类的修饰符
-
-**访问修饰符：** public、protected、private
-
-| 修饰符    | 描述                                                        |
-| --------- | ----------------------------------------------------------- |
-| public    | 属性或方法是公开的                                          |
-| protected | 如果属性或方法用 protected 修饰，则只能在类中及其子类中访问 |
-| private   | 如果属性或方法用 private 修饰，则只能在类中访问             |
-
-```typescript
-// 访问修饰符
-class Person {
-  public sex: string
-  protected name: string
-  private age: number
-  constructor(sex: string, name: string, age: number) {
-    this.sex = sex
-    this.name = name
-    this.age = age
-  }
-  public sayHello() {
-    console.log('hello')
-  }
-  protected sayLove() {
-    console.log('love')
-  }
-}
-
-var ming: Person = new Person('男', '小明', 29)
-console.log(ming.sex)
-// console.log(ming.name) // 报错，只能在类Person及其子类中访问
-// console.log(ming.age) // 报错，只能在类Person中访问
-ming.sayHello()
-// ming.sayLove() // 报错，只能在类Person及其子类中访问
-```
-
-**只读修饰符：**readonly
-
-```typescript
-// 只读修饰符readonly
-class Man {
-  public readonly sex: string = 'male' // 只读属性直接赋值
-}
-```
-
-### 9.3 继承和重写
+### 9.2 继承和重写
 
 **继承：** 允许我们创建一个类（子类），继承已有的类（父类）的所有属性和方法，子类可以创建父类中没有的属性和方法。
 
@@ -624,9 +578,232 @@ class Child extends Father {
 }
 ```
 
-### 9.4 接口
+```typescript
+class Person {
+  name = 'zoe'
+  getName() {
+    return this.name
+  }
+}
+class Teacher extends Person {
+  getTeacherName() {
+    return 'teacher zoe'
+  }
+  // 重写父类中的getName方法
+  // super可以看成是父类Person，super.getName()表示调用Person中的getName方法
+  // super主要应用场景：子类重写了父类中的方法，如果还想调用父类中的方法，可以使用super
+  getName() {
+    return super.getName() + 'ying'
+  }
+}
+const teacher = new Teacher()
+console.log(teacher.getName())
+console.log(teacher.getTeacherName())
+```
+
+### 9.3 访问类型
+
+**访问类型：** public、protected、private
+
+| 访问类型  | 描述                                     |
+| --------- | ---------------------------------------- |
+| public    | 属性或方法是公开的，允许在类中和类外访问 |
+| protected | 属性或方法只能在类中及其子类中访问       |
+| private   | 属性或方法只能在类中访问                 |
+
+```typescript
+// 访问类型
+class Person {
+  public sex: string
+  protected name: string
+  private age: number
+  constructor(sex: string, name: string, age: number) {
+    this.sex = sex
+    this.name = name
+    this.age = age
+  }
+  public sayHello() {
+    console.log('hello')
+  }
+  protected sayLove() {
+    console.log('love')
+  }
+}
+
+var ming: Person = new Person('男', '小明', 29)
+console.log(ming.sex)
+// console.log(ming.name) // 报错，只能在类Person及其子类中访问
+// console.log(ming.age) // 报错，只能在类Person中访问
+ming.sayHello()
+// ming.sayLove() // 报错，只能在类Person及其子类中访问
+```
+
+### 9.4 constructor
+
+```typescript
+class Person {
+  name: string
+  age: number
+  constructor(name: string, age: number) {
+    this.name = name
+    this.age = age
+  }
+  say() {
+    console.log('这人说话了')
+  }
+}
+
+let ming: Person = new Person('小明', 28)
+console.log(ming) // Person { name: '小明', age: 28 }
+ming.say() // 这人说话了
+```
+
+```typescript
+class Person {
+  // 传统写法
+  // public name: string
+  // constructor(name: string) {
+  //   this.name = name
+  // }
+  // 简化写法
+  constructor(public name: string) {}
+}
+```
+
+如果父类中有 constructor，子类中也有 constructor，子类需要通过 `super()` 手动调用一下父类的构造器，并且传入父类构造器需要的参数：
+
+```typescript
+class Person {
+  constructor(public name: string) {}
+}
+class Teacher extends Person {
+  constructor(public age: number) {
+    // 如果父类中没有constructor，子类也需要在constructor中调用一下super()，传参为空
+    super('zoe')
+  }
+}
+const teacher = new Teacher(28)
+console.log(teacher.age)
+console.log(teacher.name)
+```
+
+### 9.5 getter 和 setter
+
+我们可以通过 getter 访问类中的私有属性，通过 setter 修改类中的私有属性：
+
+```typescript
+class People {
+  constructor(private _name: string) {}
+  get name() {
+    return this._name
+  }
+
+  // set name(name: string) {
+  //   this._name = name
+  // }
+
+  set name(name: string) {
+    const realName = name.split(' ')[0]
+    this._name = realName
+  }
+}
+const people = new People('zoe')
+people.name = 'zoe ying' // 调用setter
+console.log(people.name) // 调用getter，name后面不需要加括号，打印出zoe
+```
+
+### 9.6 单例模式
+
+```typescript
+class Demo {
+  private static instance: Demo
+  // 不可以通过new Demo()的形式创建实例
+  private constructor(public name: string) {}
+
+  static getInstance() {
+    if (!this.instance) {
+      this.instance = new Demo('zoe')
+    }
+    return this.instance
+  }
+}
+const demo1 = Demo.getInstance()
+const demo2 = Demo.getInstance()
+console.log(demo1.name)
+```
+
+### 9.7 readonly
+
+readonly 是类的属性修饰符，使用该修饰符修饰的属性，只能被访问，不能被修改。
+
+```typescript
+// 通过使用getter，实现只读
+class Person {
+  private _name: string
+  constructor(name: string) {
+    this._name = name
+  }
+  get name() {
+    return this._name
+  }
+}
+```
+
+```typescript
+// 通过使用只读修饰符readonly，实现只读
+class Person {
+  constructor(public readonly name: string) {}
+}
+const person = new Person('zoe')
+// person.name = 'ying' // 报错
+console.log(person.name)
+```
+
+### 9.8 抽象类和接口
+
+抽象类是用来定义共有的属性或者方法的。抽象类不能被实例化，只能被继承。
+
+```typescript
+abstract class Geom {
+  width: number
+  getType() {
+    return 'Geom'
+  }
+
+  // 类的方法前面加上abstract，表示该方法的实现是抽象的
+  // 只能定义一下这个方法，后面不能加{}
+  abstract getArea(): number // 返回number类型的数据
+}
+
+// Circle是抽象类Geom的实现类
+class Circle extends Geom {
+  // 必须实现一下Geom中的抽象方法，不然会报错
+  getArea() {
+    return 4869
+  }
+}
+```
 
 接口是用来定义一些规范的。
+
+```typescript
+interface Person {
+  name: string
+}
+
+interface Teacher extends Person {
+  teachingAge: number
+}
+
+interface Student extends Person {
+  age: number
+}
+
+const getUserInfo = (user: Person) => {
+  console.log(user.name)
+}
+getUserInfo({ name: 'zoe' })
+```
 
 ```typescript
 // 用接口规范属性
@@ -653,7 +830,7 @@ mySearch = function (source: string, subString: string): boolean {
 console.log(mySearch('nice, clever, skillful', 'clever')) // true
 ```
 
-### 9.5 命名空间
+### 9.9 命名空间
 
 在大型应用中，我们可以采用命名空间来区分不同的模块，让程序更有层次感且变量之间互不干扰。
 
@@ -680,16 +857,6 @@ let girl2: badGirl.Girl = new badGirl.Girl()
 girl1.talk()
 girl2.talk()
 ```
-
-## 10 在 React 项目中使用 TypeScript
-
-通过下面的命令可以创建基于 TypeScript 的 React 项目，并且使用 npm 安装依赖：
-
-```bash
-npx create-react-app my-app --template typescript --use-npm
-```
-
-
 
 
 
