@@ -1,8 +1,8 @@
-# 小畅叙的学习笔记
+# 学习笔记
 
 ## ES6
 
-- [ES6 基础知识](/posts/2019-09-25-es6-basic.md)
+- [ES6 基础知识](/posts/2019-09-25-ES6基础知识.md)
 - [Promise 对象](/posts/2019-11-10-es6-promise.md)
 - [Symbol](/posts/2019-11-10-es6-symbol.md)
 - [async&await](/posts/2019-12-28-es6-async-and-await.md)
@@ -64,10 +64,10 @@
 ## Others
 
 - [我的 2019 年总结](/posts/2020-03-02-my-2019-summary.md)
-- [搭建 GitHub 个人博客](/posts/2019-10-08-personal-blog-using-github-pages.md)
+- [搭建 GitHub 个人博客](/posts/2019-10-08-搭建GitHub个人博客.md)
 - [Koa2 入门](/posts/2020-03-07-koa2.md)
 - [MongoDB 入门](/posts/2020-01-12-mongodb.md)
-- [TypeScript 入门](/posts/2020-01-24-typescript.md)
+- [TypeScript 入门学习笔记](/posts/2020-09-13-TypeScript入门学习笔记.md)
 - [uni-app 入门](/posts/2020-03-18-uni-app.md)
 - [Nginx 简单入门与配置实例](/posts/2020-03-23-nginx.md)
 - [前端易忘知识点1](/posts/2020-04-11-trivial-front-points-easy-to-forget-part1.md)
