@@ -21,7 +21,7 @@
 
 ## CSS3
 
-- [CSS3 弹性盒子](/posts/2019-10-12-css3-flexible-box.md)
+- [CSS3 弹性盒子](/posts/2019-10-12-CSS3弹性盒子.md)
 
 ## React
 

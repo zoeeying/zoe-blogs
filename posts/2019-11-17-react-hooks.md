@@ -1,8 +1,3 @@
----
-title: React Hooks
-date: 2019-11-17
----
-
 # React Hooks
 
 React Hooks 是用**函数的形式**代替原来的**继承类的形式**来定义组件的。React Hooks 可以在无需修改组件结构的情况下**复用状态逻辑**，将组件中相互关联的部分拆分成更小的函数（比如设置订阅或请求数据），而并非强制按照生命周期划分。
@@ -336,7 +331,9 @@ export default () => {
 
 ## 6 useMemo
 
-如果某个函数执行比较耗时，在组件重新渲染的时候不希望重复执行该函数，可以使用 useMemo 钩子函数将其执行结果返回值缓存起来。useMemo 的第一个参数是一个函数，该函数返回的值会被缓存起来，同时这个值会作为 useMemo 的返回值；useMemo 的第二个参数是一个依赖数组，如果数组中的值有变化，那么就会去重新执行第一个参数中的函数，并将函数返回值缓存起来作为 useMemo 的返回值。
+如果某个函数执行比较耗时，在组件重新渲染的时候不希望重复执行该函数，可以使用 useMemo 钩子函数将其**执行结果**返回值缓存起来。
+
+useMemo 的第一个参数是一个函数，该函数返回的值会被缓存起来，同时这个值会作为 useMemo 的返回值；useMemo 的第二个参数是一个依赖数组，如果数组中的值有变化，那么就会去重新执行第一个参数中的函数，并将函数返回值缓存起来作为 useMemo 的返回值。
 
 ```jsx
 import React, { useState, useMemo } from 'react'
@@ -362,9 +359,7 @@ export default () => {
 }
 ```
 
-## 7 React.memo
-
-## 8 useCallback
+## 7 useCallback
 
 使用类组件进行 React 开发时，经常会遇到组件重复渲染的问题，父组件中一个 state 发生了变化，会导致该组件的所有子组件都重写 render，即使绝大多数子组件的 props 没有变化，shouldComponentUpdate 生命周期函数可以减少这种重复渲染。如果使用 React Hooks 的话，也会遇到类似的问题，可以使用 useCallback 这个钩子函数。
 
@@ -407,7 +402,7 @@ function Child({ callback }) {
 }
 ```
 
-## 9 useRef
+## 8 useRef
 
 useRef 可以用来获取 DOM 元素，也可以用来保存变量。
 
@@ -442,7 +437,7 @@ export default () => {
 }
 ```
 
-## 10 自定义 Hooks
+## 9 自定义 Hooks
 
 通过自定义 Hooks，可以将组件逻辑提取到可重用的函数中来复用状态逻辑，但是它不复用 state 本身，在复用状态逻辑的组件中，各自的 state 是相互独立的。事实上 Hooks 的每次调用都有一个完全独立的 state，因此可以在单个组件中多次调用同一个自定义 Hook。
 

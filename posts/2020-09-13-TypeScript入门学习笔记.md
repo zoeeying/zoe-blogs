@@ -2,8 +2,6 @@
 
 ## 1 简介
 
-Node 之父 Ryan Dahl 开源来了一个项目叫作 Deno，并且宣称 Deno 将是 Node 的代替品。Deno is a secure runtime for JavaScript and TypeScript and it aims to provide a productive and secure scripting environment for the modern programmer. It is built on top of V8, Rust, and TypeScript.
-
 TypeScript 是 JavaScript 的一个超集，是**静态类型语言**，是由微软开发的自由和开源的编程语言，设计目标是开发大型应用。TypeScript 不可以直接运行在浏览器环境或者 node 环境，必须编译成 JavaScript 才行。
 
 **补充：** TypeScript 是静态类型语言，即在运行之前的编译阶段就检查数据类型；JavaScript 是动态类型语言，即在运行时才去检查数据类型。
@@ -141,9 +139,9 @@ const rawData = '{"name": "zoe"}'
 const newData: Person = JSON.parse(rawData)
 ```
 
-#### (3) 补充
+#### (3) 类型注解和类型推断
 
-**类型注解**的英文是 type annotation，是指显式地声明一个固定类型的变量。
+**类型注解**的英文是 type annotation，是一种轻量级的为函数或变量添加约束的方式。
 
 **类型推断**的英文是 type inference，是指 TypeScript 会自动地去尝试分析变量的类型。
 
@@ -857,8 +855,6 @@ let girl2: badGirl.Girl = new badGirl.Girl()
 girl1.talk()
 girl2.talk()
 ```
-
-## 10 项目实战
 
 
 

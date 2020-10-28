@@ -73,3 +73,10 @@ Array.apply(null, { length: 20 }).map((item, index) => ({
   name: `name${index + 1}`,
 }))
 ```
+
+## 7 npm 全局包安装路径
+
+```bash
+npm root -g
+```
+
