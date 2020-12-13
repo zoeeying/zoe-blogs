@@ -32,7 +32,7 @@
 - [React 动画](/posts/2020-02-27-react-animation.md)
 - [React Router](/posts/2020-02-27-react-router.md)
 - [Next.js 入门](/posts/2020-03-26-next.md)
-- [React 琐碎知识点](/posts/2020-04-11-react-trival-points.md)
+- [React 琐碎知识点](/posts/2020-04-11-React琐碎知识点.md)
 
 ## Vue
 
@@ -70,6 +70,6 @@
 - [TypeScript 入门学习笔记](/posts/2020-09-13-TypeScript入门学习笔记.md)
 - [uni-app 入门](/posts/2020-03-18-uni-app.md)
 - [Nginx 简单入门与配置实例](/posts/2020-03-23-nginx.md)
-- [前端易忘知识点1](/posts/2020-04-11-trivial-front-points-easy-to-forget-part1.md)
-- [前端易忘知识点2](/posts/2020-04-11-trivial-front-points-easy-to-forget-part2.md)
+- [前端琐碎知识点1](/posts/2020-04-11-琐碎知识点1.md)
+- [前端琐碎知识点2](/posts/2020-04-11-琐碎知识点2.md)
 - [王者荣耀铭文](/posts/2020-01-28-glory-of-kings-inscriptions.md)
