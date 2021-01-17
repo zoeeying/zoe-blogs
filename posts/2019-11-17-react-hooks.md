@@ -338,24 +338,24 @@ useMemo 的第一个参数是一个函数，该函数返回的值会被缓存起
 ```jsx
 import React, { useState, useMemo } from 'react'
 export default () => {
-	const [num, setNum] = useState(0)
+  const [num, setNum] = useState(0)
 
-	const expensiveFn = () => {
-		let result = 0
-		for (let i = 0; i < 100000; i++) {
-			result += i
-		}
-		console.log(result)
-		return result
-	}
-	const base = useMemo(expensiveFn, [])
+  const expensiveFn = () => {
+    let result = 0
+    for (let i = 0; i < 100000; i++) {
+      result += i
+    }
+    console.log(result)
+    return result
+  }
+  const base = useMemo(expensiveFn, [])
 
-	return (
-		<div className="App">
-			<h1>count：{num}</h1>
-			<button onClick={() => setNum(num + base)}>+1</button>
-		</div>
-	)
+  return (
+    <div className="App">
+      <h1>count：{num}</h1>
+      <button onClick={() => setNum(num + base)}>+1</button>
+    </div>
+  )
 }
 ```
 
@@ -484,6 +484,3 @@ export default () => {
   )
 }
 ```
-
-
-

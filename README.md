@@ -13,7 +13,7 @@
 ## JavaScript
 
 - [ES5 复习与回顾](/posts/2019-10-31-es5-relearning.md)
-- [深拷贝和浅拷贝](/posts/2019-10-24-deep-copy-and-shallow-copy.md)
+- [深拷贝和浅拷贝](/posts/2019-10-24-深拷贝和浅拷贝.md)
 - [JavaScript 函数式编程](/posts/2020-02-25-javascript-functional-programming.md)
 - [JavaScript 字符串 API](/posts/2020-02-25-javascript-string-api.md)
 - [JavaScript 堆栈内存运行机制](/posts/2020-04-11-javascript-bottom-principle.md)
@@ -52,7 +52,7 @@
 
 ## Dart
 
-- [Dart 中的重要概念](/posts/2019-10-18-dart-important-points.md)
+- [Dart 中的重要概念](/posts/2019-10-18-Dart中的重要概念.md)
 - [Dart 基础](/posts/2019-12-29-dart-basic.md)
 - [Dart 面向对象](/posts/2019-12-29-dart-oop.md)
 
@@ -63,7 +63,8 @@
 
 ## Others
 
-- [我的 2019 年总结](/posts/2020-03-02-my-2019-summary.md)
+- [叙叙的 2019 年总结](/posts/2020-03-02-my-2019-summary.md)
+- [叙叙的 2020 年总结](/posts/2020-12-19-叙叙的2020年总结.md)
 - [搭建 GitHub 个人博客](/posts/2019-10-08-搭建GitHub个人博客.md)
 - [Koa2 入门](/posts/2020-03-07-koa2.md)
 - [MongoDB 入门](/posts/2020-01-12-mongodb.md)
