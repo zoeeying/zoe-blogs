@@ -15,7 +15,7 @@
 - [ES5 复习与回顾](/posts/2019-10-31-es5-relearning.md)
 - [深拷贝和浅拷贝](/posts/2019-10-24-深拷贝和浅拷贝.md)
 - [JavaScript 函数式编程](/posts/2020-02-25-javascript-functional-programming.md)
-- [JavaScript 字符串 API](/posts/2020-02-25-javascript-string-api.md)
+- [JavaScript 字符串 API](/posts/2020-02-25-JavaScript字符串API.md)
 - [JavaScript 堆栈内存运行机制](/posts/2020-04-11-javascript-bottom-principle.md)
 - [线程机制与事件机制](/posts/2020-04-11-thread-and-event.md)
 
