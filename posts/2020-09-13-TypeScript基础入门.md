@@ -1,4 +1,4 @@
-# TypeScript 入门学习笔记
+# TypeScript 基础入门
 
 ## 1 简介
 
