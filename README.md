@@ -31,8 +31,8 @@
 - [React 生命周期](/posts/2020-02-24-react-lifecycle.md)
 - [React 动画](/posts/2020-02-27-react-animation.md)
 - [React Router](/posts/2020-02-27-react-router.md)
-- [Next.js 入门](/posts/2020-03-26-next.md)
-- [React 琐碎知识点](/posts/2020-04-11-React琐碎知识点.md)
+- [Next.js 基础入门](/posts/2020-03-26-next.md)
+- [React 知识点](/posts/2020-04-11-React知识点.md)
 
 ## Vue
 
@@ -42,7 +42,8 @@
 - [Vue 核心](/posts/2020-02-16-vue-core-knowledge.md)
 - [vue-router](/posts/2020-02-20-vue-router.md)
 - [Vuex](/posts/2020-02-21-vuex.md)
-- [Vue 琐碎知识点](/posts/2020-04-11-vue-trivial-points.md)
+- [Vue 知识点](/posts/2020-04-11-vue-trivial-points.md)
+- [uni-app 基础入门](/posts/2020-03-18-uni-app.md)
 
 ## Webpack
 
@@ -50,27 +51,40 @@
 - [Webpack4.0 高级](/posts/2020-02-07-webpack4.0-advanced.md)
 - [实现简易的 Webpack](/posts/2020-02-17-easy-webpack.md)
 
-## Dart
-
-- [Dart 中的重要概念](/posts/2019-10-18-Dart中的重要概念.md)
-- [Dart 基础](/posts/2019-12-29-dart-basic.md)
-- [Dart 面向对象](/posts/2019-12-29-dart-oop.md)
-
 ## Flutter
+
+* [Dart 中的重要概念](/posts/2019-10-18-Dart中的重要概念.md)
+* [Dart 基础](/posts/2019-12-29-dart-basic.md)
+* [Dart 面向对象](/posts/2019-12-29-dart-oop.md)
 
 - [Flutter 状态管理 Provide 和 Provider](/posts/2019-12-14-flutter-provide-and-provider.md)
 - [在 Flutter 中使用 Fluro 管理路由](/posts/2019-12-18-flutter-fluro.md)
 
+## Automated Testing
+
+* [Jest 基础入门](/posts/2021-03-28-Jest基础入门.md)
+
+## Language
+
+* [TypeScript 基础入门](/posts/2020-09-13-TypeScript基础入门.md)
+* [Python 基础入门](/posts/2020-05-17-Python基础入门.md)
+
+## Server
+
+* [Koa2 基础入门](/posts/2020-03-07-koa2.md)
+
+* [Nginx 基础入门与配置实例](/posts/2020-03-23-nginx.md)
+
+* [MongoDB 基础入门](/posts/2020-01-12-mongodb.md)
+
 ## Others
+
+- [搭建 GitHub 个人博客](/posts/2019-10-08-搭建GitHub个人博客.md)
+- [前端知识点1](/posts/2020-04-11-前端知识点1.md)
+- [前端知识点2](/posts/2020-04-11-前端知识点2.md)
+- [王者荣耀铭文](/posts/2020-01-28-glory-of-kings-inscriptions.md)
+
+## Annual Summary
 
 - [叙叙的 2019 年总结](/posts/2020-03-02-my-2019-summary.md)
 - [叙叙的 2020 年总结](/posts/2020-12-19-叙叙的2020年总结.md)
-- [搭建 GitHub 个人博客](/posts/2019-10-08-搭建GitHub个人博客.md)
-- [Koa2 入门](/posts/2020-03-07-koa2.md)
-- [MongoDB 入门](/posts/2020-01-12-mongodb.md)
-- [TypeScript 入门学习笔记](/posts/2020-09-13-TypeScript入门学习笔记.md)
-- [uni-app 入门](/posts/2020-03-18-uni-app.md)
-- [Nginx 简单入门与配置实例](/posts/2020-03-23-nginx.md)
-- [前端琐碎知识点1](/posts/2020-04-11-琐碎知识点1.md)
-- [前端琐碎知识点2](/posts/2020-04-11-琐碎知识点2.md)
-- [王者荣耀铭文](/posts/2020-01-28-glory-of-kings-inscriptions.md)
