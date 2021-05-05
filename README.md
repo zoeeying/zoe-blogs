@@ -53,38 +53,35 @@
 
 ## Flutter
 
-* [Dart 中的重要概念](/posts/2019-10-18-Dart中的重要概念.md)
-* [Dart 基础](/posts/2019-12-29-dart-basic.md)
-* [Dart 面向对象](/posts/2019-12-29-dart-oop.md)
-
+- [Dart 中的重要概念](/posts/2019-10-18-Dart中的重要概念.md)
+- [Dart 基础](/posts/2019-12-29-dart-basic.md)
+- [Dart 面向对象](/posts/2019-12-29-dart-oop.md)
 - [Flutter 状态管理 Provide 和 Provider](/posts/2019-12-14-flutter-provide-and-provider.md)
 - [在 Flutter 中使用 Fluro 管理路由](/posts/2019-12-18-flutter-fluro.md)
 
-## Automated Testing
+## Testing
 
-* [Jest 基础入门](/posts/2021-03-28-Jest基础入门.md)
+- [Jest 基础入门](/posts/2021-03-28-Jest基础入门.md)
 
 ## Language
 
-* [TypeScript 基础入门](/posts/2020-09-13-TypeScript基础入门.md)
-* [Python 基础入门](/posts/2020-05-17-Python基础入门.md)
+- [TypeScript 基础入门](/posts/2020-09-13-TypeScript基础入门.md)
+- [Python 基础入门](/posts/2020-05-17-Python基础入门.md)
 
 ## Server
 
-* [Koa2 基础入门](/posts/2020-03-07-koa2.md)
+- [Koa2 基础入门](/posts/2020-03-07-koa2.md)
+- [Nginx 基础入门与配置实例](/posts/2020-03-23-nginx.md)
+- [MongoDB 基础入门](/posts/2020-01-12-mongodb.md)
 
-* [Nginx 基础入门与配置实例](/posts/2020-03-23-nginx.md)
+## Summary
 
-* [MongoDB 基础入门](/posts/2020-01-12-mongodb.md)
+- [叙叙的 2019 年总结](/posts/2020-03-02-my-2019-summary.md)
+- [叙叙的 2020 年总结](/posts/2020-12-19-叙叙的2020年总结.md)
 
 ## Others
 
 - [搭建 GitHub 个人博客](/posts/2019-10-08-搭建GitHub个人博客.md)
-- [前端知识点1](/posts/2020-04-11-前端知识点1.md)
-- [前端知识点2](/posts/2020-04-11-前端知识点2.md)
+- [前端知识点 1](/posts/2020-04-11-前端知识点1.md)
+- [前端知识点 2](/posts/2020-04-11-前端知识点2.md)
 - [王者荣耀铭文](/posts/2020-01-28-glory-of-kings-inscriptions.md)
-
-## Annual Summary
-
-- [叙叙的 2019 年总结](/posts/2020-03-02-my-2019-summary.md)
-- [叙叙的 2020 年总结](/posts/2020-12-19-叙叙的2020年总结.md)
