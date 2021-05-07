@@ -61,7 +61,7 @@
 
 ## Testing
 
-- [Jest 基础入门](/posts/2021-03-28-Jest基础入门.md)
+- [前端测试框架 Jest 基础入门](/posts/2021-03-28-前端测试框架Jest基础入门.md)
 
 ## Language
 
@@ -84,4 +84,5 @@
 - [搭建 GitHub 个人博客](/posts/2019-10-08-搭建GitHub个人博客.md)
 - [前端知识点 1](/posts/2020-04-11-前端知识点1.md)
 - [前端知识点 2](/posts/2020-04-11-前端知识点2.md)
-- [王者荣耀铭文](/posts/2020-01-28-glory-of-kings-inscriptions.md)
+- [王者荣耀铭文](./posts/2020-01-28-glory-of-kings-inscriptions.md)
+
