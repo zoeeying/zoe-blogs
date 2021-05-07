@@ -43,7 +43,7 @@ alert 会暂停当前主线程的执行（也会暂停计时），点击确定�
 
 浏览器的事件循环（轮询）模型。
 
-![事件驱动模型](https://wx2.sinaimg.cn/mw690/600a9336gy1gd8m9u97dpj20i40g1q8g.jpg)
+![事件驱动模型](../images/event-driven.png)
 
 **上图中的一些概念介绍：**
 
@@ -77,7 +77,7 @@ Web Worker 是 HTML5 提供的一个 JS 多线程解决方案。我们可以将�
 
 Web Worker 处在一个自包含的执行环境（WorkerGlobalScope）中，无法访问 Window 对象和 Document 对象，和主线程之间的通信只能通过**异步消息的传递机制**来实现，这就意味着分线程是无法操作 DOM 和更新界面的。
 
-![Web Worker](https://wx3.sinaimg.cn/mw690/600a9336gy1gd8m9xvg7kj20oy0a9my0.jpg)
+![Web Worker](../images/web-worker.png)
 
 **下面是一个小案例：**
 

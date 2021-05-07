@@ -7,7 +7,7 @@ date: 2020-02-24
 
 React 生命周期可以用如下两个图来示意。
 
-![React生命周期](https://wx4.sinaimg.cn/mw690/600a9336gy1gdsbdkb8whj20o90dlt9d.jpg)
+![React生命周期](../images/react-cycle.png)
 
 生命周期函数（钩子函数），通俗的说就是在某一时刻会被自动调用执行的函数。
 

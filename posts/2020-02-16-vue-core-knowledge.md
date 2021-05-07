@@ -1,8 +1,3 @@
----
-title: Vue 核心
-date: 2020-02-16
----
-
 # Vue 核心
 
 代码地址：<https://github.com/zoeeying/vue-learning>
@@ -233,7 +228,7 @@ Vue 的生命周期函数（钩子函数）是在某些特定阶段会被自动�
 </script>
 ```
 
-![lifecycle.png](http://a1.qpic.cn/psc?/V10mSDSc0CUQs4/QNsgOSLzUrTyB8UN2gSlSBj5WZZGzL.Ki84rgfcv8B*Q38RqNB*WmXOslrmsUUBFcDkjId1jqxKkYsPl72AXHw!!/c&ek=1&kp=1&pt=0&bo=OASvCgAAAAADN4s!&tl=1&vuin=511616698&tm=1581084000&sce=60-2-2&rf=viewer_4)
+![lifecycle.png](../images/vue-cycle.png)
 
 ## 3 Template 模板
 

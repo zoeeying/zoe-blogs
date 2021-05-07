@@ -158,7 +158,7 @@ ECStack = [
 ]
 ```
 
-![作用域和作用域链](https://wx2.sinaimg.cn/mw690/600a9336gy1gdb29lvpykj20q90e011b.jpg)
+![作用域和作用域链](../images/js-scope.png)
 
 上面的图中，EC(A) 中创建的堆被全局变量 C 占用着，所以执行完后不能出栈销毁，会压入栈底等待下次执行，这就叫做**闭包**。
 
@@ -236,7 +236,7 @@ fn(4)
 console.log(obj.x, x)
 ```
 
-![闭包试题4](https://wx1.sinaimg.cn/mw690/600a9336gy1gdbzpbqya9j20sq0e5aht.jpg)
+![闭包试题4](../images/closure.png)
 
 ## 4 this 执行主体
 
@@ -267,4 +267,4 @@ box.attachEvent('onclick', function () {
 })
 ```
 
-![this](https://wx4.sinaimg.cn/mw690/600a9336gy1gdc0ggi0u8j20b50a975n.jpg)
+![this](../images/js-this.png)
