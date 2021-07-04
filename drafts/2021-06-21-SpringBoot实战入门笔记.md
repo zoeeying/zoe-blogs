@@ -22,7 +22,7 @@ Spring Boot 项目其实是一个 Maven 父子项目。
 
 **WikiApplication** 类中的 main 函数是用来启动项目的，需要加上 `@SpringBootApplication` 注解。
 
-**src/main/resources** 目录中存放配置文件，至少有  8 个默认的配置文，比如，在 application.properties 中可以配置默认启动端口：
+**src/main/resources** 目录中存放配置文件，至少有 8 个默认的配置文，比如，在 application.properties 中可以配置默认启动端口：
 
 ```properties
 server.port = 8080
@@ -38,7 +38,7 @@ server.port = 8080
 
 ## 3 初始配置
 
-**编码格式：** 点击 File => Settings => Editor => File Encodings，把  Project Encoding 和 Default encoding for properties files 修改成 UTF-8。
+**编码格式：** 点击 File => Settings => Editor => File Encodings，把 Project Encoding 和 Default encoding for properties files 修改成 UTF-8。
 
 **配置 JDK：** 点击 File => Project Structure => Project Settings => Project，把 Project SDK 修改成本地 JDK 路径即可。
 
@@ -94,7 +94,7 @@ public class HelloController {
 }
 ```
 
-启动项目，用浏览器访问 http://127.0.0.1:8080/hello，即可在页面上看到字符串 'Hello World'。需要注意的是，使用浏览器直接访问接口地址，发送的是 GET 请求。
+启动项目，用浏览器访问 <http://127.0.0.1:8080/hello>，即可在页面上看到字符串 'Hello World'。需要注意的是，使用浏览器直接访问接口地址，发送的是 GET 请求。
 
 @RestController 用来返回字符串或 JSON 对象；@Controller 用来返回页面，对于前后端分离项目，用不到。
 
@@ -538,41 +538,368 @@ public class DemoController {
 
 启动项目，访问 /demo/list 接口，即可获取到 demo 表中的所有数据。
 
+## 11 通用返回类
 
+项目开发中，需要对接口的返回值进行统一。可以手动构造一个**通用返回类**。
 
+本项目中，在 com.zoe.wiki 中创建了 resp 层，并在该层中创建了通用返回类 CommonResp：
 
+```java
+package com.zoe.wiki.resp;
 
+public class CommonResp<T> {
 
+    /**
+     * 业务上的成功或失败
+     */
+    private boolean success = true;
 
+    /**
+     * 返回信息
+     */
+    private String message;
 
+    /**
+     * 返回泛型数据，自定义类型
+     */
+    private T content;
 
+    public boolean getSuccess() {
+        return success;
+    }
 
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 
+    public String getMessage() {
+        return message;
+    }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
+    public T getContent() {
+        return content;
+    }
 
+    public void setContent(T content) {
+        this.content = content;
+    }
 
+    // toString方法主要用来打印日志
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("ResponseDto{");
+        sb.append("success=").append(success);
+        sb.append(", message='").append(message).append('\'');
+        sb.append(", content=").append(content);
+        sb.append('}');
+        return sb.toString();
+    }
+}
+```
 
+然后，在 controller 层中使用 CommonResp 类：
 
+```java
+@RestController
+@RequestMapping("/ebook")
+public class EbookController {
+    @Resource
+    private EbookService ebookService;
 
+    @GetMapping("/list")
+    public CommonResp list(){
+        CommonResp<List<Ebook>> resp = new CommonResp<>();
+        List<Ebook> list = ebookService.list();
+        resp.setContent(list);
+        return resp;
+    }
+}
+```
 
+这样，访问 /ebook/list 接口，会返回一个对象，属性有 success、message 和 content，content 属性的值就是 ebook 表中的数据。
 
+## 12 跨域
 
+在 Spring Boot 项目中，对于跨域问题，可以通过添加一个**配置类**的方式来解决。
 
+需要在 com.zoe.wiki 中创建 config 层，然后在 config 层中创建 CorsConfig 类：
 
+```java
+package com.zoe.wiki.config;
 
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@Configuration
+public class CorsConfig implements WebMvcConfigurer {
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowedHeaders(CorsConfiguration.ALL)
+                .allowedMethods(CorsConfiguration.ALL)
+                .allowCredentials(true)
+                .maxAge(3600); // 1小时内不需要再预检（发OPTIONS请求）
+    }
+}
+```
 
+然后重启项目，就不会出现跨域问题了。
 
+## 13 过滤器
 
+**接口耗时**在我们的应用监控中，是一个非常重要的监控点，可以用来衡量应用的处理能力。在 Spring Boot 项目中可以通过配置**过滤器**来打印接口耗时。
 
+需要在 com.zoe.wiki 中创建 filter 层，并在该层中创建 LogFilter 类用来编写过滤器代码。过滤器的代码一般比较固定，如下所示：
 
+```java
+package com.zoe.wiki.filter;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
+// 添加@Component注解，这样Spring Boot就会自动去扫描LogFilter类，容器就会拿到这个过滤器了
+@Component
+public class LogFilter implements Filter {
 
+    private static final Logger LOG = LoggerFactory.getLogger(LogFilter.class);
 
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
 
+    }
 
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        // 打印请求信息
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        LOG.info("------------- LogFilter开始 -------------");
+        LOG.info("请求地址: {} {}", request.getRequestURL().toString(), request.getMethod());
+        LOG.info("远程地址: {}", request.getRemoteAddr());
 
+        long startTime = System.currentTimeMillis();
+       // 通过链来调用业务方法
+        filterChain.doFilter(servletRequest, servletResponse);
+        LOG.info("------------- LogFilter结束耗时: {} ms -------------", System.currentTimeMillis() - startTime);
+    }
+}
+```
+
+这样，重启项目，访问接口，就能打印出过滤器日志了。
+
+上面的代码中实现了 Filter 接口，它是 servlet 包里的。其实，过滤器是 servlet（可以理解成请求接口）的一个概念，而 servlet 是容器的一个概念，所以过滤器是给容器（比如 Tomcat）用的。
+
+## 14 拦截器
+
+上面介绍了如何使用**过滤器**来打印接口耗时。对于打印接口耗时，也可以采用配置**拦截器**的方式。
+
+需要在 com.zoe.wiki 中创建 interceptor 层，并在 interceptor 层中创建 LogInterceptor 类：
+
+```java
+package com.zoe.wiki.interceptor;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * 拦截器：Spring框架特有的，常用于登录校验，权限校验，请求日志打印
+ */
+@Component
+public class LogInterceptor implements HandlerInterceptor {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LogInterceptor.class);
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // 打印请求信息
+        LOG.info("------------- LogInterceptor开始 -------------");
+        LOG.info("请求地址: {} {}", request.getRequestURL().toString(), request.getMethod());
+        LOG.info("远程地址: {}", request.getRemoteAddr());
+
+        long startTime = System.currentTimeMillis();
+        request.setAttribute("requestStartTime", startTime);
+        // 可以在这里增加登录校验，如果没有登录或者登录超时，就return false，这样后面的业务逻辑就不会执行了
+        return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        long startTime = (Long) request.getAttribute("requestStartTime");
+        LOG.info("------------- LogInterceptor结束耗时: {} ms -------------", System.currentTimeMillis() - startTime);
+    }
+}
+```
+
+然后，还需要在 config 层中创建配置类 SpringMvcConfig：
+
+```java
+package com.zoe.wiki.config;
+
+import com.zoe.wiki.interceptor.LogInterceptor;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.annotation.Resource;
+
+@Configuration
+public class SpringMvcConfig implements WebMvcConfigurer {
+
+    // 把拦截器注入进来
+    @Resource
+    LogInterceptor logInterceptor;
+
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 对于所有请求，除了/login，注册拦截器
+        registry.addInterceptor(logInterceptor)
+                .addPathPatterns("/**").excludePathPatterns("/login");
+    }
+}
+```
+
+这样，重启项目，访问接口，就能打印出拦截器日志了。
+
+## 15 AOP
+
+在 Spring Boot 项目中，可以配置 AOP，用来打印接口耗时、请求参数、返回参数。
+
+首先，需要在 pom.xml 中增加依赖：
+
+```xml
+<!-- Spring Boot自带的AOP依赖 -->
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-aop</artifactId>
+</dependency>
+
+<!-- 在AOP类中处理JSON用的，不是配置AOP必须的 -->
+<dependency>
+  <groupId>com.alibaba</groupId>
+  <artifactId>fastjson</artifactId>
+  <version>1.2.70</version>
+</dependency>
+```
+
+然后，在 com.zoe.wiki 中创建 aspect 层，并在该层中创建 LogAspect 类：
+
+```java
+package com.zoe.wiki.aspect;
+
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.support.spring.PropertyPreFilters;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
+import org.aspectj.lang.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+
+@Aspect
+@Component
+public class LogAspect {
+
+    private final static Logger LOG = LoggerFactory.getLogger(LogAspect.class);
+
+    /**
+     * 定义一个切点
+     * com.zoe.*.controller中的所有Controller中的所有方法（包括参数），都会被AOP拦截到
+     */
+    @Pointcut("execution(public * com.zoe.*.controller..*Controller.*(..))")
+    public void controllerPointcut() {}
+
+    /**
+     * 前置通知
+     * 表示在执行业务代码之前要去做的事情
+     */
+    @Before("controllerPointcut()")
+    public void doBefore(JoinPoint joinPoint) throws Throwable {
+
+        // 开始打印请求日志
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        Signature signature = joinPoint.getSignature();
+        String name = signature.getName();
+
+        // 打印请求信息
+        LOG.info("------------- AOP开始 -------------");
+        LOG.info("请求地址: {} {}", request.getRequestURL().toString(), request.getMethod());
+        LOG.info("类名方法: {}.{}", signature.getDeclaringTypeName(), name);
+        LOG.info("远程地址: {}", request.getRemoteAddr());
+
+        /**
+         * 打印请求参数
+         * AOP跟过滤器和拦截器不同，需要通过连接点（joinPoint）拿到请求参数
+         */
+        Object[] args = joinPoint.getArgs();
+        // LOG.info("请求参数: {}", JSONObject.toJSONString(args));
+
+        Object[] arguments  = new Object[args.length];
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] instanceof ServletRequest
+                    || args[i] instanceof ServletResponse
+                    || args[i] instanceof MultipartFile) {
+                continue;
+            }
+            arguments[i] = args[i];
+        }
+        // 排除字段，敏感字段（密码等）或太长的字段（文件内容或者富文本等）不显示
+        String[] excludeProperties = { "password", "file" };
+        PropertyPreFilters filters = new PropertyPreFilters();
+        PropertyPreFilters.MySimplePropertyPreFilter excludefilter = filters.addFilter();
+        excludefilter.addExcludes(excludeProperties);
+        LOG.info("请求参数: {}", JSONObject.toJSONString(arguments, excludefilter));
+    }
+
+    /**
+     * 环绕通知，也就是环绕业务内容
+     * 在业务内容之前和之后，都会执行
+     */
+    @Around("controllerPointcut()")
+    public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        long startTime = System.currentTimeMillis();
+        // 执行业务内容
+        Object result = proceedingJoinPoint.proceed();
+        // 打印返回结果，同时排除字段，敏感字段或太长的字段不显示
+        String[] excludeProperties = { "password", "file" };
+        PropertyPreFilters filters = new PropertyPreFilters();
+        PropertyPreFilters.MySimplePropertyPreFilter excludefilter = filters.addFilter();
+        excludefilter.addExcludes(excludeProperties);
+        LOG.info("返回结果: {}", JSONObject.toJSONString(result, excludefilter));
+        LOG.info("------------- AOP结束耗时: {} ms -------------", System.currentTimeMillis() - startTime);
+        return result;
+    }
+
+}
+```
+
+最后，重启项目，访问接口，就能打印出 AOP 日志了。
+
+上面的 LogAspect 类就叫作**切面**（把切点和通知结合起来就是切面）。
+
+一般项目中，过滤器、拦截器、AOP 三选一即可。
