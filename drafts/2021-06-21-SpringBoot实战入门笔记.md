@@ -10,11 +10,11 @@ Spring Boot 是整合 Spring 技术栈的一站式框架，是简化 Spring 技�
 
 在官网上填写相应配置信息，点击 GENERATE 按钮，会下载一个 zip 文件，解压该文件，用 IDEA 打开，Spring Boot 项目就创建好了。
 
-![image-20210624230918099](C:\叙叙\PROJECTS\个人项目\zoe-blogs\images\spring_boot_create_project.png)
+![image-20210624230918099](../images/spring_boot_create_project-1628179669788.png)
 
 使用 IDEA 创建项目，可以点击 IDEA 左上角的 File => New => Project，在打开的弹框中填写相应信息，然后点击 Next，选择 Dependencies，最后点击确认，即可创建 Spring Boot 项目。
 
-![image-20210624231651293](C:\叙叙\PROJECTS\个人项目\zoe-blogs\images\spring_boot_create_project2.png)
+![image-20210624231651293](../images/spring_boot_create_project2-1628179690807.png)
 
 Spring Boot 项目其实是一个 Maven 父子项目，在生成的项目的 pom.xml 中可以看到下面一段代码，其中，spring-boot-starter-parent 是父项目，用于依赖管理，它几乎声明了所有开发中常用的依赖的版本号（自动版本仲裁机制），所以我们在 dependencies 中引入大部分依赖都无需声明版本号。
 
@@ -57,7 +57,7 @@ server.port = 8080
 
 **配置 Maven：** 主要配置 settings.xml 和 repository，settings.xml 中主要配置 Maven 镜像地址。
 
-![image-20210625000055687](C:\叙叙\PROJECTS\个人项目\zoe-blogs\images\maven.png)
+![image-20210625000055687](../images/maven-1628179687388.png)
 
 ```xml
 <!-- settings.xml -->
@@ -216,11 +216,11 @@ private String testHello;
 
 2、修改 IDEA 设置，如下图，开启静态自动编译：
 
-![image-20210627094353805](C:\叙叙\PROJECTS\个人项目\zoe-blogs\images\idea_settings.png)
+![image-20210627094353805](../images/idea_settings-1628179701636.png)
 
 3、点击 Help => Find Action，输入 Registry，打开，勾选如下配置项，开启动态自动编译：
 
-![image-20210627094857783](C:\叙叙\PROJECTS\个人项目\zoe-blogs\images\idea_registry.png)
+![idea_registry](../images/idea_registry-1628179703749.png)
 
 需要注意的是，必须触发文件的保存（比如手动 Ctrl + S），才会自动编译和热部署。如果修改完代码后，手动点击 Build Project 图标，可以减少等待编译和热部署时间。
 
@@ -268,11 +268,11 @@ alter user 'root'@'localhost' identified by 'root';
 
 在 IDEA 中配置数据库，可以按照下图操作：
 
-![image-20210627164734379](C:\叙叙\PROJECTS\个人项目\zoe-blogs\images\idea_database1.png)
+![image-20210627164734379](../images/idea_database1-1628179707956.png)
 
-![image-20210627114148924](C:\叙叙\PROJECTS\个人项目\zoe-blogs\images\idea_database2.png)
+![image-20210627114148924](../images/idea_database2-1628179713200.png)
 
-![image-20210627165458321](C:\叙叙\PROJECTS\个人项目\zoe-blogs\images\idea_database3.png)
+![image-20210627165458321](../images/idea_database3-1628180111411.png)
 
 在 console 控制台中可以写一些 SQL 语句，然后点击 Execute 按钮执行语句：
 
@@ -511,9 +511,9 @@ MyBatis 官方提供了一个代码生成器，可以简化 MyBatis 代码。对
 
 3、增加启动命令：
 
-![image-20210627222643273](C:\叙叙\PROJECTS\个人项目\zoe-blogs\images\start_command.png)
+![image-20210627222643273](../images/start_command-1628179719296.png)
 
-![image-20210627222559021](C:\叙叙\PROJECTS\个人项目\zoe-blogs\images\mybatis.png)
+![image-20210627222559021](../images/mybatis-1628179722972.png)
 
 4、启动 mybatis-generator，即可生成 demo 表的 MyBatis 持久层代码。
 
