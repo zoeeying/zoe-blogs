@@ -12,3 +12,7 @@
 
 5、`Refect.ownKeys(obj)` 返回一个数组，包含对象**自身的所有属性**，包含 **Symbol 属性**，包含**可枚举和不可枚举属性**。
 
+## 2 Object 实例属性和方法
+
+`hasOwnProperty(propertyName)`：判断当前对象**实例**（不是原型）上是否存在给定的属性，要检查的属性名必须是字符串，比如 `o.hasOwnProperty("name")`。
+

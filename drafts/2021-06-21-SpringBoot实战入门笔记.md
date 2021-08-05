@@ -1,18 +1,31 @@
 # Spring Boot 实战入门笔记
 
-Spring Boot 项目其实是一个 Maven 父子项目。
+Spring Boot 是整合 Spring 技术栈的一站式框架，是简化 Spring 技术栈的快速开发脚手架，能够快速创建出生产级别的 Spring 应用。
+
+**Spring Boot 优点：** 创建独立 Spring 应用；内嵌 web 服务器；自动 starter 依赖，简化构建配置；自动配置 Spring 以及第三方功能；提供生产级别的监控、健康检查及外部化配置；无代码生成、无需编写 XML。
 
 ## 1 创建项目
 
 创建 Spring Boot 项目有两种方式：在[官网](start.spring.io)上创建、使用 IDEA 上创建。
 
-在官网上，我们需要选择相应的配置，填写相应的信息，最后点击 GENERATE 按钮，会下载一个 zip 文件，解压该文件，用 IDEA 打开，Spring Boot 项目就创建好了。
+在官网上填写相应配置信息，点击 GENERATE 按钮，会下载一个 zip 文件，解压该文件，用 IDEA 打开，Spring Boot 项目就创建好了。
 
 ![image-20210624230918099](C:\叙叙\PROJECTS\个人项目\zoe-blogs\images\spring_boot_create_project.png)
 
-使用 IDEA 创建项目，我们可以点击 IDEA 左上角的 File => New => Project，在打开的弹框中填写相应信息，然后点击 Next，选择 Dependencies，最后点击确认，即可创建 Spring Boot 项目。
+使用 IDEA 创建项目，可以点击 IDEA 左上角的 File => New => Project，在打开的弹框中填写相应信息，然后点击 Next，选择 Dependencies，最后点击确认，即可创建 Spring Boot 项目。
 
 ![image-20210624231651293](C:\叙叙\PROJECTS\个人项目\zoe-blogs\images\spring_boot_create_project2.png)
+
+Spring Boot 项目其实是一个 Maven 父子项目，在生成的项目的 pom.xml 中可以看到下面一段代码，其中，spring-boot-starter-parent 是父项目，用于依赖管理，它几乎声明了所有开发中常用的依赖的版本号（自动版本仲裁机制），所以我们在 dependencies 中引入大部分依赖都无需声明版本号。
+
+```xml
+<parent>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-parent</artifactId>
+   <version>2.5.3</version>
+   <relativePath/> <!-- lookup parent from repository -->
+</parent>
+```
 
 ## 2 文件结构
 
@@ -94,7 +107,9 @@ public class HelloController {
 }
 ```
 
-启动项目，用浏览器访问 <http://127.0.0.1:8080/hello>，即可在页面上看到字符串 'Hello World'。需要注意的是，使用浏览器直接访问接口地址，发送的是 GET 请求。
+在 IDEA 中**启动项目**，用浏览器访问 <http://127.0.0.1:8080/hello>，即可在页面上看到字符串 'Hello World'。也可以把项目达成 jar 包，然后在 cmd 中执行 `java -jar demo-0.0.1-SNAPSHOT.jar` 命令来**启动项目**。
+
+**补充：** 使用浏览器直接访问接口地址，发送的是 GET 请求。
 
 @RestController 用来返回字符串或 JSON 对象；@Controller 用来返回页面，对于前后端分离项目，用不到。
 
@@ -900,6 +915,68 @@ public class LogAspect {
 
 最后，重启项目，访问接口，就能打印出 AOP 日志了。
 
-上面的 LogAspect 类就叫作**切面**（把切点和通知结合起来就是切面）。
+上面的 LogAspect 类又叫做**切面**，把切点和通知结合起来就是切面。
 
 一般项目中，过滤器、拦截器、AOP 三选一即可。
+
+## 16 雪花算法
+
+雪花算法主要用来生成数据库 ID，雪花算法生成的 ID 其实就是时间戳加上一些机器码，再加上递增的序列号，它是一个**长整型**。
+
+**雪花算法 ID：** 时间戳 + 数据中心 + 机器中心 + 序列号，数据中心和机器中心具体的数值一般可以放在配置文件中，也可以通过一些算法在机器启动的时候自动到 Redis 缓存中去获取一个唯一的不重复的值。
+
+由于雪花算法生成的 ID 是长整型，传到前端会导致精度丢失，有两种解决方案：
+
+1、在查询接口返回的实体类的 id 上增加注解：
+
+```java
+@JsonSerialize(using=ToStringSerializer.class)
+private Long id;
+```
+
+2、在 com.zoe.wiki.config 中新增 JacksonConfig 类：
+
+```java
+@Configuration
+public class JacksonConfig {
+    @Bean
+    public ObjectMapper jacksonObjectMapper(Jackson2ObjectMapperBuilder builder) {
+        ObjectMapper objectMapper = builder.createXmlMapper(false).build();
+
+        // 全局配置序列化返回JSON处理
+        SimpleModule simpleModule = new SimpleModule();
+        // Long => String
+        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+        objectMapper.registerModule(simpleModule);
+        return objectMapper;
+    }
+}
+```
+
+## 17 参数校验
+
+后端的参数校验需要增加依赖：
+
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-validation</artifactId>
+</dependency>
+```
+
+对于查询接口的分页参数 size，需要增加校验规则，防止有人用一些工具脚本直接访问后端接口的时候，恶意把 size 改成很大的值，导致查询数据量过大造成服务器崩溃。
+
+对于 size 增加校验规则，只需在分页请求的实体类中增加如下注解即可：
+
+```java
+@NotNull(message = "size不能为空")
+@Max(value = 1000, message = "size不能超过1000")
+private int size;
+```
+
+然后，在相应的查询接口的请求参数前面加上 @Valid 注解，表示对于该请求参数开启校验规则：
+
+```java
+@GetMapping("/list")
+public CommonResp list(@Valid EbookQueryReq req){}
+```

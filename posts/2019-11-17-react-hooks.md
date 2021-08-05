@@ -30,7 +30,7 @@ export default class Counter extends Component {
       count: 0,
     }
   }
-  render () {
+  render() {
     const { count } = this.state
     return (
       <>
@@ -54,7 +54,13 @@ export default props => {
   return (
     <>
       <p>点击了 {count} 次</p>
-      <button onClick={() => { setCount(prev => prev + 1) }}>点击</button>
+      <button
+        onClick={() => {
+          setCount(prev => prev + 1)
+        }}
+      >
+        点击
+      </button>
     </>
   )
 }
@@ -120,7 +126,8 @@ useEffect 跟 class 组件中的 componentDidMount、componentDidUpdate 和 comp
 ```jsx
 useEffect(() => {
   console.log('页面加载了') // return上面的语句在组件加载了之后执行一次，相当于componentDidMount
-  return () => { // 返回的匿名函数只在组件卸载前执行一次，相当于componentWillUnmount
+  return () => {
+    // 返回的匿名函数只在组件卸载前执行一次，相当于componentWillUnmount
     console.log('页面卸载了')
   }
 }, []) // 依赖项数组是空数组
@@ -156,7 +163,7 @@ React Context 提供了一种在组件之间**共享状态**的方法，而不�
 // {theme: 'light'}为defaultValue，只有当组件所处的树中没有匹配到Provider时，defaultValue参数才会生效，这有助于在不使用Provider包装组件的情况下对组件进行测试
 // 注意：将undefined传递给Provider时，消费组件的defaultValue不会生效
 import React, { createContext } from 'react'
-const ThemeContext = createContext({theme: 'light'}) // 建立一个Context对象
+const ThemeContext = createContext({ theme: 'light' }) // 建立一个Context对象
 
 class App extends React.Component {
   render() {
@@ -166,7 +173,7 @@ class App extends React.Component {
       <ThemeContext.Provider value={{ theme: 'dark' }}>
         <Toolbar />
       </ThemeContext.Provider>
-    );
+    )
   }
 }
 
@@ -176,14 +183,14 @@ function Toolbar(props) {
     <div>
       <ThemedButton />
     </div>
-  );
+  )
 }
 
 class ThemedButton extends React.Component {
   // 指定contextType读取当前的Context对象
   // 当React渲染一个订阅了这个Context对象的组件，这个组件会从组件树中离自身最近的那个匹配的Provider中读取到当前的Context值
   static contextType = ThemeContext
-  render () {
+  render() {
     // 注意是通过this.context读取当前的Context值
     return <Button theme={this.context}>按钮</Button>
   }
@@ -215,32 +222,30 @@ const [state, dispatch] = useReducer(reducer, initialState)
 
 // 用于计算状态的Reducer函数
 const myReducer = (state, action) => {
-  switch(action.type)  {
-    case('countUp'):
-      return  {
+  switch (action.type) {
+    case 'countUp':
+      return {
         ...state,
-        count: state.count + 1
+        count: state.count + 1,
       }
     default:
-      return  state
+      return state
   }
 }
 
 // 组件代码
 function App() {
   const [state, dispatch] = useReducer(myReducer, { count: 0 })
-  return  (
+  return (
     <div className="App">
-      <button onClick={() => dispatch({ type: 'countUp' })}>
-        +1
-      </button>
+      <button onClick={() => dispatch({ type: 'countUp' })}>+1</button>
       <p>Count: {state.count}</p>
     </div>
-  );
+  )
 }
 ```
 
-[使用 useReducer 和 useContext 代替 Redux 的小案例：]( https://github.com/zoeeying/react-redux-learning )
+[使用 useReducer 和 useContext 代替 Redux 的小案例：](https://github.com/zoeeying/react-redux-learning)
 
 1、新建一个文件 redux.js，用于放使用 Context 管理的状态以及使用 useReducer 改变状态的操作。
 
@@ -251,7 +256,7 @@ import React, { createContext, useReducer } from 'react'
 export const ColorContext = createContext({})
 
 // 改变状态的操作
-export const UPDATE_COLOR = "UPDATE_COLOR"
+export const UPDATE_COLOR = 'UPDATE_COLOR'
 
 // reducer函数
 const reducer = (state, action) => {
@@ -266,11 +271,7 @@ const reducer = (state, action) => {
 // 包裹起来的组件可以共享Context对象
 export const Color = props => {
   const [color, dispatch] = useReducer(reducer, 'blue')
-  return (
-    <ColorContext.Provider value={{ color, dispatch }}>
-      {props.children}
-    </ColorContext.Provider>
-  )
+  return <ColorContext.Provider value={{ color, dispatch }}>{props.children}</ColorContext.Provider>
 }
 ```
 
@@ -282,9 +283,7 @@ import { ColorContext } from './redux'
 
 export default () => {
   const { color } = useContext(ColorContext)
-  return (
-    <div style={{ color }}>我是什么颜色的呀？</div>
-  )
+  return <div style={{ color }}>我是什么颜色的呀？</div>
 }
 ```
 
@@ -298,11 +297,19 @@ export default () => {
   return (
     <>
       <button
-        onClick={() => { dispatch({ type: UPDATE_COLOR, color: 'red' }) }}
-      >红色</button>
+        onClick={() => {
+          dispatch({ type: UPDATE_COLOR, color: 'red' })
+        }}
+      >
+        红色
+      </button>
       <button
-        onClick={() => { dispatch({ type: UPDATE_COLOR, color: 'green' }) }}
-      >绿色</button>
+        onClick={() => {
+          dispatch({ type: UPDATE_COLOR, color: 'green' })
+        }}
+      >
+        绿色
+      </button>
     </>
   )
 }
@@ -310,24 +317,24 @@ export default () => {
 
 4、新建 index.js 文件作为入口文件。
 
-  ```jsx
-  import React from 'react'
-  import ReactDOM from 'react-dom'
-  import Buttons from './Buttons'
-  import ShowText from './ShowText'
-  import { Color } from './redux'
-  
-  const App = () => {
-    return (
-      // 使用Color把ShowText组件和Buttons组件包裹起来
-      <Color>
-        <ShowText />
-        <Buttons />
-      </Color>
-    )
-  }
-  ReactDOM.render(<App />, document.getElementById('root'))
-  ```
+```jsx
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Buttons from './Buttons'
+import ShowText from './ShowText'
+import { Color } from './redux'
+
+const App = () => {
+  return (
+    // 使用Color把ShowText组件和Buttons组件包裹起来
+    <Color>
+      <ShowText />
+      <Buttons />
+    </Color>
+  )
+}
+ReactDOM.render(<App />, document.getElementById('root'))
+```
 
 ## 6 useMemo
 
@@ -385,7 +392,7 @@ function Parent() {
       <Child callback={callback} />
       <div>
         <button onClick={() => setCount(count + 1)}>+</button>
-        <input value={val} onChange={(event) => setVal(event.target.value)} />
+        <input value={val} onChange={event => setVal(event.target.value)} />
       </div>
     </div>
   )
@@ -431,7 +438,12 @@ export default () => {
       <button onClick={onClick}>按钮</button>
       <br />
       <br />
-      <input value={text} onChange={(e) => { setText(e.target.value) }} />
+      <input
+        value={text}
+        onChange={e => {
+          setText(e.target.value)
+        }}
+      />
     </>
   )
 }
@@ -484,3 +496,11 @@ export default () => {
   )
 }
 ```
+
+## 10 一些思想
+
+本节摘抄极客时间王沛的《React Hooks 核心原理与实战》课程中的一些思想。
+
+1、React Hooks 的本质就是提供了让 React 组件能够**绑定到某个可变数据源**的能力。
+
+2、React 的开发其实就是复杂应用程序**状态的管理和开发**。
