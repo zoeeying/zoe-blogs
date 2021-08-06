@@ -1,6 +1,6 @@
-# React Hooks
+# 学习常用的 React Hooks
 
-React Hooks 是用**函数的形式**代替原来的**继承类的形式**来定义组件的。React Hooks 可以在无需修改组件结构的情况下**复用状态逻辑**，将组件中相互关联的部分拆分成更小的函数（比如设置订阅或请求数据），而并非强制按照生命周期划分。
+React Hooks 是用**函数的形式**代替原来的**类的形式**来定义组件的。React Hooks 可以在无需修改组件结构的情况下**复用状态逻辑**，将组件中相互关联的部分拆分成更小的函数（比如设置订阅或请求数据），而并非强制按照生命周期划分。
 
 **组件类的缺点：** 大型组件很难拆分和重构，也很难测试；业务逻辑分散在组件的各个方法之中，导致重复逻辑或关联逻辑；组件类引入了复杂的编程模式，比如 render props 和高阶组件。
 
@@ -10,16 +10,15 @@ React Hooks 是用**函数的形式**代替原来的**继承类的形式**来定
 
 ## 1 小案例
 
-1、安装 create-react-app，使用 create-react-app 创建一个项目
+1、使用 create-react-app 创建一个项目：
 
 ```bash
-cnpm install create-react-app -g
-npx create-react-app demo01 # 在某个空文件夹下使用该命令创建demo01项目
+npx create-react-app demo01 # demo01是项目名
 cd demo01
 npm start
 ```
 
-2、使用组件类的计数器例子
+2、使用组件类的计数器例子：
 
 ```jsx
 import React, { Component } from 'react'
@@ -45,7 +44,7 @@ export default class Counter extends Component {
 }
 ```
 
-3、使用 React Hooks 改写上面的计数器例子
+3、使用 React Hooks 改写上面的计数器例子：
 
 ```jsx
 import React, { useState } from 'react'
@@ -368,13 +367,11 @@ export default () => {
 
 ## 7 useCallback
 
-使用类组件进行 React 开发时，经常会遇到组件重复渲染的问题，父组件中一个 state 发生了变化，会导致该组件的所有子组件都重写 render，即使绝大多数子组件的 props 没有变化，shouldComponentUpdate 生命周期函数可以减少这种重复渲染。如果使用 React Hooks 的话，也会遇到类似的问题，可以使用 useCallback 这个钩子函数。
+如果一个父组件包含子组件，子组件接收一个函数作为 props，如果父组件重新渲染了，该父组件（函数组件）中的代码都会重新执行，每次执行都会创建新的 callback 函数，导致子组件接收到的 props 发生改变，从而触发重新渲染，而这种情况下的重新渲染其实是没有必要的，可以借助 useCallback 把 callback 函数缓存起来，在父组件的重新渲染的时候保持两个 callback 函数的引用一致，从而避免子组件的不必要的更新。
 
 useCallback 和 useMemo 的参数跟 useEffect（用于处理副作用，而 useCallback 和 useMemo 不可以）一致。
 
 useMemo 和 useCallback 都会在组件第一次渲染的时候执行，之后会在其依赖的变量发生改变时再次执行，并且它们都返回缓存的值，useMemo 返回缓存的变量，useCallback 返回缓存的函数。
-
-有一个父组件，其中包含子组件，子组件接收一个函数作为 props，如果父组件重新渲染了，该父组件（函数组件）中的代码都会重新执行，每次执行都会创建新的 callback 函数，导致子组件接收到的 props 发生改变，从而触发重新渲染，而这种情况下的重新渲染其实是没有必要的，我们可以借助 useCallback 把 callback 函数缓存起来，在父组件的重新渲染的时候保持两个 callback 函数的引用一致，从而避免子组件的不必要的更新。
 
 ```jsx
 import React, { useState, useCallback, useEffect } from 'react'

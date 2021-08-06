@@ -25,9 +25,9 @@
 
 ## React
 
-- [React Hooks](./posts/2019-11-17-react-hooks.md)
-- [Redux](./posts/2019-11-23-redux.md)
-- [react-redux](./posts/2019-11-23-react-redux.md)
+- [学习常用的 React Hooks](./posts/2019-11-17-学习常用的ReactHooks.md)
+- [Redux 基础知识](./posts/2019-11-23-Redux基础知识.md)
+- [react-redux 用法学习](./posts/2019-11-23-react-redux用法学习.md)
 - [React 生命周期](./posts/2020-02-24-react-lifecycle.md)
 - [React 动画](./posts/2020-02-27-react-animation.md)
 - [React Router](./posts/2020-02-27-react-router.md)
