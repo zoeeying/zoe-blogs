@@ -1,12 +1,12 @@
 # 学习常用的 React Hooks
 
-React Hooks 是用**函数的形式**代替原来的**类的形式**来定义组件的。React Hooks 可以在无需修改组件结构的情况下**复用状态逻辑**，将组件中相互关联的部分拆分成更小的函数（比如设置订阅或请求数据），而并非强制按照生命周期划分。
+React Hooks 是用**函数形式**代替原来的**类形式**来定义组件的。React Hooks 可以在无需修改组件结构的情况下**复用状态逻辑**，将组件中相互关联的部分拆分成更小的函数（比如设置订阅或请求数据），而并非强制按照生命周期划分。
 
 **组件类的缺点：** 大型组件很难拆分和重构，也很难测试；业务逻辑分散在组件的各个方法之中，导致重复逻辑或关联逻辑；组件类引入了复杂的编程模式，比如 render props 和高阶组件。
 
 **使用 Hooks 的规则：** 只能在**函数最外层**调用 Hooks，不要在循环、条件判断或者嵌套函数中调用；只能在 **React 的函数组件**中调用 Hooks；不要在其他普通 JavaScript 函数中调用（自定义的 Hooks 中也可以调用 Hooks）。
 
-只要 Hooks 的调用顺序在多次渲染之间保持一致，React 就能正确地将内部 state 和对应的 Hooks 进行关联。**这就是为什么 Hooks 需要在我们组件的最顶层调用。**
+只要 Hooks 的调用顺序在多次渲染之间保持一致，React 就能正确地将内部 state 和对应的 Hooks 进行关联，**这就是为什么 Hooks 需要在我们组件的最顶层调用。**
 
 ## 1 小案例
 
@@ -337,7 +337,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ## 6 useMemo
 
-如果某个函数执行比较耗时，在组件重新渲染的时候不希望重复执行该函数，可以使用 useMemo 钩子函数将其**执行结果**返回值缓存起来。
+如果某个函数执行比较耗时，在组件重新渲染的时候不希望重复执行该函数，可以使用 useMemo 将其**执行结果**返回值缓存起来。
 
 useMemo 的第一个参数是一个函数，该函数返回的值会被缓存起来，同时这个值会作为 useMemo 的返回值；useMemo 的第二个参数是一个依赖数组，如果数组中的值有变化，那么就会去重新执行第一个参数中的函数，并将函数返回值缓存起来作为 useMemo 的返回值。
 
@@ -354,6 +354,7 @@ export default () => {
     console.log(result)
     return result
   }
+  
   const base = useMemo(expensiveFn, [])
 
   return (
@@ -367,11 +368,11 @@ export default () => {
 
 ## 7 useCallback
 
-如果一个父组件包含子组件，子组件接收一个函数作为 props，如果父组件重新渲染了，该父组件（函数组件）中的代码都会重新执行，每次执行都会创建新的 callback 函数，导致子组件接收到的 props 发生改变，从而触发重新渲染，而这种情况下的重新渲染其实是没有必要的，可以借助 useCallback 把 callback 函数缓存起来，在父组件的重新渲染的时候保持两个 callback 函数的引用一致，从而避免子组件的不必要的更新。
+如果一个父组件包含子组件，子组件接收一个函数作为 props，那么，如果父组件重新渲染了，该父组件（函数组件）中的代码都会重新执行，每次执行都会创建新的 callback 函数，导致子组件接收到的 props 发生改变，从而触发子组件的重新渲染，而这种情况下的重新渲染其实是没有必要的，可以借助 useCallback 把 callback 函数缓存起来，在父组件重新渲染时保持两个 callback 函数的引用一致，从而避免**子组件的不必要的重新渲染**。
 
 useCallback 和 useMemo 的参数跟 useEffect（用于处理副作用，而 useCallback 和 useMemo 不可以）一致。
 
-useMemo 和 useCallback 都会在组件第一次渲染的时候执行，之后会在其依赖的变量发生改变时再次执行，并且它们都返回缓存的值，useMemo 返回缓存的变量，useCallback 返回缓存的函数。
+useMemo 和 useCallback 都会在组件第一次渲染的时候执行，之后会在其依赖的变量发生改变时再次执行，并且它们都返回缓存的值，**useMemo 返回缓存的变量，useCallback 返回缓存的函数**。
 
 ```jsx
 import React, { useState, useCallback, useEffect } from 'react'
@@ -434,7 +435,6 @@ export default () => {
       <input ref={inputElement} />
       <button onClick={onClick}>按钮</button>
       <br />
-      <br />
       <input
         value={text}
         onChange={e => {
@@ -494,6 +494,156 @@ export default () => {
 }
 ```
 
+## 10 容器模式
+
+由于 Hooks 必须在顶层作用域执行，而不能放在条件判断、循环等语句中，也不能在可能的 return 语句之后执行（Hooks 必须按顺序被执行到），会导致一些业务逻辑受限，比如下面的业务场景：
+
+```react
+import { useState } from 'react'
+import { Modal } from 'antd'
+
+function UserInfoModal({ visible, ...rest }) {
+  // 当visible为false时，不渲染任何内容
+  if (!visible) return null
+
+  // 报错，不能在可能的return语句之后执行Hooks
+  const [userInfo, setUserInfo] = useState({})
+  
+  // ...
+
+  return (
+    <Modal visible={visible} {...rest}>
+      {/* 对话框的内容 */}
+    </Modal>
+  )
+}
+```
+
+可以使用**容器模式**来实现上面的逻辑，具体做法就是把条件判断的结果放到两个组件之中，确保真正 render UI 的组件收到的所有属性都是有值的，针对上面的例子，可以在 UserInfoModal 外层加一个容器，这样就能实现条件渲染了：
+
+```react
+export default function UserInfoModalWrapper({ visible, ...rest }) {
+  // 如果对话框不显示，则不render任何内容
+  if (!visible) return null
+  
+  // 否则执行对话框的组件逻辑
+  return <UserInfoModal visible {...rest} />
+}
+```
+
+## 11 render props
+
+在 Class 组件时期，render props 和 HOC（高阶组件）两种模式可以说是进行**逻辑重用**（包括数据逻辑和 UI 逻辑）的两把利器，但是实际上，HOC 的所有场景几乎都可以用 render props 来实现。
+
+Hooks 出现后，对于**数据逻辑重用**，首选 **Hooks**，而对于 **UI 逻辑的重用**，还是需要借助于 **render props**。
+
+render props 就是把一个 **render 函数**作为属性传递给某个组件，由这个组件去执行这个函数从而 render 实际的内容，适用于类组件和函数组件。
+
+下面看一个使用 render props 来封装计数器**数据逻辑**的例子：
+
+```react
+import { useState, useCallback } from 'react'
+
+// 使用render props模式来做数据逻辑重用
+// 其实对于数据逻辑重用，使用Hooks更合适
+function CounterRenderProps({ render }) {
+  const [count, setCount] = useState(0)
+
+  const increment = useCallback(() => {
+    setCount(count + 1)
+  }, [count])
+
+  const decrement = useCallback(() => {
+    setCount(count - 1)
+  }, [count])
+
+  // 不render任何UI的组件
+  return render({ count, increment, decrement })
+}
+
+export default function CounterRenderPropsExample() {
+  return (
+    <CounterRenderProps
+      // render属性值是一个函数，在CounterRenderProps中调用
+      render={({ count, increment, decrement }) => {
+        return (
+          <div>
+            <button onClick={decrement}>-</button>
+            <span>{count}</span>
+            <button onClick={increment}>+</button>
+          </div>
+        )
+      }}
+      />
+  )
+}
+```
+
+下面是一个使用 render props 做 **UI 逻辑重用**的例子：
+
+```react
+import { Popover, Tag, Button } from 'antd'
+
+const data = [
+  {
+    id: '1',
+    name: 'Kennedy',
+    job: 'Chief Mobility Orchestrator',
+    city: 'North Alec',
+  },
+  {
+    id: '2',
+    name: 'Lucius',
+    job: 'Internal Research Manager',
+    city: 'Littleland',
+  },
+  {
+    id: '3',
+    name: 'Carlos',
+    job: 'Lead Configuration Analyst',
+    city: 'South Lillian',
+  },
+  
+  // ...
+]
+
+function ListWithMore({ renderItem, data = [], max }) {
+  const elements = data.map((item, index) => renderItem(item, index, data))
+  const show = elements.slice(0, max)
+  const hide = elements.slice(max)
+
+  return (
+    <span>
+      {show}
+      {hide.length > 0 && (
+        <Popover content={hide}>
+          <a>
+            <span>and {hide.length} more...</span>
+          </a>
+        </Popover>
+      )}
+    </span>
+  )
+}
+
+export default function ListWithMoreExample() {
+  return (
+    <div>
+      <h2>User Names</h2>
+      <div>
+        <ListWithMore
+          renderItem={user => {
+            return <Tag>{user.name}</Tag>
+          }}
+          data={data}
+          max={3}
+        />
+      </div>
+    </div>
+  )
+}
+```
+
 ## 10 一些思想
 
 本节摘抄极客时间王沛的《React Hooks 核心原理与实战》课程中的一些思想。
@@ -501,3 +651,24 @@ export default () => {
 1、React Hooks 的本质就是提供了让 React 组件能够**绑定到某个可变数据源**的能力。
 
 2、React 的开发其实就是复杂应用程序**状态的管理和开发**。
+
+3、**扩展点机制：** 在任何可能产生单点复杂度的模块中，通过扩展点的方式，允许其它模块为其增加功能。
+
+```react
+function ArticleView({ id }) {
+  const { article } = useArticle(id)
+
+  return (
+    <div className="article-view">
+      <MainContent article={article} />
+      {/* 定义了一个名为article.footer的扩展点 */}
+      <Extension name="article.footer" args={article} />
+    </div>
+  )
+}
+
+extensionEngine.register('article.footer', article => {
+  return <CommentList article={article} />
+})
+```
+
