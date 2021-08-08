@@ -1,8 +1,3 @@
----
-title: Vue 实例
-date: 2020-02-14
----
-
 # Vue 实例
 
 ## 1 简介
@@ -23,7 +18,7 @@ Vue 实例暴露了一些有用的**实例属性与方法**，它们都有前缀
 var data = { a: 1 }
 var vm = new Vue({
   el: '#example',
-  data: data
+  data: data,
 })
 
 // 获得这个实例上的属性，返回源数据中对应的字段
@@ -68,33 +63,33 @@ vm.$watch('a', function (newValue, oldValue) {
   {{message}}
 </div>
 <script type="text/javascript">
-  var app = new Vue({
-    el: '#app',
-    data: {
-      message: 'Hello World!'
+var app = new Vue({
+  el: '#app',
+  data: {
+    message: 'Hello World!',
+  },
+  mounted() {
+    $('#app').html('Hello jQuery!')
+  },
+  methods: {
+    add() {
+      console.log('add方法被调用了')
     },
-    mounted() {
-      $('#app').html('Hello jQuery!')
-    },
-    methods: {
-      add() {
-        console.log('add方法被调用了')
-      }
-    },
-  })
-  // 在构造器外部调用构造器内部methods中的add方法
-  app.add()
+  },
+})
+// 在构造器外部调用构造器内部methods中的add方法
+app.add()
 </script>
 ```
 
 ## 2 实例方法（生命周期）
 
-| 方法         | 描述                                                         |
-| ------------ | ------------------------------------------------------------ |
+| 方法         | 描述                                                                                                                                                                                  |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | $mount       | 如果 Vue 实例在实例化时没有收到 el 选项，则它处于**未挂载**状态，没有关联的 DOM 元素，可以使用 `vm.$mount()` 手动地挂载一个未挂载的实例。返回实例自身，因而可以链式调用其它实例方法。 |
-| $destroy     | 完全销毁一个实例，清理它与其它实例的连接，解绑它的全部指令及事件监听器，触发 `beforeDestroy` 和 `destroyed` 的钩子。 |
-| $forceUpdate | 迫使 Vue 实例重新渲染，注意它仅仅影响实例本身和插入插槽内容的子组件，而不是所有子组件。 |
-| $nextTick    | 将回调延迟到下次 DOM 更新循环之后执行。在修改数据之后立即使用它，然后等待 DOM 更新。 |
+| $destroy     | 完全销毁一个实例，清理它与其它实例的连接，解绑它的全部指令及事件监听器，触发 `beforeDestroy` 和 `destroyed` 的钩子。                                                                  |
+| $forceUpdate | 迫使 Vue 实例重新渲染，注意它仅仅影响实例本身和插入插槽内容的子组件，而不是所有子组件。                                                                                               |
+| $nextTick    | 将回调延迟到下次 DOM 更新循环之后执行。在修改数据之后立即使用它，然后等待 DOM 更新。                                                                                                  |
 
 ```vue
 <div id="app"></div>
@@ -104,49 +99,49 @@ vm.$watch('a', function (newValue, oldValue) {
   <button onclick="tick()">修改数据</button>
 </p>
 <script type="text/javascript">
-  var zoeExtend = Vue.extend({
-    template: "<p><a :href='zoeUrl'>{{zoeName}}</a></p>",
-    data() {
-      return ({
-        zoeUrl: 'https://zoeeying.github.io',
-        zoeName: '小畅叙'
-      })
-    },
-    // 扩展中的生命周期同构造器
-    mounted() {
-      console.log('扩展被挂载了')
-    },
-    destroyed() {
-      console.log('扩展被销毁了')
-    },
-    updated() {
-      console.log('扩展被更新了')
-    },
+var zoeExtend = Vue.extend({
+  template: "<p><a :href='zoeUrl'>{{zoeName}}</a></p>",
+  data() {
+    return {
+      zoeUrl: 'https://zoeeying.github.io',
+      zoeName: '小畅叙',
+    }
+  },
+  // 扩展中的生命周期同构造器
+  mounted() {
+    console.log('扩展被挂载了')
+  },
+  destroyed() {
+    console.log('扩展被销毁了')
+  },
+  updated() {
+    console.log('扩展被更新了')
+  },
+})
+
+// 创建并挂载到#app（会替换#app）
+var vm = new zoeExtend().$mount('#app')
+// 同上
+// var vm = new zoeExtend({ el: '#app' })
+// 或者，在文档之外渲染并且随后挂载
+// var component = new zoeExtend().$mount()
+// document.getElementById('app').appendChild(component.$el)
+
+function destroy() {
+  vm.$destroy()
+}
+function reload() {
+  vm.$forceUpdate()
+}
+function tick() {
+  // 修改数据
+  vm.zoeName = '无敌小畅叙'
+  // DOM还没有更新
+  vm.$nextTick(function () {
+    // DOM现在更新了
+    vm.doSomethingElse()
   })
-
-  // 创建并挂载到#app（会替换#app）
-  var vm = new zoeExtend().$mount('#app')
-  // 同上
-  // var vm = new zoeExtend({ el: '#app' })
-  // 或者，在文档之外渲染并且随后挂载
-  // var component = new zoeExtend().$mount()
-  // document.getElementById('app').appendChild(component.$el)
-
-  function destroy() {
-    vm.$destroy()
-  }
-  function reload() {
-    vm.$forceUpdate()
-  }
-  function tick() {
-    // 修改数据
-    vm.zoeName = '无敌小畅叙'
-    // DOM还没有更新
-    vm.$nextTick(function () {
-      // DOM现在更新了
-      vm.doSomethingElse()
-    })
-  }
+}
 </script>
 ```
 
@@ -154,12 +149,12 @@ vm.$watch('a', function (newValue, oldValue) {
 
 实例事件是指在构造器外部增加的事件，可以调用构造器内部的数据。
 
-| 事件  | 描述                                                         |
-| ----- | ------------------------------------------------------------ |
+| 事件  | 描述                                                                                                                                                                         |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | $on   | 监听当前实例上的**自定义事件**。事件可以由 `vm.$emit` 触发。接收两个参数，第一个参数是事件函数名称，第二个参数是一个回调函数，回调函数会接收所有传入事件触发函数的额外参数。 |
-| $once | 监听一个自定义事件，但是只触发一次，一旦触发之后，监听器就会被移除。 |
-| $off  | 移除自定义事件监听器。如果没有提供参数，则移除所有的事件监听器；如果只提供了事件，则移除该事件所有的监听器；如果同时提供了事件与回调，则只移除这个回调的监听器。 |
-| $emit | 触发当前实例上的事件。附加参数都会传给监听器回调。           |
+| $once | 监听一个自定义事件，但是只触发一次，一旦触发之后，监听器就会被移除。                                                                                                         |
+| $off  | 移除自定义事件监听器。如果没有提供参数，则移除所有的事件监听器；如果只提供了事件，则移除该事件所有的监听器；如果同时提供了事件与回调，则只移除这个回调的监听器。             |
+| $emit | 触发当前实例上的事件。附加参数都会传给监听器回调。                                                                                                                           |
 
 ```vue
 <div id="app">
@@ -226,7 +221,7 @@ Vue.component('welcome-button', {
     <button v-on:click="$emit('welcome')">
       Click me to be welcomed
     </button>
-  `
+  `,
 })
 ```
 
@@ -242,8 +237,8 @@ new Vue({
   methods: {
     sayHi: function () {
       alert('Hi!')
-    }
-  }
+    },
+  },
 })
 ```
 
@@ -262,46 +257,46 @@ new Vue({
 </template>
 
 <script>
-  export default {
-    name: 'Child',
-    methods: {
-      changeNum() {
-        this.$emit('numChanged', 4869) // 自定义numChanged事件，传值4869
-      }
-    }
-  }
+export default {
+  name: 'Child',
+  methods: {
+    changeNum() {
+      this.$emit('numChanged', 4869) // 自定义numChanged事件，传值4869
+    },
+  },
+}
 </script>
 ```
 
 ```vue
 <!-- 父组件 -->
 <template>
-	<div id="parent">
+  <div id="parent">
     <!-- numChanged是子组件自定义的事件 -->
     <Child v-on:numChanged="updateNum"></Child>
-    <h3>{{num}}</h3>
+    <h3>{{ num }}</h3>
   </div>
 </template>
 
 <script>
-  import Child from '@/components/Child'
-  export default {
-    name: 'Parent',
-    components: {
-      Child
-    },
-    data() {
-      return {
-        num: 0
-      }
-    },
-    methods: {
-      // 子组件通过e给父组件发送消息，实际上就是子组件把自己的数据发送到父组件
-      updateNum(e) {
-        this.num = e
-      }
+import Child from '@/components/Child'
+export default {
+  name: 'Parent',
+  components: {
+    Child,
+  },
+  data() {
+    return {
+      num: 0,
     }
-  }
+  },
+  methods: {
+    // 子组件通过e给父组件发送消息，实际上就是子组件把自己的数据发送到父组件
+    updateNum(e) {
+      this.num = e
+    },
+  },
+}
 </script>
 ```
 
@@ -320,72 +315,72 @@ new Vue({
 </div>
 <template id="aaa">
   <div>
-    <h4>我是aaa组件，我有name：{{name}}</h4>
+    <h4>我是aaa组件，我有name：{{ name }}</h4>
     <button @click="send">把数据发送给ccc组件</button>
   </div>
 </template>
 <template id="bbb">
   <div>
-    <h4>我是bbb组件，我有nickname：{{nickname}}</h4>
+    <h4>我是bbb组件，我有nickname：{{ nickname }}</h4>
     <button @click="send">把数据发送给ccc组件</button>
   </div>
 </template>
 <template id="ccc">
   <div>
     <h4>我是ccc组件</h4>
-    <p>我接收到了aaa组件传过来的name：{{name}}</p>
-    <p>我接收到了bbb组件传过来的nickname：{{nickname}}</p>
+    <p>我接收到了aaa组件传过来的name：{{ name }}</p>
+    <p>我接收到了bbb组件传过来的nickname：{{ nickname }}</p>
   </div>
 </template>
 <script type="text/javascript">
-  const Event = new Vue()
-  const aaa = {
-    template: '#aaa',
-    data() {
-      return {
-        name: '周颖'
-      }
-    },
-    methods: {
-      send() {
-        Event.$emit('aaaSend', this.name)
-      }
+const Event = new Vue()
+const aaa = {
+  template: '#aaa',
+  data() {
+    return {
+      name: '周颖',
     }
-  }
-  const bbb = {
-    template: '#bbb',
-    data() {
-      return {
-        nickname: '小畅叙'
-      }
+  },
+  methods: {
+    send() {
+      Event.$emit('aaaSend', this.name)
     },
-    methods: {
-      send() {
-        Event.$emit('bbbSend', this.nickname)
-      }
+  },
+}
+const bbb = {
+  template: '#bbb',
+  data() {
+    return {
+      nickname: '小畅叙',
     }
-  }
-  const ccc = {
-    template: '#ccc',
-    data() {
-      return {
-        name: '',
-        nickname: ''
-      }
+  },
+  methods: {
+    send() {
+      Event.$emit('bbbSend', this.nickname)
     },
-    mounted() {
-      Event.$on('aaaSend', name => {
-        this.name = name
-      })
-      Event.$on('bbbSend', nickname => {
-        this.nickname = nickname
-      })
+  },
+}
+const ccc = {
+  template: '#ccc',
+  data() {
+    return {
+      name: '',
+      nickname: '',
     }
-  }
-  var app = new Vue({
-    el: '#app',
-    components: { aaa, bbb, ccc }
-  })
+  },
+  mounted() {
+    Event.$on('aaaSend', name => {
+      this.name = name
+    })
+    Event.$on('bbbSend', nickname => {
+      this.nickname = nickname
+    })
+  },
+}
+var app = new Vue({
+  el: '#app',
+  components: { aaa, bbb, ccc },
+})
 </script>
 ```
 
@@ -401,8 +396,8 @@ new Vue({
 
 ```vue
 <template id="zoe">
-	<div>
-  	<slot></slot>
+  <div>
+    <slot></slot>
   </div>
 </template>
 
@@ -413,31 +408,30 @@ new Vue({
 </div>
 
 <script type="text/javascript">
-  const zoe = {
-    template: '#zoe',
-    data() {
-      return {
-        name: 'Zoe'
-      }
+const zoe = {
+  template: '#zoe',
+  data() {
+    return {
+      name: 'Zoe',
+    }
+  },
+  methods: {
+    sayHello() {
+      alert('Hello Zoe')
     },
-    methods: {
-      sayHello() {
-        alert('Hello Zoe')
-      }
-    }
-  }
+  },
+}
 
-  var app = new Vue({
-    el: '#app',
-    components: { zoe },
-    mounted() {
-      const zoeRef = this.$refs.zoeRef
-      console.log(zoeRef.name)
-      zoeRef.sayHello()
-    }
-  })
+var app = new Vue({
+  el: '#app',
+  components: { zoe },
+  mounted() {
+    const zoeRef = this.$refs.zoeRef
+    console.log(zoeRef.name)
+    zoeRef.sayHello()
+  },
+})
 </script>
 ```
 
 但是这个方法无法在跨级或兄弟组件间通讯。
-

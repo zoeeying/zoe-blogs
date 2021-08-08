@@ -1,8 +1,3 @@
----
-title: JavaScript 函数式编程
-date: 2020-02-25
----
-
 # JavaScript 函数式编程
 
 一个函数被当作**第一类成员（公民）**时，它不仅可以被声明为一个变量，而且可以被当作函数参数传递，这些函数甚至可以作为函数的执行结果被返回。一个语言是否可以进行函数式编程，取决于该语言中的函数是否是**第一类公民**。JavaScript 就是函数式编程语言，因为它的函数是第一类公民，这意味着函数就是数据，可以像变量那样被保存、检索或者在应用程序内部传递。
@@ -55,7 +50,7 @@ const schools = [
   { name: '竹程中学' },
   { name: '六合一中' },
   { name: '南通大学' },
-  { name: '河海大学' }
+  { name: '河海大学' },
 ]
 
 // 方法1
@@ -63,16 +58,14 @@ const updatedSchools = schools.map(item => {
   if (item.name === '六合一中') {
     return {
       ...item,
-      name: '六合高级中学'
+      name: '六合高级中学',
     }
   }
   return item
 })
 
 // 方法2是方法1的简写，工作中很常用
-const updatedSchools2 = schools.map(item =>
-  item.name === '六合一中' ? { ...item, name: '六合高级中学' } : item
-)
+const updatedSchools2 = schools.map(item => (item.name === '六合一中' ? { ...item, name: '六合高级中学' } : item))
 ```
 
 Array.map 会将每个元素的索引作为第二个参数注入回调函数中，即变量 i。当 i 和目标元素的索引不相等时，我们只需将相同元素插入新数组即可，当 i 和目标元素的索引相等时，我们会使用一个新对象替换新数组中相同索引位置的对象。
@@ -98,8 +91,7 @@ console.log(max)
 // 数组去重
 const colors = ['yellow', 'green', 'blue', 'red', 'green', 'blue']
 const distinctColors = colors.reduce(
-  (distinct, color) =>
-    distinct.includes(color) ? distinct : [...distinct, color],
+  (distinct, color) => (distinct.includes(color) ? distinct : [...distinct, color]),
   []
 )
 console.log(distinctColors)
@@ -111,18 +103,18 @@ const persons = [
   {
     name: 'Zoe',
     age: 28,
-    skill: 'Coding'
+    skill: 'Coding',
   },
   {
     name: 'Cha',
     age: 12,
-    skill: 'Sleeping'
+    skill: 'Sleeping',
   },
   {
     name: 'Xu',
     age: 21,
-    skill: 'Gaming'
-  }
+    skill: 'Gaming',
+  },
 ]
 const hashPersons = persons.reduce((hash, { name, age, skill }) => {
   hash[name] = { age, skill }
@@ -184,16 +176,14 @@ var zoe = {
       id: 28,
       fullname: {
         first: 'Zhou',
-        last: 'Zoe'
-      }
-    }
-  }
+        last: 'Zoe',
+      },
+    },
+  },
 }
 const deepPick = (fields, object = {}) => {
   const [first, ...remaining] = fields.split('.')
-  return remaining.length
-    ? deepPick(remaining.join('.'), object[first])
-    : object[first]
+  return remaining.length ? deepPick(remaining.join('.'), object[first]) : object[first]
 }
 
 // 需求：给定一个对象，根据点符号拼接的嵌套属性字符串，找出对应的属性值
@@ -218,7 +208,10 @@ const func2 = date => date.toLocaleString()
 // 优化写法，方便扩展，方便添加更多函数，方便调整函数执行顺序
 // 数组fns是函数之间传递数据的管道
 // reduce的使用，可以正序调用fns数组中的函数
-const compose = (...fns) => arg => fns.reduce((composed, f) => f(composed), arg)
+const compose =
+  (...fns) =>
+  arg =>
+    fns.reduce((composed, f) => f(composed), arg)
 const both = compose(func1, func2)
 console.log(both(new Date()))
 ```

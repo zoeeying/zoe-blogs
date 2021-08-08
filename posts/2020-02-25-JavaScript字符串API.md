@@ -1,8 +1,3 @@
----
-title: JavaScript 字符串 API
-date: 2020-02-25
----
-
 # JavaScript 字符串 API
 
 ## 1 字符方法
@@ -199,12 +194,12 @@ console.log('x'.padStart(5, 'abc')) // 'abcax'
 
 ## 10 其它
 
-| 方法              | 描述                                                         |
-| ----------------- | ------------------------------------------------------------ |
-| `includes(str)`   | 判断是否包含指定的字符串，返回 `true/false`                  |
-| `startsWith(str)` | 判断是否以指定字符串开头，返回 `true/false`                  |
-| `endsWith(str)`   | 判断是否以指定字符串结尾，返回 `true/false`                  |
-| `repeat(count)`   | 重复指定次数，返回重复后的新的字符串                         |
+| 方法              | 描述                                                                                                                            |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `includes(str)`   | 判断是否包含指定的字符串，返回 `true/false`                                                                                     |
+| `startsWith(str)` | 判断是否以指定字符串开头，返回 `true/false`                                                                                     |
+| `endsWith(str)`   | 判断是否以指定字符串结尾，返回 `true/false`                                                                                     |
+| `repeat(count)`   | 重复指定次数，返回重复后的新的字符串                                                                                            |
 | `localeCompare()` | 用于比较两个字符串，并返回 -1、0、1，对于英语而言，大写字母在字母表中排在小写字母前面，当然这个方法对于不同地区的语言是有差别的 |
 
 ```javascript
@@ -213,8 +208,3 @@ console.log(string.localeCompare('brick')) // 1，yellow在字母表中排在bri
 console.log(string.localeCompare('yellow')) // 0
 console.log(string.localeCompare('zoo')) // -1，yellow在字母表中排在zoo之前
 ```
-
-
-
-
-

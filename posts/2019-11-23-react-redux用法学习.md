@@ -6,7 +6,7 @@ react-redux 的作用是建立一个桥梁，让 React 和 Redux 实现互通。
 
 在 React 中使用 Redux 的单向数据流：
 
-![image-20210806233448446](../images/image-20210806233448446-1628264089989.png)
+![react_redux](../images/react_redux.png)
 
 ## 1 理解
 
@@ -39,10 +39,7 @@ UI 组件只负责 UI 的呈现，不带任何业务逻辑，通过 props 接收
 ```jsx
 import { connect } from 'react-redux'
 
-connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Counter)
+connect(mapStateToProps, mapDispatchToProps)(Counter)
 ```
 
 #### (3) mapStateToProps
@@ -73,12 +70,12 @@ npm install --save redux-thunk
 // store.js
 import { createStore, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
-import { counter } from './reducers' 
+import { counter } from './reducers'
 
 // 生成一个store对象
 const store = createStore(
   counter,
-  applyMiddleware(thunk), // 应用异步的中间件
+  applyMiddleware(thunk) // 应用异步的中间件
 ) // 内部会第一次调用reducer函数得到初始state
 export default store
 ```
@@ -98,21 +95,19 @@ export const DECREMENT = 'DECREMENT'
  **/
 import { INCREMENT, DECREMENT } from './action-types'
 
-export const increment = (number) => ({ type: INCREMENT, data: number })
-export const decrement = (number) => ({ type: DECREMENT, data: number })
+export const increment = number => ({ type: INCREMENT, data: number })
+export const decrement = number => ({ type: DECREMENT, data: number })
 /**
  * 异步action
  * 在store.js中应用异步的中间件applyMiddleware(thunk)，才可以返回一个函数，默认只能返回对象
  */
-export const incrementAsync = (number) => (
-  dispatch => {
-    // 异步的代码
-    setTimeout(() => {
-      // 1秒后才去分发一个同步的action
-      dispatch(increment(number))
-    }, 1000)
-  }
-)
+export const incrementAsync = number => dispatch => {
+  // 异步的代码
+  setTimeout(() => {
+    // 1秒后才去分发一个同步的action
+    dispatch(increment(number))
+  }, 1000)
+}
 ```
 
 ```jsx
@@ -141,7 +136,8 @@ function comments(state = [], action) {
       return state.filter((item, key) => action.data !== key)
     case RECEIVE_COMMENTS:
       return action.data
-    default: // 进来第一次会走default
+    default:
+      // 进来第一次会走default
       return state
   }
 }
@@ -162,11 +158,12 @@ import { Provider } from 'react-redux'
 import App from './containers/App'
 import store from './redux/store'
 
-ReactDOM.render((
+ReactDOM.render(
   <Provider store={store}>
     <App />
-  </Provider>
-), document.getElementById('root'))
+  </Provider>,
+  document.getElementById('root')
+)
 ```
 
 4、在子组件中，比如本案例 Counter.js 中，通过 props 获取状态和 actions：
@@ -294,7 +291,7 @@ import { counter } from './reducers'
 // 生成一个store对象
 const store = createStore(
   counter,
-  composeWithDevTools(applyMiddleware(thunk)), // 应用异步的中间件
+  composeWithDevTools(applyMiddleware(thunk)) // 应用异步的中间件
 ) // 内部会第一次调用reducer函数得到初始state
 export default store
 ```

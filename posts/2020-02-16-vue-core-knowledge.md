@@ -33,13 +33,13 @@ Vue.directive 用于注册或获取全局指令。
   function unbind() {
     app.$destroy() // 销毁
   }
-  
+
   // Vue.directive('zoe', function (el, binding, vnode) {
   //   // el是dom元素，这里将会被bind和update调用
   //   el.style = "color:" + binding.value
   //   console.log(binding)
   // })
-  
+
   Vue.directive('zoe', {
     bind: function (el, binding) {
       console.log('1 - bind')
@@ -58,10 +58,10 @@ Vue.directive 用于注册或获取全局指令。
       console.log('5 - unbind')
     }
   })
-  
+
   // getter，返回已注册的指令
   // var myDirective = Vue.directive('zoe')
-  
+
   var app = new Vue({
     el: '#app',
     data: {
@@ -114,19 +114,19 @@ Vue.extend 使用基础 Vue 构造器，创建一个**子类**，参数是一个
 <div id="zoe"></div>
 <zoe></zoe>
 <script type="text/javascript">
-  // 创建构造器
-  var zoeExtend = Vue.extend({
-    template: "<p><a :href='zoeUrl'>{{zoeName}}</a></p>",
-    data: function () {
-      return ({
-        zoeUrl: 'https://zoeeying.github.io',
-        zoeName: '小畅叙'
-      })
+// 创建构造器
+var zoeExtend = Vue.extend({
+  template: "<p><a :href='zoeUrl'>{{zoeName}}</a></p>",
+  data: function () {
+    return {
+      zoeUrl: 'https://zoeeying.github.io',
+      zoeName: '小畅叙',
     }
-  })
-  // 创建zoeExtend实例，并挂载到一个元素上
-  new zoeExtend().$mount('#zoe') // 挂载到id为zoe的div元素上，推荐使用
-  new zoeExtend().$mount('zoe') // 挂载到自定义的zoe元素上
+  },
+})
+// 创建zoeExtend实例，并挂载到一个元素上
+new zoeExtend().$mount('#zoe') // 挂载到id为zoe的div元素上，推荐使用
+new zoeExtend().$mount('zoe') // 挂载到自定义的zoe元素上
 </script>
 ```
 
@@ -146,31 +146,31 @@ Vue.extend 使用基础 Vue 构造器，创建一个**子类**，参数是一个
 <p><button onclick="add()">增加数字</button></p>
 <p><button onclick="change()">改变数组中第一个元素</button></p>
 <script type="text/javascript">
-  function add() {
-    // count是基本类型，这些方法都能实现改变count的目的
-    // Vue.set(outData, 'count', 2)
-    // Vue.set(app, 'count', 2)
-    // app.count++
-    outData.count++
-  }
+function add() {
+  // count是基本类型，这些方法都能实现改变count的目的
+  // Vue.set(outData, 'count', 2)
+  // Vue.set(app, 'count', 2)
+  // app.count++
+  outData.count++
+}
 
-  function change() {
-    // 如果数据是引用类型的，比如数组，那么只是改变数组中某个元素，需要使用Vue.set，页面才会更新
-    // app.arr[1] = 'bbb'
-    // outData.arr[1] = 'bbb'
-    // Vue.set(outData.arr, 1, 'bbb')
-    Vue.set(app.arr, 1, 'bbb')
-  }
+function change() {
+  // 如果数据是引用类型的，比如数组，那么只是改变数组中某个元素，需要使用Vue.set，页面才会更新
+  // app.arr[1] = 'bbb'
+  // outData.arr[1] = 'bbb'
+  // Vue.set(outData.arr, 1, 'bbb')
+  Vue.set(app.arr, 1, 'bbb')
+}
 
-  var outData = {
-    count: 1,
-    arr: ['111', '222', '333']
-  }
+var outData = {
+  count: 1,
+  arr: ['111', '222', '333'],
+}
 
-  var app = new Vue({
-    el: '#app',
-    data: outData
-  })
+var app = new Vue({
+  el: '#app',
+  data: outData,
+})
 </script>
 ```
 
@@ -228,7 +228,7 @@ Vue 的生命周期函数（钩子函数）是在某些特定阶段会被自动�
 </script>
 ```
 
-![lifecycle.png](../images/vue-cycle.png)
+![lifecycle.png](../images/vue_cycle.png)
 
 ## 3 Template 模板
 
@@ -239,10 +239,10 @@ Vue 的生命周期函数（钩子函数）是在某些特定阶段会被自动�
 ```vue
 <div id="app"></div>
 <script type="text/javascript">
-  var app = new Vue({
-    el: '#app',
-    template: `<h2 style="color:blue">在构造器中创建模板</h2>`
-  })
+var app = new Vue({
+  el: '#app',
+  template: `<h2 style="color:blue">在构造器中创建模板</h2>`,
+})
 </script>
 ```
 
@@ -256,11 +256,12 @@ Vue 的生命周期函数（钩子函数）是在某些特定阶段会被自动�
     <h2 style="color:blue">在template标签中创建模板</h2>
   </div>
 </template>
-<script type="text/javascript"> kjjjjj,
-  var app = new Vue({
-    el: '#app',
-    template: '#templateId'
-  })
+<script type="text/javascript">
+kjjjjj,
+ var app = new Vue({
+   el: '#app',
+   template: '#templateId'
+ })
 </script>
 ```
 
@@ -271,15 +272,15 @@ Vue 的生命周期函数（钩子函数）是在某些特定阶段会被自动�
 ```vue
 <div id="app"></div>
 <script type="x-template" id="scriptId">
-  <div>
-    <h2 style="color:blue">使用script标签创建模板</h2>
-  </div>
+<div>
+  <h2 style="color:blue">使用script标签创建模板</h2>
+</div>
 </script>
 <script type="text/javascript">
-  var app = new Vue({
-    el: '#app',
-    template: '#scriptId'
-  })
+var app = new Vue({
+  el: '#app',
+  template: '#scriptId',
+})
 </script>
 ```
 
@@ -303,15 +304,15 @@ Vue 的生命周期函数（钩子函数）是在某些特定阶段会被自动�
 <!-- 无效 -->
 <!-- <zoe></zoe> -->
 <script type="text/javascript">
-  Vue.component('zoe', {
-    template: `<h4 style="color:green">全局的zoe组件</h4>`
-  })
-  var app = new Vue({
-    el: '#app',
-  })
-  var app2 = new Vue({
-    el: '#app2',
-  })
+Vue.component('zoe', {
+  template: `<h4 style="color:green">全局的zoe组件</h4>`,
+})
+var app = new Vue({
+  el: '#app',
+})
+var app2 = new Vue({
+  el: '#app2',
+})
 </script>
 ```
 
@@ -322,14 +323,14 @@ Vue 的生命周期函数（钩子函数）是在某些特定阶段会被自动�
   <panda></panda>
 </div>
 <script type="text/javascript">
-  var app = new Vue({
-    el: '#app',
-    components: {
-      'panda': {
-        template: `<h4 style="color:blue">局部的panda组件</h4>`
-      }
-    }
-  })
+var app = new Vue({
+  el: '#app',
+  components: {
+    panda: {
+      template: `<h4 style="color:blue">局部的panda组件</h4>`,
+    },
+  },
+})
 </script>
 ```
 
@@ -339,15 +340,15 @@ Vue 的生命周期函数（钩子函数）是在某些特定阶段会被自动�
   <panda></panda>
 </div>
 <script type="text/javascript">
-  var pandaComponent = {
-    template: `<h4 style="color:blue">局部的panda组件</h4>`
-  }
-  var app = new Vue({
-    el: '#app',
-    components: {
-      'panda': pandaComponent
-    }
-  })
+var pandaComponent = {
+  template: `<h4 style="color:blue">局部的panda组件</h4>`,
+}
+var app = new Vue({
+  el: '#app',
+  components: {
+    panda: pandaComponent,
+  },
+})
 </script>
 ```
 
@@ -360,18 +361,18 @@ Vue 的生命周期函数（钩子函数）是在某些特定阶段会被自动�
   <panda here="中国" from-here="四川" :adj="adj"></panda>
 </div>
 <script type="text/javascript">
-  var app = new Vue({
-    el: '#app',
-    data: {
-      adj: '非常可爱'
+var app = new Vue({
+  el: '#app',
+  data: {
+    adj: '非常可爱',
+  },
+  components: {
+    panda: {
+      template: `<h2 style="color:red">熊猫来自于{{here}}{{fromHere}}，{{adj}}</h2>`,
+      props: ['here', 'fromHere', 'adj'], // 使用props选项注册属性
     },
-    components: {
-      'panda': {
-        template: `<h2 style="color:red">熊猫来自于{{here}}{{fromHere}}，{{adj}}</h2>`,
-        props: ['here', 'fromHere', 'adj'] // 使用props选项注册属性
-      }
-    }
-  })
+  },
+})
 </script>
 ```
 
@@ -401,7 +402,7 @@ Vue 的生命周期函数（钩子函数）是在某些特定阶段会被自动�
         template: `
           <h3 style="color:green">我是子组件，我接收了父组件传过来的值{{username}}</h3>
         `,
-        props: ['username']
+        props: ['username'],
       }
       var parent = {
         template: `
@@ -412,15 +413,15 @@ Vue 的生命周期函数（钩子函数）是在某些特定阶段会被自动�
         `,
         data() {
           return {
-            username: 'zoeeying'
+            username: 'zoeeying',
           }
         },
-        components: { child }
+        components: { child },
       }
 
       var app = new Vue({
         el: '#app',
-        components: { parent }
+        components: { parent },
       })
     </script>
   </body>
@@ -429,7 +430,7 @@ Vue 的生命周期函数（钩子函数）是在某些特定阶段会被自动�
 
 ### 4.5 component 标签
 
-component  标签是 Vue 内置的，可以根据 data 中的值动态地展示不同的组件。
+component 标签是 Vue 内置的，可以根据 data 中的值动态地展示不同的组件。
 
 ```vue
 <div id="app">
@@ -437,34 +438,34 @@ component  标签是 Vue 内置的，可以根据 data 中的值动态地展示�
   <button @click="changeComponent">改变组件</button>
 </div>
 <script type="text/javascript">
-  var aaa = {
-    template: `<h3 style="color:green">我是aaa组件</h3>`
-  }
-  var bbb = {
-    template: `<h3 style="color:red">我是bbb组件</h3>`
-  }
-  var ccc = {
-    template: `<h3 style="color:blue">我是ccc组件</h3>`
-  }
-  var app = new Vue({
-    el: '#app',
-    data: {
-      which: 'aaa',
-      count: 1,
+var aaa = {
+  template: `<h3 style="color:green">我是aaa组件</h3>`,
+}
+var bbb = {
+  template: `<h3 style="color:red">我是bbb组件</h3>`,
+}
+var ccc = {
+  template: `<h3 style="color:blue">我是ccc组件</h3>`,
+}
+var app = new Vue({
+  el: '#app',
+  data: {
+    which: 'aaa',
+    count: 1,
+  },
+  components: {
+    aaa: aaa,
+    bbb: bbb,
+    ccc: ccc,
+  },
+  methods: {
+    changeComponent: function () {
+      let arr = ['aaa', 'bbb', 'ccc']
+      this.which = arr[this.count % 3]
+      this.count += 1
     },
-    components: {
-      'aaa': aaa,
-      'bbb': bbb,
-      'ccc': ccc,
-    },
-    methods: {
-      changeComponent: function () {
-        let arr = ['aaa', 'bbb', 'ccc']
-        this.which = arr[this.count % 3]
-        this.count += 1
-      }
-    }
-  })
+  },
+})
 </script>
 ```
 
@@ -509,21 +510,21 @@ slot 是标签的内容扩展，也就是说使用 slot，可以在自定义组�
   </div>
 </template>
 <script type="text/javascript">
-  var app = new Vue({
-    el: '#app',
-    data: {
-      blogData: {
-        url: 'http://zoeeying.github.io',
-        name: '小畅叙的博客',
-        description: '黑客与画家',
-      },
+var app = new Vue({
+  el: '#app',
+  data: {
+    blogData: {
+      url: 'http://zoeeying.github.io',
+      name: '小畅叙的博客',
+      description: '黑客与画家',
     },
-    components: {
-      'zoe': {
-        template: '#myBlog'
-      }
-    }
-  })
+  },
+  components: {
+    zoe: {
+      template: '#myBlog',
+    },
+  },
+})
 </script>
 ```
 
@@ -550,25 +551,25 @@ slot 是标签的内容扩展，也就是说使用 slot，可以在自定义组�
 </template>
 
 <script type="text/javascript">
-  var app = new Vue({
-    el: '#app',
-    data: {
-      blogData: {
-        description: '黑客与画家',
-      }
+var app = new Vue({
+  el: '#app',
+  data: {
+    blogData: {
+      description: '黑客与画家',
     },
-    components: {
-      zoe: {
-        data() {
-          return {
-            // 注意一下是怎么在插槽内容中访问这个others数据的
-            others: '，小畅叙的学习笔记'
-          }
-        },
-        template: '#myBlog'
-      }
-    }
-  })
+  },
+  components: {
+    zoe: {
+      data() {
+        return {
+          // 注意一下是怎么在插槽内容中访问这个others数据的
+          others: '，小畅叙的学习笔记',
+        }
+      },
+      template: '#myBlog',
+    },
+  },
+})
 </script>
 ```
 
@@ -595,12 +596,12 @@ render 函数可以用 JS 来描述一个标签。
   <zoe></zoe>
 </div>
 <script type="text/javascript">
-  Vue.component('zoe', {
-    template: `<h4>ZOE</h4>`
-  })
-  var app = new Vue({
-    el: '#app'
-  })
+Vue.component('zoe', {
+  template: `<h4>ZOE</h4>`,
+})
+var app = new Vue({
+  el: '#app',
+})
 </script>
 ```
 
@@ -613,21 +614,21 @@ render 函数可以用 JS 来描述一个标签。
   <zoe></zoe>
 </div>
 <script type="text/javascript">
-  // h是一个创建标签的函数
-  Vue.component('zoe', {
-    render(h) {
-      return h(
-        'h4',
-        {
-          style: { color: 'green' }
-        },
-        'ZOE'
-      )
-    }
-  })
-  var app = new Vue({
-    el: '#app'
-  })
+// h是一个创建标签的函数
+Vue.component('zoe', {
+  render(h) {
+    return h(
+      'h4',
+      {
+        style: { color: 'green' },
+      },
+      'ZOE'
+    )
+  },
+})
+var app = new Vue({
+  el: '#app',
+})
 </script>
 ```
 
@@ -640,18 +641,18 @@ render 函数可以用 JS 来描述一个标签。
   <zoe></zoe>
 </div>
 <script type="text/javascript">
-  // const tyler = Vue.component('tyler', {
-  //   template: '<input/>'
-  // })
-  const tyler = {
-    template: '<input/>'
-  }
-  Vue.component('zoe', {
-    render: h => h(tyler)
-  })
-  var app = new Vue({
-    el: '#app',
-  })
+// const tyler = Vue.component('tyler', {
+//   template: '<input/>'
+// })
+const tyler = {
+  template: '<input/>',
+}
+Vue.component('zoe', {
+  render: h => h(tyler),
+})
+var app = new Vue({
+  el: '#app',
+})
 </script>
 ```
 
@@ -670,9 +671,9 @@ render 函数可以用 JS 来描述一个标签。
   <zoe url="http://baidu.com" :level="1">百度</zoe>
 </div>
 <script type="text/javascript">
-  Vue.component('zoe', {
-    props: ['url', 'level'],
-    template: `
+Vue.component('zoe', {
+  props: ['url', 'level'],
+  template: `
       <div>
         <h1 v-if="level===1">
           <a :href="url">
@@ -690,11 +691,11 @@ render 函数可以用 JS 来描述一个标签。
           </a>
         </h3>
       </div>
-    `
-  })
-  var app = new Vue({
-    el: '#app'
-  })
+    `,
+})
+var app = new Vue({
+  el: '#app',
+})
 </script>
 ```
 
@@ -709,41 +710,41 @@ render 函数可以用 JS 来描述一个标签。
   <zoe url="http://baidu.com" level="1" val="我是输入框中的内容">百度</zoe>
 </div>
 <script type="text/javascript">
-  Vue.component('iii', {
-    props: ['val'],
-    template: '<input v-model="val"/>'
-  })
-  Vue.component('zoe', {
-    props: ['url', 'level', 'val'],
-    // 注意这里不要使用箭头函数，因为要使用this
-    // 为什么使用this.level呢？？？
-    render(h) {
-      return h('h' + this.level, [
-        h(
-          'a', // 标签名称，可以使用拼接字符串
-          {
-            style: { color: 'red' },
-            domProps: { href: this.url }
-          },
-          // this.$slots表示所有插槽
-          // this.$slots.default表示子节点数组
-          // 组件中传递不带v-slot指令的子节点时，这些子节点被存储在组件实例中的$slots.default中
-          [
-            h('button', this.$slots.default),
-            h('iii', {
-              props: {
-                // 这里不能把插槽通过props传递给iii组件
-                val: this.val
-              }
-            })
-          ]
-        )
-      ])
-    }
-  })
-  var app = new Vue({
-    el: '#app'
-  })
+Vue.component('iii', {
+  props: ['val'],
+  template: '<input v-model="val"/>',
+})
+Vue.component('zoe', {
+  props: ['url', 'level', 'val'],
+  // 注意这里不要使用箭头函数，因为要使用this
+  // 为什么使用this.level呢？？？
+  render(h) {
+    return h('h' + this.level, [
+      h(
+        'a', // 标签名称，可以使用拼接字符串
+        {
+          style: { color: 'red' },
+          domProps: { href: this.url },
+        },
+        // this.$slots表示所有插槽
+        // this.$slots.default表示子节点数组
+        // 组件中传递不带v-slot指令的子节点时，这些子节点被存储在组件实例中的$slots.default中
+        [
+          h('button', this.$slots.default),
+          h('iii', {
+            props: {
+              // 这里不能把插槽通过props传递给iii组件
+              val: this.val,
+            },
+          }),
+        ]
+      ),
+    ])
+  },
+})
+var app = new Vue({
+  el: '#app',
+})
 </script>
 ```
 
@@ -778,7 +779,7 @@ render(h) {
 第二个参数是一个与模板中属性对应的数据对象。对象中的属性如下：
 
 | 属性        | 描述                                                                               |
-| ----------- | ---------------------------------------------------------------------------------- |
+| ----------- | ---------------------------------------------------------------------------------- | --------------- |
 | class       | 与 `v-bind:class` 的 API 相同，接受一个字符串、对象或者字符串和对象组成的数组      |
 | style       | 与 `v-bind:style` 的 API 相同，接受一个字符串、对象或者对象组成的数组              |
 | attrs       | 普通的 HTML attribute                                                              |
@@ -787,7 +788,7 @@ render(h) {
 | on          | 里面可以放事件监听器，比如 click 等                                                |
 | nativeOn    | 仅用于组件，用于监听原生事件，而不是组件内部使用 `vm.$emit` 触发的事件             |
 | directives  | 自定义指令                                                                         |
-| scopedSlots | 作用域插槽，格式为 `{ name: props => VNode | Array<VNode> }`                       |
+| scopedSlots | 作用域插槽，格式为 `{ name: props => VNode                                         | Array<VNode> }` |
 | slot        | 如果组件是其它组件的子组件，需为通过 slot 为插槽指定名称                           |
 | key、ref    | 特殊顶层属性                                                                       |
 | refInFor    | 如果在渲染函数中给多个元素都应用了相同的 ref 名，那么 `$refs.myRef` 会变成一个数组 |
@@ -837,22 +838,15 @@ npm install @vue/babel-preset-jsx @vue/babel-helper-vue-jsx-merge-props
 }
 ```
 
-然后，我们就可以在 render  函数中使用 JSX 了：
+然后，我们就可以在 render 函数中使用 JSX 了：
 
 ```vue
-import Zoe from './Zoe.vue'
-
-new Vue({
-  el: '#app',
-  render: function (h) {
-    // 如果使用的Babel插件版本在3.4.0及以上，可以去掉这个h参数
-    return (
-      <Zoe level={1}>
+import Zoe from './Zoe.vue' new Vue({ el: '#app', render: function (h) { //
+如果使用的Babel插件版本在3.4.0及以上，可以去掉这个h参数 return (
+<Zoe level="{1}">
         <span>Hello</span> zoe!
       </Zoe>
-    )
-  }
-})
+) } })
 ```
 
 ## 7 过滤器
@@ -896,14 +890,3 @@ var myFilter = Vue.filter('myFilter')
 ```
 
 当全局过滤器和局部过滤器重名时，会采用局部过滤器。
-
-
-
-
-
-
-
-
-
-
-

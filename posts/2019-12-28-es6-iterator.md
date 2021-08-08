@@ -1,8 +1,3 @@
----
-title: Iterator 遍历器
-date: 2019-12-28
----
-
 # Iterator 遍历器
 
 Iterator 是一种接口机制，为各种不同的**数据结构**提供统一的访问机制。ES6 已经把接口机制封装好了，部署在指定的数据结构上，指向遍历器对象。
@@ -35,10 +30,8 @@ function myIterator(arr) {
     next: function () {
       // nextIndex++可以先使用nextIndex的值，再+1
       // 返回遍历器对象
-      return nextIndex < arr.length ?
-        { value: arr[nextIndex++], done: false } :
-        { value: undefined, done: true }
-    }
+      return nextIndex < arr.length ? { value: arr[nextIndex++], done: false } : { value: undefined, done: true }
+    },
   }
 }
 let arr = [1, 4, 53, 'abc']
@@ -73,16 +66,13 @@ let targetData = {
     let nextIndex = 0
     return {
       next: function () {
-        return nextIndex < this.length ?
-          { value: this[nextIndex++], done: false } :
-          { value: undefined, done: true }
-      }
+        return nextIndex < this.length ? { value: this[nextIndex++], done: false } : { value: undefined, done: true }
+      },
     }
-  }
+  },
 }
 ```
 
 #### (3) 补充
 
 使用三点运算符，解构赋值，默认去调用 Iterator 接口。
-

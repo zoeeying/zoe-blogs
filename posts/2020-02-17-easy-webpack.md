@@ -1,8 +1,3 @@
----
-title: 实现简易的 Webpack
-date: 2020-02-17
----
-
 # 实现简易的 Webpack
 
 ## 1 简易的 Webpack Loader
@@ -51,28 +46,32 @@ const path = require('path')
 module.exports = {
   mode: 'development',
   entry: {
-    main: './src/index.js'
+    main: './src/index.js',
   },
   resolveLoader: {
-    modules: ['node_modules', './loaders']
+    modules: ['node_modules', './loaders'],
   },
   module: {
-    rules: [{
-      test: /\.js/,
-      use: [{
-        // loader: path.resolve(__dirname, './loaders/replaceLoader.js'),
-        // 如果上面配置了resolveLoader，这里的loader就可以直接写成replaceLoader
-        loader: 'replaceLoader',
-        options: {
-          name: '小畅叙'
-        }
-      }]
-    }]
+    rules: [
+      {
+        test: /\.js/,
+        use: [
+          {
+            // loader: path.resolve(__dirname, './loaders/replaceLoader.js'),
+            // 如果上面配置了resolveLoader，这里的loader就可以直接写成replaceLoader
+            loader: 'replaceLoader',
+            options: {
+              name: '小畅叙',
+            },
+          },
+        ],
+      },
+    ],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js'
-  }
+    filename: '[name].js',
+  },
 }
 ```
 
@@ -110,12 +109,12 @@ class CopyrightWebpackPlugin {
         },
         size: function () {
           return 28
-        }
+        },
       }
       callback()
     })
     // 对于同步的hook，比如compile
-    compiler.hooks.compile.tap('CopyrightWebpackPlugin', (compilation) => {
+    compiler.hooks.compile.tap('CopyrightWebpackPlugin', compilation => {
       console.log('compile是同步的hook')
     })
   }
@@ -132,7 +131,7 @@ const CopyrightWebpackPlugin = require('./plugins/copyright-webpack-plugin')
 module.exports = {
   mode: 'development',
   entry: {
-    main: './src/index.js'
+    main: './src/index.js',
   },
   plugins: [
     // new CopyrightWebpackPlugin({ name: 'Zoe' }), // 可以给插件传递参数
@@ -140,8 +139,8 @@ module.exports = {
   ],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js'
-  }
+    filename: '[name].js',
+  },
 }
 ```
 
@@ -187,7 +186,7 @@ const parser = require('@babel/parser')
 const traverse = require('@babel/traverse').default
 const babel = require('@babel/core')
 
-const moduleAnalyser = (filename) => {
+const moduleAnalyser = filename => {
   const content = fs.readFileSync(filename, 'utf-8')
   // 可以借助cli-highlight来高亮显示打印出来的文件内容
   // 在项目目录下使用命令node bundler.js | highlight来执行该文件
@@ -196,7 +195,7 @@ const moduleAnalyser = (filename) => {
   // 抽象语法树
   const ast = parser.parse(content, {
     // 源代码中使用了ES Module，即import引入模块的方式
-    sourceType: 'module'
+    sourceType: 'module',
   })
 
   // 所有的依赖
@@ -209,19 +208,19 @@ const moduleAnalyser = (filename) => {
       let newFilePath = './' + path.join(dirname, node.source.value)
       newFilePath = newFilePath.replace('\\', '/')
       dependencies[node.source.value] = newFilePath
-    }
+    },
   })
 
   // 把抽象语法树转换为浏览器可以执行的代码
   // code就是浏览器可以执行的代码
   const { code } = babel.transformFromAst(ast, null, {
     // 插件集合
-    presets: ['@babel/preset-env']
+    presets: ['@babel/preset-env'],
   })
   return {
     filename,
     dependencies,
-    code
+    code,
   }
 }
 // 对入口文件的代码分析
@@ -254,7 +253,7 @@ const makeDependenciesGraph = entry => {
   graphArray.forEach(item => {
     graph[item.filename] = {
       dependencies: item.dependencies,
-      code: item.code
+      code: item.code,
     }
   })
   return graph

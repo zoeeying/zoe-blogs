@@ -1,8 +1,3 @@
----
-title: vue-router
-date: 2020-02-20
----
-
 # vue-router
 
 路由指的是 SPA 的路径管理器，vue-router 是 Web 应用的链接路径管理器。
@@ -36,7 +31,7 @@ cnpm install vue-router -S
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
 }
 </script>
 
@@ -73,19 +68,19 @@ export default new Router({
     {
       path: '/',
       name: 'HelloWorld',
-      component: HelloWorld
+      component: HelloWorld,
     },
     {
       path: '/zoe',
       name: 'HelloZoe',
-      component: HelloZoe
+      component: HelloZoe,
     },
     // 输入的地址不存在时，显示404页面
     {
       path: '*',
-      component: ErrorPage
-    }
-  ]
+      component: ErrorPage,
+    },
+  ],
 })
 ```
 
@@ -100,7 +95,7 @@ Vue.config.productionTip = false
 
 new Vue({
   render: h => h(App),
-  router
+  router,
 }).$mount('#app')
 ```
 
@@ -137,21 +132,21 @@ export default new Router({
         {
           path: '/',
           name: 'zoe1',
-          component: Zoe1
+          component: Zoe1,
         },
         {
           path: 'zoe1',
           name: 'zoe1',
-          component: Zoe1
+          component: Zoe1,
         },
         {
           path: 'zoe2',
           name: 'zoe2',
-          component: Zoe2
-        }
-      ]
-    }
-  ]
+          component: Zoe2,
+        },
+      ],
+    },
+  ],
 })
 ```
 
@@ -177,8 +172,9 @@ export default new Router({
 <router-link
   :to="{
     name: 'zoe2',
-    params: { username: '叙叙', age: 28 }
-  }">Zoe2</router-link>
+    params: { username: '叙叙', age: 28 },
+  }"
+>Zoe2</router-link>
 ```
 
 2、模板页面中通过 `$route.params.xxxx` 接收参数
@@ -203,9 +199,9 @@ export default new Router({
       // 在path中绑定userId和userName参数，(\\d+)是正则，限制userId只能传数字
       path: '/params/:userId(\\d+)/:userName',
       name: 'params',
-      component: Params
-    }
-  ]
+      component: Params,
+    },
+  ],
 })
 ```
 
@@ -249,10 +245,10 @@ export default new Router({
         default: HelloWorld,
         // left和right是router-view标签配置的name
         left: Zoe1,
-        right: Zoe3
-      }
-    }
-  ]
+        right: Zoe3,
+      },
+    },
+  ],
 })
 ```
 
@@ -265,14 +261,14 @@ export default new Router({
     // ...
     {
       path: '/goHome',
-      redirect: '/'
+      redirect: '/',
     },
     // 需要传递参数的重定向
     {
       path: '/goHomeParams/:userId(\\d+)/:userName',
-      redirect: '/params/:userId(\\d+)/:userName'
-    }
-  ]
+      redirect: '/params/:userId(\\d+)/:userName',
+    },
+  ],
 })
 ```
 
@@ -296,9 +292,9 @@ export default new Router({
     {
       path: '/zoe1',
       component: Zoe1,
-      alias: '/zoe1Alias'
-    }
-  ]
+      alias: '/zoe1Alias',
+    },
+  ],
 })
 ```
 
@@ -379,9 +375,9 @@ export default new Router({
         // next函数中可以传入三个参数
         // false表示不会跳转；true表示可以跳转；还可以传入对象{path:'/'}，表示跳转到根路径
         next()
-      }
-    }
-  ]
+      },
+    },
+  ],
 })
 ```
 
@@ -393,9 +389,7 @@ export default new Router({
 <template>
   <div>
     <h2>{{ msg }}</h2>
-    <div>
-      userId：{{ $route.params.userId }}，userName：{{ $route.params.userName }}
-    </div>
+    <div>userId：{{ $route.params.userId }}，userName：{{ $route.params.userName }}</div>
   </div>
 </template>
 
@@ -404,7 +398,7 @@ export default {
   name: 'Params',
   data() {
     return {
-      msg: '通过url传递参数'
+      msg: '通过url传递参数',
     }
   },
   beforeRouteEnter: (to, from, next) => {
@@ -416,7 +410,7 @@ export default {
     console.log(to)
     console.log(from)
     next()
-  }
+  },
 }
 </script>
 ```
@@ -449,8 +443,8 @@ export default {
     goHome() {
       // 跳转到具体的某个路由
       this.$router.push('/')
-    }
-  }
+    },
+  },
 }
 </script>
 ```

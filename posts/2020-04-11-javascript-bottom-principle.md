@@ -2,7 +2,7 @@
 
 ## 1 堆栈内存
 
-JavaScript 引擎执行 JS 代码会先通过**编译器**进行词法解析，构建 AST 抽象语法树，最终生成计算机可执行的机器码并执行。目前比较流行的就是 V8 引擎，Chrome 浏览器和 Node.js 使用的引擎就是 V8 引擎。 
+JavaScript 引擎执行 JS 代码会先通过**编译器**进行词法解析，构建 AST 抽象语法树，最终生成计算机可执行的机器码并执行。目前比较流行的就是 V8 引擎，Chrome 浏览器和 Node.js 使用的引擎就是 V8 引擎。
 
 V8 引擎执行 JavaScript 代码时，首先会创建一个**执行环境栈**（ECStack，Execution Context Stack，也叫栈内存，可以执行代码和存储基本类型值），然后针对每个作用域，都会创建执行环境（EC，Execution Context，也叫**执行上下文**），全局的执行上下文叫作 EC(G)，函数 fn 的执行上下文叫作 EC(fn)，然后把这些执行上下文压入栈内存（也叫进栈）来执行，执行完后，有的执行上下文就没有用了，会出栈，而有的执行上下文还有用，会被压缩到栈底，等待下次执行（也叫闭包）。
 
@@ -24,7 +24,7 @@ V8 引擎执行 JavaScript 代码时，首先会创建一个**执行环境栈**�
 
 ```javascript
 let x = 10,
-    y = 20
+  y = 20
 // 相当于
 let x
 let y
@@ -158,7 +158,7 @@ ECStack = [
 ]
 ```
 
-![作用域和作用域链](../images/js-scope.png)
+![作用域和作用域链](../images/js_scope.png)
 
 上面的图中，EC(A) 中创建的堆被全局变量 C 占用着，所以执行完后不能出栈销毁，会压入栈底等待下次执行，这就叫做**闭包**。
 
@@ -205,7 +205,7 @@ console.log(x) // 8
 ```javascript
 // 闭包试题3
 let a = 0,
-    b = 0
+  b = 0
 function A(a) {
   A = function (b) {
     console.log(a + b++)
@@ -267,4 +267,4 @@ box.attachEvent('onclick', function () {
 })
 ```
 
-![this](../images/js-this.png)
+![this](../images/js_this.png)

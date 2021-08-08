@@ -1,13 +1,8 @@
----
-title: React 生命周期
-date: 2020-02-24
----
-
 # React 生命周期
 
 React 生命周期可以用如下两个图来示意。
 
-![React生命周期](../images/react-cycle.png)
+![React生命周期](../images/react_cycle.png)
 
 生命周期函数（钩子函数），通俗的说就是在某一时刻会被自动调用执行的函数。
 
@@ -15,10 +10,10 @@ React 生命周期可以用如下两个图来示意。
 
 当组件实例被创建并插入 DOM 中时，其生命周期函数执行顺序如下：
 
-* `constructor()`
-* `static getDerivedStateFromProps()`
-* `render()`
-* `componentDidMount()`
+- `constructor()`
+- `static getDerivedStateFromProps()`
+- `render()`
+- `componentDidMount()`
 
 #### (1) constructor
 
@@ -46,7 +41,7 @@ constructor(props) {
 static getDerivedStateFromProps(props, state)
 ```
 
-生命周期函数 `componentWillReceiveProps` 是响应 props 变化之后进行更新的方式，但是在16.3 版本中，使用了一个替代版的生命周期函数 `getDerivedStateFromProps`。`getDerivedStateFromProps` 的存在只有一个目的：让组件在 **props 变化**时更新 state。
+生命周期函数 `componentWillReceiveProps` 是响应 props 变化之后进行更新的方式，但是在 16.3 版本中，使用了一个替代版的生命周期函数 `getDerivedStateFromProps`。`getDerivedStateFromProps` 的存在只有一个目的：让组件在 **props 变化**时更新 state。
 
 在每次 re-rendering 前都会触发 getDerivedStateFromProps 方法，componentWillReceiveProps 仅在父组件重新渲染时触发，而不是在内部调用 `setState` 时。
 
@@ -74,11 +69,11 @@ render 方法是 class 组件中唯一必须实现的方法。
 
 当 render 被调用时，它会检查 this.props 和 this.state 的变化并**返回**以下类型之一：
 
-* React 元素，通常通过 JSX 创建，包括自定义组件和 DOM 标签
-* 数组或 fragments，使得 render 方法可以返回多个元素
-* 字符串或数值类型，在 DOM 中会被渲染为文本节点
-* 布尔类型或 `null`，什么都不渲染
-* Portals，可以渲染子节点到不同的 DOM 子树中
+- React 元素，通常通过 JSX 创建，包括自定义组件和 DOM 标签
+- 数组或 fragments，使得 render 方法可以返回多个元素
+- 字符串或数值类型，在 DOM 中会被渲染为文本节点
+- 布尔类型或 `null`，什么都不渲染
+- Portals，可以渲染子节点到不同的 DOM 子树中
 
 render 函数应该为纯函数，这意味着在不修改组件 state 的情况下，每次调用时都返回相同的结果，并且它不会直接与浏览器交互。如需与浏览器进行交互，需要在 `componentDidMount()` 或其他生命周期方法中执行操作。保持 render 为纯函数，可以使组件更容易思考。
 
@@ -94,11 +89,11 @@ render 函数应该为纯函数，这意味着在不修改组件 state 的情况
 
 当组件的 props 或 state 发生变化时会触发更新，组件更新的生命周期函数执行顺序如下：
 
-* `static getDerivedStateFromProps()`
-* `shouldComponentUpdate()`
-* `render()`
-* `getSnapshotBeforeUpdate()`
-* `componentDidUpdate()`
+- `static getDerivedStateFromProps()`
+- `shouldComponentUpdate()`
+- `render()`
+- `getSnapshotBeforeUpdate()`
+- `componentDidUpdate()`
 
 注意以上的执行顺序中，只要 shouldComponentUpdate 返回 false，后面的生命周期函数就都不会执行了。
 
@@ -108,7 +103,7 @@ render 函数应该为纯函数，这意味着在不修改组件 state 的情况
 
 首次渲染或使用 `forceUpdate()` 时不会调用该方法。
 
-`shouldComponentUpdate(nextProps, nextState)` 会在组件每次更新之前触发，是更新生命周期的门卫，是可以取消更新操作的谓词（必须返回布尔值，返回 true  才会更新组件）。
+`shouldComponentUpdate(nextProps, nextState)` 会在组件每次更新之前触发，是更新生命周期的门卫，是可以取消更新操作的谓词（必须返回布尔值，返回 true 才会更新组件）。
 
 实际开发中，父组件的 render 执行的时候，子组件的 render 也会执行，这会导致一些性能问题，可以在子组件的 shouldComponentUpdate 中判断新旧 state/props 是否相同，相同则返回 false（阻止不必要的更新），从而优化性能。
 
@@ -145,8 +140,8 @@ componentDidUpdate(prevProps) {
 
 当渲染过程、生命周期或子组件的构造函数中抛出错误时，会调用如下方法：
 
-* `static getDerivedStateFromError(error)`
-* `componentDidCatch()`
+- `static getDerivedStateFromError(error)`
+- `componentDidCatch()`
 
 如果 class 组件定义了生命周期方法 `static getDerivedStateFromError()` 或 `componentDidCatch()` 中的任何一个（或两者），它就成为了 Error boundaries，通过生命周期更新 state 可让组件捕获树中未处理的 JavaScript 错误并展示降级 UI。
 

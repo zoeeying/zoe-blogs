@@ -1,8 +1,3 @@
----
-title: Generator 函数
-date: 2019-12-28
----
-
 # Generator 函数
 
 ## 1 简介
@@ -53,7 +48,7 @@ let obj = {
   username: 'zoe',
   age: 28,
 }
-obj[Symbol.iterator] = function* objGenerator () {
+obj[Symbol.iterator] = function* objGenerator() {
   yield 1
   yield 2
   yield 3
@@ -67,7 +62,7 @@ for (let i of obj) {
 ## 3 案例
 
 ```javascript
-function getNews (url) {
+function getNews(url) {
   // 使用了jQuery方法
   $.get(url, function (data) {
     let url = 'http://localhost:3000' + data.commentsUrl
@@ -75,7 +70,7 @@ function getNews (url) {
     SX.next(url)
   })
 }
-function* sendXml () {
+function* sendXml() {
   // 这里的url是上面的SX.next(url)传过来的
   let url = yield getNews('http://localhost:3000/news?id=3')
   yield getNews(url)

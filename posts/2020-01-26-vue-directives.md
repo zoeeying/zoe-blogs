@@ -1,8 +1,3 @@
----
-title: Vue 指令
-date: 2020-01-26
----
-
 # Vue 指令
 
 代码地址：<https://github.com/zoeeying/vue-learning>
@@ -30,32 +25,30 @@ live-server # 命令，用于启动一个服务，并且打开当前目录下的
 <!-- 在html中使用Vue -->
 <!DOCTYPE html>
 <html lang="en">
-
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Hello Vue</title>
     <script type="text/javascript" src="../assets/js/vue.js"></script>
   </head>
 
   <body>
     <h1>Hello Vue</h1>
-    <hr>
+    <hr />
     <div id="app">
-      {{message}}
+      {{ message }}
     </div>
     <script type="text/javascript">
       // 构造器
       var app = new Vue({
         el: '#app', // 是上面的div的id
-        data: { 
-          message: 'Hello Vue!'
-        }
+        data: {
+          message: 'Hello Vue!',
+        },
       })
     </script>
   </body>
-
 </html>
 ```
 
@@ -63,7 +56,7 @@ live-server # 命令，用于启动一个服务，并且打开当前目录下的
 
 **v-if：** 判断是否加载，可以减轻服务器的压力，在需要时加载。
 
-**v-show：** 设置 CSS 的 display属性，可以使客户端操作更加流畅。
+**v-show：** 设置 CSS 的 display 属性，可以使客户端操作更加流畅。
 
 ```vue
 <div id="app">
@@ -100,37 +93,37 @@ live-server # 命令，用于启动一个服务，并且打开当前目录下的
   </ul>
 </div>
 <script type="text/javascript">
-  var app = new Vue({
-    el: '#app',
-    data: {
-      items: [1, 32, 4, 23, 76, 92, 12, 29],
-      students: [
-        { name: '小畅叙', age: 28 },
-        { name: '夏日星', age: 18 },
-        { name: '畅叙', age: 22 },
-        { name: 'Zoe', age: 25 },
-      ],
+var app = new Vue({
+  el: '#app',
+  data: {
+    items: [1, 32, 4, 23, 76, 92, 12, 29],
+    students: [
+      { name: '小畅叙', age: 28 },
+      { name: '夏日星', age: 18 },
+      { name: '畅叙', age: 22 },
+      { name: 'Zoe', age: 25 },
+    ],
+  },
+  computed: {
+    // 如果想给items排序的话，不能在data中排序
+    // computed表示在输出items之前做的操作
+    // 这里不能直接用items作为属性名，会报错，需要重新取个名字sortItems
+    sortItems: function () {
+      return this.items.sort((a, b) => a - b)
     },
-    computed: {
-      // 如果想给items排序的话，不能在data中排序
-      // computed表示在输出items之前做的操作
-      // 这里不能直接用items作为属性名，会报错，需要重新取个名字sortItems
-      sortItems: function () {
-        return this.items.sort((a, b) => a - b)
-      },
-      sortStudents: function () {
-        return sortArrByKey(this.students, 'age')
-      }
+    sortStudents: function () {
+      return sortArrByKey(this.students, 'age')
     },
+  },
+})
+// 对象数组排序方法
+function sortArrByKey(arr, key) {
+  return arr.sort(function (a, b) {
+    var x = a[key]
+    var y = b[key]
+    return x < y ? -1 : x > y ? 1 : 0
   })
-  // 对象数组排序方法
-  function sortArrByKey(arr, key) {
-    return arr.sort(function (a, b) {
-      var x = a[key]
-      var y = b[key]
-      return ((x < y) ? -1 : ((x > y) ? 1 : 0))
-    })
-  }
+}
 </script>
 ```
 
@@ -148,14 +141,14 @@ live-server # 命令，用于启动一个服务，并且打开当前目录下的
   <span v-html="h2Message"></span>
 </div>
 <script type="text/javascript">
-  // 生成器
-  var app = new Vue({
-    el: '#app', 
-    data: {
-      message: '显示信息',
-      h2Message: '<h2>h2显示信息</h2>'
-    }
-  })
+// 生成器
+var app = new Vue({
+  el: '#app',
+  data: {
+    message: '显示信息',
+    h2Message: '<h2>h2显示信息</h2>',
+  },
+})
 </script>
 ```
 
@@ -364,8 +357,3 @@ live-server # 命令，用于启动一个服务，并且打开当前目录下的
 ```
 
 **注意：** 使用修饰符顺序很重要，相应的代码会以同样的顺序产生。因此，`v-on:click.prevent.self` 会阻止**所有的点击**，而 `v-on:click.self.prevent` 只会阻止对元素自身的点击。
-
-
-
-
-

@@ -1,8 +1,3 @@
----
-title: React Router
-date: 2020-02-27
----
-
 # React Router
 
 React Router 是一个基于 React 之上的强大的路由库，可以让我们向 SPA 应用中快速添加**视图**和**数据流**，同时保持页面与 URL 间的同步。
