@@ -644,35 +644,7 @@ export default function ListWithMoreExample() {
 }
 ```
 
-## 12 一些思想
-
-本节摘抄极客时间王沛的《React Hooks 核心原理与实战》课程中的一些思想。
-
-1、React Hooks 的本质就是提供了让 React 组件能够**绑定到某个可变数据源**的能力。
-
-2、React 的开发其实就是复杂应用程序**状态的管理和开发**。
-
-3、**扩展点机制：** 在任何可能产生单点复杂度的模块中，通过扩展点的方式，允许其它模块为其增加功能。
-
-```react
-function ArticleView({ id }) {
-  const { article } = useArticle(id)
-
-  return (
-    <div className="article-view">
-      <MainContent article={article} />
-      {/* 定义了一个名为article.footer的扩展点 */}
-      <Extension name="article.footer" args={article} />
-    </div>
-  )
-}
-
-extensionEngine.register('article.footer', article => {
-  return <CommentList article={article} />
-})
-```
-
-## 13 处理表单
+## 12 处理表单
 
 ```react
 import { useState, useCallback, useMemo } from 'react'
@@ -752,5 +724,33 @@ export default function UseFormDemo() {
     </form>
   )
 }
+```
+
+## 13 一些思想
+
+本节摘抄极客时间王沛的《React Hooks 核心原理与实战》课程中的一些思想。
+
+1、React Hooks 的本质就是提供了让 React 组件能够**绑定到某个可变数据源**的能力。
+
+2、React 的开发其实就是复杂应用程序**状态的管理和开发**。
+
+3、**扩展点机制：** 在任何可能产生单点复杂度的模块中，通过扩展点的方式，允许其它模块为其增加功能。
+
+```react
+function ArticleView({ id }) {
+  const { article } = useArticle(id)
+
+  return (
+    <div className="article-view">
+      <MainContent article={article} />
+      {/* 定义了一个名为article.footer的扩展点 */}
+      <Extension name="article.footer" args={article} />
+    </div>
+  )
+}
+
+extensionEngine.register('article.footer', article => {
+  return <CommentList article={article} />
+})
 ```
 

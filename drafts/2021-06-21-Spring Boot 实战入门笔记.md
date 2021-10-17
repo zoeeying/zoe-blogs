@@ -2,7 +2,15 @@
 
 Spring Boot 是整合 Spring 技术栈的一站式框架，是简化 Spring 技术栈的快速开发脚手架，能够快速创建出生产级别的 Spring 应用。
 
-**Spring Boot 优点：** 创建独立 Spring 应用；内嵌 web 服务器；自动 starter 依赖，简化构建配置；自动配置 Spring 以及第三方功能；提供生产级别的监控、健康检查及外部化配置；无代码生成、无需编写 XML。
+**Spring Boot 优点：**
+
+创建独立 Spring 应用；内嵌 web 服务器（servlet 容器）；自动 starter 依赖，简化构建配置；自动配置 Spring 以及第三方功能；提供生产级别的监控、健康检查及外部化配置；无代码生成、无需编写 XML。
+
+**其它需要了解的方面：**
+
+Spring Boot 有非常强大的 AutoConfiguration 功能，它是通过**自动扫描 + 条件装配**实现的。
+
+由于 Spring 5 的重大升级，Spring Boot 也升级成了 Spring Boot 2，它包括两个方面：Reactive Stack 和 Servlet Stack。Reactive Stack 是响应式开发，可以以少量的线程和资源，处理大量的并发。
 
 ## 1 创建项目
 
@@ -16,24 +24,65 @@ Spring Boot 是整合 Spring 技术栈的一站式框架，是简化 Spring 技�
 
 ![image-20210624231651293](../images/spring_boot_create_project2.png)
 
-Spring Boot 项目其实是一个 Maven 父子项目，在生成的项目的 pom.xml 中可以看到下面一段代码，其中，spring-boot-starter-parent 是父项目，用于依赖管理，它几乎声明了所有开发中常用的依赖的版本号（自动版本仲裁机制），所以我们在 dependencies 中引入大部分依赖都无需声明版本号。
+Spring Boot 项目其实是一个 Maven 父子项目，在生成的项目的 pom.xml 中可以看到下面一段代码，其中，spring-boot-starter-parent 是父项目，用于依赖管理，它几乎声明了所有开发中常用的依赖的版本号（自动版本仲裁机制，可以在 spring-boot-dependencies 中查看依赖的版本号），所以我们在 dependencies 中引入大部分依赖都无需声明版本号。
 
 ```xml
 <parent>
    <groupId>org.springframework.boot</groupId>
    <artifactId>spring-boot-starter-parent</artifactId>
-   <version>2.5.3</version>
-   <relativePath/> <!-- lookup parent from repository -->
+   <version>2.5.5</version>
 </parent>
 ```
+
+如果需要修改默认版本号，有两种方案：
+
+1、直接依赖引入具体版本号，原理是 Maven 的就近依赖原则；
+
+2、通过 properties，重新声明版本号，原理是 Maven 的属性的就近优先原则：
+
+```xml
+<properties>
+  <mysql.version>5.1.43</mysql.version>
+</properties>
+```
+
+开发项目的时候，可以根据不同开发需要，引入不同的场景启动器（Starters）。
+
+只要引入某个场景，该场景所需要的所有常规依赖都会被自动引入。
+
+spring-boot-starter-* 是官方提供的场景启动器，*-spring-boot-starter 是第三方提供的场景启动器。
+
+所有场景启动器的最底层依赖都是 spring-boot-starter。
 
 ## 2 文件结构
 
 **src/main/java** 目录中存放所有 Java 类。
 
-**src/main/java/com.zoe.wiki** 目录中的 WikiApplication 是**启动类**，在该文件上右击，点击 `Run 'WikiApplication'` 即可启动项目，默认使用 Spring Boot 内嵌的 Tomcat 启动，默认端口是 8080，当然，也可以使用传统的方式，把项目打成 war 包，放入单独的 Tomcat 中来启动项目。
+**src/main/java/com.zoe.demo** 目录中的 MainApplication 是**启动类**，在该文件上右击，点击 `Run 'MainApplication'` 即可启动项目，默认使用 Spring Boot 内嵌的 Tomcat 启动，默认端口是 8080，当然，也可以使用传统的方式，把项目打成 war 包，放入单独的 Tomcat 中来启动项目。
 
-**WikiApplication** 类中的 main 函数是用来启动项目的，需要加上 `@SpringBootApplication` 注解。
+**MainApplication** 类中的 main 函数是用来启动项目的，需要加上 `@SpringBootApplication` 注解。
+
+下面是一个启动类示例：
+
+```java
+package com.zoe.;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+/**
+ * 主程序类，应用入口
+ * 主程序所在的包及其子包中的所有组件都会被默认扫描进来
+ * 也可以通过@SpringBootApplication(scanBasePackages="com.zoe")指定SpringBoot扫描包的范围
+ * 注解@SpringBootApplication表示这是一个SpringBoot应用
+ */
+@SpringBootApplication
+public class MainApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(MainApplication.class, args);
+    }
+}
+```
 
 **src/main/resources** 目录中存放配置文件，至少有 8 个默认的配置文，比如，在 application.properties 中可以配置默认启动端口：
 
@@ -47,7 +96,7 @@ server.port = 8080
 
 **.mvn/wrapper** 主要用于自动化打包场景，比如在流水线中自动拉代码、下载 Maven、编译打包。
 
-**.idea、target、wiki.iml** 是本地空间相关的文件，无需版本控制。
+**.idea、target、*.iml** 是本地空间相关的文件，无需版本控制。
 
 ## 3 初始配置
 
@@ -199,9 +248,52 @@ test.hello = hello zoe
 private String testHello;
 ```
 
+在 yaml 配置文件中，字符串配置值可以不用加引号。如果加引号，单双引号是有区别的。单引号会将 `\n` 作为字符串输出，双引号会将 `\n` 作为换行输出，也就是说，双引号不会转义，单引号会转义（转义 `\n`转义字符）。
+
+可以添加 spring-boot-configuration-processor 依赖，来增加**配置提示**功能：
+
+```xml
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-configuration-processor</artifactId>
+  <optional>true</optional>
+</dependency>
+```
+
+由于 spring-boot-configuration-processor 只是用于开发场景，无需打到 jar 包中，需要在打包的时候排除掉：
+
+```xml
+<build>
+  <plugins>
+    <plugin>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-maven-plugin</artifactId>
+      <configuration>
+        <excludes>
+          <exclude>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+          </exclude>
+        </excludes>
+      </configuration>
+    </plugin>
+  </plugins>
+</build>
+```
+
+Spring Boot 的默认配置最终都是映射到 MultipartProperties。
+
+配置文件的值最终会绑定到某个类上，这个类会在容器中创建对象。
+
+Spring Boot 是按需加载所有**自动配置**项的，只有引入的场景的自动配置项才会生效。
+
+所有的自动配置功能都在 spring-boot-autoconfigure 包中。
+
+在配置文件中，设置 `debug=true`，可以开启自动配置报告，这样，启动项目的时候，会打印自动配置报告，negative 表示不生效的自动配置，positive 表示生效的自动配置。
+
 ## 7 集成热部署
 
-集成热部署可以让我们的代码一改完就即时生效，而无需重启应用。
+集成热部署可以让我们的代码一改完就即时生效，而无需手动重启应用。
 
 配置集成热部署有三个步骤：
 
@@ -222,7 +314,11 @@ private String testHello;
 
 ![idea_registry](../images/idea_registry.png)
 
-需要注意的是，必须触发文件的保存（比如手动 Ctrl + S），才会自动编译和热部署。如果修改完代码后，手动点击 Build Project 图标，可以减少等待编译和热部署时间。
+需要注意的是，必须触发文件的保存（比如手动 Ctrl + S），才会自动编译和热部署。
+
+如果修改完代码后，手动点击 Build Project 图标（快捷键 Ctrl + F9），可以减少等待编译和热部署时间。
+
+其实，上面步骤配置的集成热部署本质上是自动重启。
 
 ## 8 安装配置 MySQL
 
@@ -230,7 +326,7 @@ private String testHello;
 
 1、在官网下载 MySQL 8.0 免压缩版，放在 C 盘中，并解压；
 
-2、以管理员身份运行 CMD，进入 MySQL 的 bin 目录中；
+2、以管理员身份运行 cmd，进入 MySQL 的 bin 目录中；
 
 3、安装 MySQL 的服务：
 
@@ -289,148 +385,180 @@ create table `test` (
 
 ## 10 MyBatis
 
-MyBatis 是一个基于 Java 的持久层框架。
+MyBatis 是一个基于 Java 的持久层框架，支持定制化 SQL、存储过程以及高级映射，避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。MyBatis 可以使用简单的 XML 或注解来配置和映射原生信息，将接口和 Java 的 POJOs（Plain Ordinary Java Object）映射成数据库中的记录。
 
-**持久层**是指相对独立的逻辑层面，专著于数据持久化逻辑的实现。
+补充：**持久层**是指相对独立的逻辑层面，专著于数据持久化逻辑的实现。
 
-#### (1) 集成 MyBatis
-
-在 Spring Boot 项目中集成 MyBatis，可以参考下面的步骤：
-
-1、在 pom.xml 中增加 dependency：
+在 Spring Boot 项目中集成 MyBatis，首先需要引入场景启动器：
 
 ```xml
-<!-- 集成MyBatis-->
 <dependency>
   <groupId>org.mybatis.spring.boot</groupId>
   <artifactId>mybatis-spring-boot-starter</artifactId>
-  <version>2.1.3</version>
-</dependency>
-
-<!--集成MySQL连接-->
-<dependency>
-  <groupId>mysql</groupId>
-  <artifactId>mysql-connector-java</artifactId>
-  <version>8.0.22</version>
+  <version>2.1.4</version>
 </dependency>
 ```
 
-2、在 application.properties 中增加数据库连接：
+`mybatis-spring-boot-starter` 自动配置了 SqlSessionFactory，自动配置了 SqlSessionTemplate 组合了 SqlSession。
 
-```properties
-spring.datasource.url=localhost
-spring.datasource.username=wiki
-spring.datasource.password=wiki
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+MyBatis 相关的配置在配置文件中以 mybatis 为前缀。
+
+#### (1) 基本使用
+
+下面，通过具体的例子来学习如何使用 MyBatis。
+
+1、配置 MyBatis：
+
+```yaml
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml # MyBatis全局配置文件位置
+  mapper-locations: classpath:mybatis/mapper/*.xml # SQL映射文件位置
 ```
 
-这样，我们的项目中就集成好了 MyBatis。
-
-#### (2) 持久层
-
-下面我们需要准备持久层：
-
-1、在 com.zoe.wiki 中增加 domain 层，也可以是 entity、POJO 等，该层的实体类与数据库表一一映射。然后在 domain 中新建实体类 Test（表名是 test）：
-
-```java
-public class Test {
-    private Integer id;
-
-    // alt+insert快捷键生成Getter and Setter
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-}
-```
-
-2、在 com.zoe.wiki 中增加 mapper 层（**持久层**，早期也叫 **Dao 层**），然后在 mapper 层中新建接口类 TestMapper：
-
-```java
-package com.zoe.wiki.mapper;
-
-import com.zoe.wiki.domain.Test;
-import java.util.List;
-
-public interface TestMapper {
-    public List<Test> list();
-}
-```
-
-3、在 resources 中新建 mapper 目录（用来存放 MySQL 脚本），然后在目录中新建 TestMapper.xml 文件：
+MyBatis 全局配置文件 mybatis-config.xml 如下：
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.zoe.wiki.mapper.TestMapper" >
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <settings>
+    <setting name="mapUnderscoreToCamelCase" value="true"/>
+  </settings>
+</configuration>
+```
 
-    <select id="list" resultType="com.zoe.wiki.domain.Test">
-        select `id`, `name`, `password` from `test`
+上面的 MyBatis 全局配置文件中配置了开启**驼峰命名自动映射规则**，即从经典数据库列名 A_COLUMN 映射到经典 Java 属性名 aColumn，也可以配置在 application.yaml 中：
+
+```yaml
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true # 开启驼峰命名自动映射规则
+```
+
+需要注意的是，application.yaml 中，config-location 和 configuration 不能同时配置，否则项目会无法启动。推荐使用 configuration 配置项来配置 MyBatis 全局配置文件中的配置。
+
+2、新建 bean 层，也可以是 domain、entity、POJO 等，该层的实体类与数据库表一一映射，然后在 bean 层中新建实体类 Ebook：
+
+```java
+@ToString
+@Data
+public class Ebook {
+  private Long id;
+
+  private String name;
+
+	// ...
+}
+```
+
+3、新建 mapper 层（**持久层**，早期也叫 **Dao 层**），然后在 mapper 层中新建 Mapper 接口 EbookMapper，并标注 @Mapper 注解：
+
+```java
+// 注解@Mapper表示这是一个Mapper接口，用来操作数据库的
+@Mapper
+public interface EbookMapper {
+    public Ebook getEbookById(Long id);
+}
+```
+
+4、在 `resources/mybatis/mapper` 目录中新建 SQL 映射文件 EbookMapper.xml，并通过 namespace 绑定上面的 Mapper 接口：
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zoe.admin.mapper.EbookMapper">
+    <!-- 根据id查找电子书，getEbookById是EbookMapper接口中的方法 -->
+    <select id="getEbookById" resultType="com.zoe.admin.bean.Ebook">
+        select * from ebook where id=#{id}
     </select>
-
 </mapper>
 ```
 
-4、在启动类中，增加一个扫描注解，让项目知道 Mapper 就是持久层：
+插入一条数据的 XML 写法和注解写法如下：
 
-```java
-@MapperScan("com.zoe.wiki.mapper")
+```xml
+<insert id="insertEbook" useGeneratedKeys="true" keyProperty="id">
+  insert into ebook(`name`, `description`) values(#{name}, #{description})
+</insert>
 ```
 
-5、在 application.properties 中增加 XML 所在路径的配置，让项目知道 XML 就是要执行的 SQL 语句：
-
-```properties
-# 配置MyBatis所有XxxMapper.xml所在路径，classpath就是resources目录
-mybatis.mapper-locations=classpath:/mapper/**/*.xml
+```java
+@Insert("insert into ebook(`name`, `description`) values(#{name}, #{description})")
+@Options(useGeneratedKeys = true, keyProperty = "id")
 ```
 
-这样，我们就把持久层准备好了。
+需要注意的是，如果成功插入一条数据后，想要返回该条数据，并且加上自增 id，需要加上 useGeneratedKeys 和 keyProperty 属性。
 
-#### (3) 使用持久层
-
-持久层准备好了，如何在项目中使用呢？
-
-1、在 com.zoe.wiki 中新建 service 层（服务层），一般会把所有逻辑写在服务层中；
-
-2、在 service 中新建 TestService 类：
+5、新建 service 层，并在 service 层中新建 EbookService 类，用来处理具体的业务逻辑：
 
 ```java
-// @Service注解表示这个Service交给Spring来管理，Spring会扫描到这个类
+// 注解@Service表示这个Service交给Spring来管理，Spring会扫描到这个类
 @Service
-public class TestService {
+public class EbookService {
+  @Autowired
+  EbookMapper ebookMapper;
 
-    // @Resource注解会把TestMapper注入进来，也可以使用@Autowired注解
-    @Resource
-    private TestMapper testMapper;
-
-    public List<Test> list(){
-        return testMapper.list();
-    }
+  public Ebook getEbookById(Long id) {
+    return ebookMapper.getEbookById(id);
+  }
 }
-
 ```
 
-3、在 TestController 中增加一个 GET 请求：
+6、在 TestController 中增加一个 GET 请求：
 
 ```java
-@RestController
+@Controller
 public class TestController {
-    @Resource
-    private TestService testService;
+  @Autowired
+  EbookService ebookService;
 
-    @GetMapping("/test/list")
-    public List<Test> list(){
-        return testService.list();
-    }
+  @ResponseBody
+  @GetMapping("/ebook")
+  public Ebook getEbookById(@RequestParam("id") Long id) {
+    return ebookService.getEbookById(id);
+  }
 }
 ```
 
-最后启动项目，访问 /test/list 接口，即可获得 test 表中的数据。
+最后启动项目，访问 `/ebook?id=xxx`，即可根据 id 获取到一条 Ebook 数据。
 
-#### (4) 代码生成器
+在上面的例子中，我们创建了 SQL 映射文件（XML 格式的文件）用于编写 SQL 语句，其实，如果 SQL 语句比较简单的话，可以通过注解的方式，省略 SQL 映射文件。
+
+使用注解方式，需要在 Mapper 接口中增加 @Select 注解（如果是插入操作，用 @Insert 注解），并把 SQL 语句写在该注解中，比如：
+
+```java
+@Mapper
+public interface EbookMapper {
+  @Select("select * from ebook where id=#{id}")
+  public Ebook getEbookById(Long id);
+}
+```
+
+可以混合使用 SQL 映射文件和 @Select 注解。
+
+#### (2) 最佳实践
+
+1、引入 mybatis-spring-boot-starter；
+
+2、配置 application.yaml ，指定 mapper-locations 位置即可；
+
+3、编写 Mapper 接口，并标注 @Mapper 注解；
+
+4、简单方法，直接通过注解方式编写 SQL 语句；
+
+5、复杂方法，可以通过 Mapper.xml 编写 SQL 语句，并绑定映射到 Mapper 接口；
+
+6、如果不想在每个 Mapper 接口上标注 @Mapper 注解，可以在启动类上标注 @MapperScan，如下：
+
+```java
+@MapperScan("com.zoe.admin.mapper")
+```
+
+#### (3) 代码生成器
 
 MyBatis 官方提供了一个代码生成器，可以简化 MyBatis 代码。对于单表的增删改查，可以直接使用代码生成器。
 
@@ -438,7 +566,7 @@ MyBatis 官方提供了一个代码生成器，可以简化 MyBatis 代码。对
 
 1、在 pom.xml 中增加 plugin：
 
-```xml
+```
 <!-- MyBatis代码生成器插件 -->
 <plugin>
   <groupId>org.mybatis.generator</groupId>
@@ -553,7 +681,25 @@ public class DemoController {
 
 启动项目，访问 /demo/list 接口，即可获取到 demo 表中的所有数据。
 
-## 11 通用返回类
+## 11 MyBatis-Plus
+
+MyBatis-Plus 是一个 MyBatis 的增强工具，它在 MyBatis 的基础上做了增强，便于简化开发，提升开发效率。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 12 通用返回类
 
 项目开发中，需要对接口的返回值进行统一。可以手动构造一个**通用返回类**。
 
@@ -637,7 +783,7 @@ public class EbookController {
 
 这样，访问 /ebook/list 接口，会返回一个对象，属性有 success、message 和 content，content 属性的值就是 ebook 表中的数据。
 
-## 12 跨域
+## 13 跨域
 
 在 Spring Boot 项目中，对于跨域问题，可以通过添加一个**配置类**的方式来解决。
 
@@ -668,7 +814,7 @@ public class CorsConfig implements WebMvcConfigurer {
 
 然后重启项目，就不会出现跨域问题了。
 
-## 13 过滤器
+## 14 过滤器
 
 **接口耗时**在我们的应用监控中，是一个非常重要的监控点，可以用来衡量应用的处理能力。在 Spring Boot 项目中可以通过配置**过滤器**来打印接口耗时。
 
@@ -716,7 +862,7 @@ public class LogFilter implements Filter {
 
 上面的代码中实现了 Filter 接口，它是 servlet 包里的。其实，过滤器是 servlet（可以理解成请求接口）的一个概念，而 servlet 是容器的一个概念，所以过滤器是给容器（比如 Tomcat）用的。
 
-## 14 拦截器
+## 15 拦截器
 
 上面介绍了如何使用**过滤器**来打印接口耗时。对于打印接口耗时，也可以采用配置**拦截器**的方式。
 
@@ -792,7 +938,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
 这样，重启项目，访问接口，就能打印出拦截器日志了。
 
-## 15 AOP
+## 16 AOP
 
 在 Spring Boot 项目中，可以配置 AOP，用来打印接口耗时、请求参数、返回参数。
 
@@ -919,7 +1065,7 @@ public class LogAspect {
 
 一般项目中，过滤器、拦截器、AOP 三选一即可。
 
-## 16 雪花算法
+## 17 雪花算法
 
 雪花算法主要用来生成数据库 ID，雪花算法生成的 ID 其实就是时间戳加上一些机器码，再加上递增的序列号，它是一个**长整型**。
 
@@ -953,7 +1099,7 @@ public class JacksonConfig {
 }
 ```
 
-## 17 参数校验
+## 18 参数校验
 
 后端的参数校验需要增加依赖：
 
@@ -980,3 +1126,16 @@ private int size;
 @GetMapping("/list")
 public CommonResp list(@Valid EbookQueryReq req){}
 ```
+
+## 19 Jar 包
+
+创建一个可执行的 Jar 包，需要在 pom.xml 中引入 spring-boot-maven-plugin；
+
+然后在命令行中执行 `mvn package`，或者执行 Maven Lifecycle 中的 clean 和 package，即可在 target 目录中创建一个 Jar 包，名字类似于 spring-boot-demo-1.0-SNAPSHOT；
+
+最后，把该 Jar 包上传到目标服务器，执行 `java -jar spring-boot-demo-1.0-SNAPSHOT.jar` 命令，即可执行该 Jar 包。
+
+
+
+
+
