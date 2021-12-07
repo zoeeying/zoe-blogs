@@ -39,7 +39,7 @@
 - [Vue 指令](./posts/2020-01-26-vue-directives.md)
 - [Vue 选项](./posts/2020-02-08-vue-constructor-options.md)
 - [Vue 实例](./posts/2020-02-14-vue-instance.md)
-- [Vue 核心](./posts/2020-02-16-vue-core-knowledge.md)
+- [Vue 基础知识点](./posts/2020-02-16-Vue 基础知识点.md)
 - [vue-router](./posts/2020-02-20-vue-router.md)
 - [Vuex](./posts/2020-02-21-vuex.md)
 - [Vue 知识点](./posts/2020-04-11-vue-trivial-points.md)

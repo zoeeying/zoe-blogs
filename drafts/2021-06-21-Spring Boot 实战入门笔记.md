@@ -14,7 +14,7 @@ Spring Boot 有非常强大的 AutoConfiguration 功能，它是通过**自动�
 
 ## 1 创建项目
 
-创建 Spring Boot 项目有两种方式：在[官网](start.spring.io)上创建、使用 IDEA 上创建。
+创建 Spring Boot 项目有两种方式：在[官网](start.spring.io)上创建、使用 IDEA 创建。
 
 在官网上填写相应配置信息，点击 GENERATE 按钮，会下载一个 zip 文件，解压该文件，用 IDEA 打开，Spring Boot 项目就创建好了。
 
@@ -23,36 +23,6 @@ Spring Boot 有非常强大的 AutoConfiguration 功能，它是通过**自动�
 使用 IDEA 创建项目，可以点击 IDEA 左上角的 File => New => Project，在打开的弹框中填写相应信息，然后点击 Next，选择 Dependencies，最后点击确认，即可创建 Spring Boot 项目。
 
 ![image-20210624231651293](../images/spring_boot_create_project2.png)
-
-Spring Boot 项目其实是一个 Maven 父子项目，在生成的项目的 pom.xml 中可以看到下面一段代码，其中，spring-boot-starter-parent 是父项目，用于依赖管理，它几乎声明了所有开发中常用的依赖的版本号（自动版本仲裁机制，可以在 spring-boot-dependencies 中查看依赖的版本号），所以我们在 dependencies 中引入大部分依赖都无需声明版本号。
-
-```xml
-<parent>
-   <groupId>org.springframework.boot</groupId>
-   <artifactId>spring-boot-starter-parent</artifactId>
-   <version>2.5.5</version>
-</parent>
-```
-
-如果需要修改默认版本号，有两种方案：
-
-1、直接依赖引入具体版本号，原理是 Maven 的就近依赖原则；
-
-2、通过 properties，重新声明版本号，原理是 Maven 的属性的就近优先原则：
-
-```xml
-<properties>
-  <mysql.version>5.1.43</mysql.version>
-</properties>
-```
-
-开发项目的时候，可以根据不同开发需要，引入不同的场景启动器（Starters）。
-
-只要引入某个场景，该场景所需要的所有常规依赖都会被自动引入。
-
-spring-boot-starter-* 是官方提供的场景启动器，*-spring-boot-starter 是第三方提供的场景启动器。
-
-所有场景启动器的最底层依赖都是 spring-boot-starter。
 
 ## 2 文件结构
 
@@ -243,20 +213,20 @@ test.hello = hello zoe
 ```
 
 ```java
-// 'ZOE'是默认值
+// ZOE'是默认值
 @Value("${test.hello:ZOE}")
 private String testHello;
 ```
 
-在 yaml 配置文件中，字符串配置值可以不用加引号。如果加引号，单双引号是有区别的。单引号会将 `\n` 作为字符串输出，双引号会将 `\n` 作为换行输出，也就是说，双引号不会转义，单引号会转义（转义 `\n`转义字符）。
+在 yaml 配置文件中，字符串配置值可以不用加引号。如果加引号，单双引号是有区别的。单引号会将 `\n` 作为字符串输出，双引号会将 `\n` 作为换行输出，也就是说，双引号不会转义，单引号会转义（转义 `\n` 转义字符）。
 
 可以添加 spring-boot-configuration-processor 依赖，来增加**配置提示**功能：
 
 ```xml
 <dependency>
-  <groupId>org.springframework.boot</groupId>
-  <artifactId>spring-boot-configuration-processor</artifactId>
-  <optional>true</optional>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-configuration-processor</artifactId>
+    <optional>true</optional>
 </dependency>
 ```
 
@@ -264,32 +234,22 @@ private String testHello;
 
 ```xml
 <build>
-  <plugins>
-    <plugin>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-maven-plugin</artifactId>
-      <configuration>
-        <excludes>
-          <exclude>
+    <plugins>
+        <plugin>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-          </exclude>
-        </excludes>
-      </configuration>
-    </plugin>
-  </plugins>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+                <excludes>
+                    <exclude>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-configuration-processor</artifactId>
+                    </exclude>
+                </excludes>
+            </configuration>
+        </plugin>
+    </plugins>
 </build>
 ```
-
-Spring Boot 的默认配置最终都是映射到 MultipartProperties。
-
-配置文件的值最终会绑定到某个类上，这个类会在容器中创建对象。
-
-Spring Boot 是按需加载所有**自动配置**项的，只有引入的场景的自动配置项才会生效。
-
-所有的自动配置功能都在 spring-boot-autoconfigure 包中。
-
-在配置文件中，设置 `debug=true`，可以开启自动配置报告，这样，启动项目的时候，会打印自动配置报告，negative 表示不生效的自动配置，positive 表示生效的自动配置。
 
 ## 7 集成热部署
 
@@ -301,8 +261,9 @@ Spring Boot 是按需加载所有**自动配置**项的，只有引入的场景�
 
 ```xml
 <dependency>
-  <groupId>org.springframework.boot</groupId>
-  <artifactId>spring-boot-devtools</artifactId>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-devtools</artifactId>
+    <optional>true</optional>
 </dependency>
 ```
 
@@ -318,7 +279,7 @@ Spring Boot 是按需加载所有**自动配置**项的，只有引入的场景�
 
 如果修改完代码后，手动点击 Build Project 图标（快捷键 Ctrl + F9），可以减少等待编译和热部署时间。
 
-其实，上面步骤配置的集成热部署本质上是自动重启。
+其实，上面步骤配置的集成热部署本质上是**自动重启**。
 
 ## 8 安装配置 MySQL
 
@@ -566,7 +527,7 @@ MyBatis 官方提供了一个代码生成器，可以简化 MyBatis 代码。对
 
 1、在 pom.xml 中增加 plugin：
 
-```
+```xml
 <!-- MyBatis代码生成器插件 -->
 <plugin>
   <groupId>org.mybatis.generator</groupId>
@@ -681,33 +642,13 @@ public class DemoController {
 
 启动项目，访问 /demo/list 接口，即可获取到 demo 表中的所有数据。
 
-## 11 MyBatis-Plus
-
-MyBatis-Plus 是一个 MyBatis 的增强工具，它在 MyBatis 的基础上做了增强，便于简化开发，提升开发效率。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## 12 通用返回类
+## 11 通用返回类
 
 项目开发中，需要对接口的返回值进行统一。可以手动构造一个**通用返回类**。
 
 本项目中，在 com.zoe.wiki 中创建了 resp 层，并在该层中创建了通用返回类 CommonResp：
 
 ```java
-package com.zoe.wiki.resp;
-
 public class CommonResp<T> {
 
     /**
@@ -783,20 +724,13 @@ public class EbookController {
 
 这样，访问 /ebook/list 接口，会返回一个对象，属性有 success、message 和 content，content 属性的值就是 ebook 表中的数据。
 
-## 13 跨域
+## 12 跨域
 
 在 Spring Boot 项目中，对于跨域问题，可以通过添加一个**配置类**的方式来解决。
 
 需要在 com.zoe.wiki 中创建 config 层，然后在 config 层中创建 CorsConfig 类：
 
 ```java
-package com.zoe.wiki.config;
-
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 @Configuration
 public class CorsConfig implements WebMvcConfigurer {
 
@@ -814,23 +748,13 @@ public class CorsConfig implements WebMvcConfigurer {
 
 然后重启项目，就不会出现跨域问题了。
 
-## 14 过滤器
+## 13 过滤器
 
 **接口耗时**在我们的应用监控中，是一个非常重要的监控点，可以用来衡量应用的处理能力。在 Spring Boot 项目中可以通过配置**过滤器**来打印接口耗时。
 
 需要在 com.zoe.wiki 中创建 filter 层，并在该层中创建 LogFilter 类用来编写过滤器代码。过滤器的代码一般比较固定，如下所示：
 
 ```java
-package com.zoe.wiki.filter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-
 // 添加@Component注解，这样Spring Boot就会自动去扫描LogFilter类，容器就会拿到这个过滤器了
 @Component
 public class LogFilter implements Filter {
@@ -862,24 +786,13 @@ public class LogFilter implements Filter {
 
 上面的代码中实现了 Filter 接口，它是 servlet 包里的。其实，过滤器是 servlet（可以理解成请求接口）的一个概念，而 servlet 是容器的一个概念，所以过滤器是给容器（比如 Tomcat）用的。
 
-## 15 拦截器
+## 14 拦截器
 
 上面介绍了如何使用**过滤器**来打印接口耗时。对于打印接口耗时，也可以采用配置**拦截器**的方式。
 
 需要在 com.zoe.wiki 中创建 interceptor 层，并在 interceptor 层中创建 LogInterceptor 类：
 
 ```java
-package com.zoe.wiki.interceptor;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 /**
  * 拦截器：Spring框架特有的，常用于登录校验，权限校验，请求日志打印
  */
@@ -912,15 +825,6 @@ public class LogInterceptor implements HandlerInterceptor {
 然后，还需要在 config 层中创建配置类 SpringMvcConfig：
 
 ```java
-package com.zoe.wiki.config;
-
-import com.zoe.wiki.interceptor.LogInterceptor;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import javax.annotation.Resource;
-
 @Configuration
 public class SpringMvcConfig implements WebMvcConfigurer {
 
@@ -938,7 +842,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 
 这样，重启项目，访问接口，就能打印出拦截器日志了。
 
-## 16 AOP
+## 15 AOP
 
 在 Spring Boot 项目中，可以配置 AOP，用来打印接口耗时、请求参数、返回参数。
 
@@ -962,25 +866,6 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 然后，在 com.zoe.wiki 中创建 aspect 层，并在该层中创建 LogAspect 类：
 
 ```java
-package com.zoe.wiki.aspect;
-
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.support.spring.PropertyPreFilters;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-
 @Aspect
 @Component
 public class LogAspect {
@@ -1065,7 +950,7 @@ public class LogAspect {
 
 一般项目中，过滤器、拦截器、AOP 三选一即可。
 
-## 17 雪花算法
+## 16 雪花算法
 
 雪花算法主要用来生成数据库 ID，雪花算法生成的 ID 其实就是时间戳加上一些机器码，再加上递增的序列号，它是一个**长整型**。
 
@@ -1099,14 +984,14 @@ public class JacksonConfig {
 }
 ```
 
-## 18 参数校验
+## 17 参数校验
 
 后端的参数校验需要增加依赖：
 
 ```xml
 <dependency>
-  <groupId>org.springframework.boot</groupId>
-  <artifactId>spring-boot-starter-validation</artifactId>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-validation</artifactId>
 </dependency>
 ```
 
@@ -1127,7 +1012,7 @@ private int size;
 public CommonResp list(@Valid EbookQueryReq req){}
 ```
 
-## 19 Jar 包
+## 18 Jar 包
 
 创建一个可执行的 Jar 包，需要在 pom.xml 中引入 spring-boot-maven-plugin；
 
