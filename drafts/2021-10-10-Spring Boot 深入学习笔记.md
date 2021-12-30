@@ -628,9 +628,9 @@ public class User {
 
 ## 5 Thymeleaf
 
-Spring Boot 默认不支持 JSP，需要引入第三方模板引擎技术来实现页面渲染。
+Spring Boot 处理完请求后，跳转到某个页面的过程，叫做**视图解析**，常见的**视图处理方式**有转发、重定向、自定义视图。JSP 不支持在 Jar 包中编译，所以 Spring Boot 默认不支持 JSP，需要引入第三方模板引擎技术来实现**视图解析**功能。
 
-下面介绍使用 Thymeleaf 的方式：
+Thymeleaf 是现代化，服务端 Java 模板引擎，下面介绍使用 Thymeleaf 的方式：
 
 #### (1) 引入启动器
 
@@ -653,7 +653,7 @@ Spring Boot 默认不支持 JSP，需要引入第三方模板引擎技术来实�
 
 ```html
 <!DOCTYPE html>
-<!-- 加上Thymeleaf的名称空间，可以有代码提示 -->
+<!-- 加上Thymeleaf的名称空间，编辑器会有代码提示 -->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
@@ -672,7 +672,7 @@ Spring Boot 默认不支持 JSP，需要引入第三方模板引擎技术来实�
 </html>
 ```
 
-项目中前置路径配置示例：
+项目中**前置路径**配置示例：
 
 ```properties
 server.servlet.context-path=/zoe
@@ -698,7 +698,42 @@ public class ThymeleafTestController {
 
 最后，访问 `http://localhost:8080/zoe/thymeleaf`，即可访问上面的页面。
 
+#### (4) 表达式
 
+`${}`：变量表达式，用于获取请求域、session 域名、对象等
+
+`*{}`：选择变量表达式，用于获取上下文对象值
+
+`#{}`：消息表达式，用于获取国际化等值
+
+`@{}`：链接 URL 表达式，用于生成链接，会自动拼上项目的访问路径
+
+`~{}`：片段表达式，类似于 JSP 的 include，用于引入公共页面
+
+```html
+<!-- #{subscribe.submit}是国际化 -->
+<input type="submit" value="Subscribe" th:attr="value=#{subscribe.submit}" />
+<input type="submit" value="Subscribe" th:value="#{subscribe.submit}" />
+
+<!-- 设置多个属性值 -->
+<img src="../../images/zoe.png" th:attr="src=@{/images/zoe.png},title=#{logo}" />
+
+<!-- 迭代 -->
+<tr th:each="prod,iterStat : ${prods}" th:class="${iterStat.odd} ? 'odd' : 'even'">
+  <td th:text="${prod.name}">Onions</td>
+  <td th:text="${prod.price}">2.41</td>
+  <td th:text="${prod.instock} ? #{true} : #{false}">yes</td>
+</tr>
+
+<!-- 条件运算 -->
+<a href="comments.html" th:href="@{/product/comments(prodId=${prod.id})}" th:if="${not #lists.isEmpty(prod.comments)}">View</a>
+
+<div th:switch="${user.role}">
+  <p th:case="'admin'">User is an administrator</p>
+  <p th:case="#{roles.manager}">User is a manager</p>
+  <p th:case="*">User is some other thing</p>
+</div>
+```
 
 ## 4 数据访问
 

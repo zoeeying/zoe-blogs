@@ -360,7 +360,7 @@ MyBatis 是一个基于 Java 的持久层框架，支持定制化 SQL、存储�
 </dependency>
 ```
 
-`mybatis-spring-boot-starter` 自动配置了 SqlSessionFactory，自动配置了 SqlSessionTemplate 组合了 SqlSession。
+`mybatis-spring-boot-starter` 自动配置了 SqlSessionFactory、SqlSessionTemplate（组合了 SqlSession）、Mapper 等。
 
 MyBatis 相关的配置在配置文件中以 mybatis 为前缀。
 
