@@ -66,7 +66,7 @@ server.port = 8080
 
 **.mvn/wrapper** 主要用于自动化打包场景，比如在流水线中自动拉代码、下载 Maven、编译打包。
 
-**.idea、target、*.iml** 是本地空间相关的文件，无需版本控制。
+**.idea、target、\*.iml** 是本地空间相关的文件，无需版本控制。
 
 ## 3 初始配置
 
@@ -83,21 +83,21 @@ server.port = 8080
 
 <?xml version="1.0" encoding="UTF-8"?>
 <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
-  <localRepository>C:\Users\叙叙\.m2\repository</localRepository>
-  <mirrors>
-    <mirror>
-        <id>alimaven</id>
-        <mirrorOf>central</mirrorOf>
-        <name>aliyun maven</name>
-        <url>http://maven.aliyun.com/nexus/content/repositories/central/</url>
-    </mirror>
-    <mirror>
-        <id>huaweicloud</id>
-        <name>huaweicloud maven</name>
-        <mirrorOf>*</mirrorOf>
-        <url>https://mirrors.huaweicloud.com/repository/maven/</url>
-    </mirror>
-  </mirrors>
+    <localRepository>C:\Users\叙叙\.m2\repository</localRepository>
+    <mirrors>
+        <mirror>
+            <id>alimaven</id>
+            <mirrorOf>central</mirrorOf>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/repositories/central/</url>
+        </mirror>
+        <mirror>
+            <id>huaweicloud</id>
+            <name>huaweicloud maven</name>
+            <mirrorOf>*</mirrorOf>
+            <url>https://mirrors.huaweicloud.com/repository/maven/</url>
+        </mirror>
+    </mirrors>
 </settings>
 ```
 
@@ -176,11 +176,11 @@ GET http://localhost:8080/hello
 
 > {%
 client.test("测试/hello接口", function() {
-  client.log("测试/hello接口");
-  client.log(response.body);
-  client.log(JSON.stringify(response.body));
-  client.assert(response.status === 200, "返回码不是200");
-  client.assert(response.body === "Hello World", "结果验证失败");
+    client.log("测试/hello接口");
+    client.log(response.body);
+    client.log(JSON.stringify(response.body));
+    client.assert(response.status === 200, "返回码不是200");
+    client.assert(response.body === "Hello World", "结果验证失败");
 });
 %}
 
@@ -313,13 +313,13 @@ net start MySQL
 mysql -u root -p
 ```
 
-7、把密码修改成 'root'：
+7、把密码修改成 '123456'：
 
 ```bash
-alter user 'root'@'localhost' identified by 'root';
+alter user 'root'@'localhost' identified by '123456';
 ```
 
-8、设置系统全局变量
+8、设置系统全局变量。
 
 ## 9 IDEA 配置数据库
 
@@ -346,17 +346,25 @@ create table `test` (
 
 ## 10 MyBatis
 
-MyBatis 是一个基于 Java 的持久层框架，支持定制化 SQL、存储过程以及高级映射，避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。MyBatis 可以使用简单的 XML 或注解来配置和映射原生信息，将接口和 Java 的 POJOs（Plain Ordinary Java Object）映射成数据库中的记录。
+MyBatis 是一个基于 Java 的持久层框架，支持定制化 SQL、存储过程以及高级映射，避免了几乎所有的 JDBC 代码、手动设置参数、获取结果集。MyBatis 可以使用简单的 XML 或注解来配置和映射原生信息，将接口和 Java 的 POJOs（Plain Ordinary Java Object）映射成数据库中的记录。
 
 补充：**持久层**是指相对独立的逻辑层面，专著于数据持久化逻辑的实现。
 
-在 Spring Boot 项目中集成 MyBatis，首先需要引入场景启动器：
+在 Spring Boot 项目中集成 MyBatis，首先需要引入依赖：
 
 ```xml
+<!-- 集成MyBatis场景启动器 -->
 <dependency>
-  <groupId>org.mybatis.spring.boot</groupId>
-  <artifactId>mybatis-spring-boot-starter</artifactId>
-  <version>2.1.4</version>
+    <groupId>org.mybatis.spring.boot</groupId>
+    <artifactId>mybatis-spring-boot-starter</artifactId>
+    <version>2.1.3</version>
+</dependency>
+
+<!-- 集成MySQL连接 -->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.22</version>
 </dependency>
 ```
 
@@ -368,9 +376,18 @@ MyBatis 相关的配置在配置文件中以 mybatis 为前缀。
 
 下面，通过具体的例子来学习如何使用 MyBatis。
 
-1、配置 MyBatis：
+1、配置 MyBatis 和数据库连接：
 
 ```yaml
+# 数据库连接
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/wiki?characterEncoding=UTF8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# MyBatis配置
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml # MyBatis全局配置文件位置
   mapper-locations: classpath:mybatis/mapper/*.xml # SQL映射文件位置
@@ -384,9 +401,9 @@ MyBatis 全局配置文件 mybatis-config.xml 如下：
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-  <settings>
-    <setting name="mapUnderscoreToCamelCase" value="true"/>
-  </settings>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
 </configuration>
 ```
 
@@ -398,106 +415,124 @@ mybatis:
     map-underscore-to-camel-case: true # 开启驼峰命名自动映射规则
 ```
 
-需要注意的是，application.yaml 中，config-location 和 configuration 不能同时配置，否则项目会无法启动。推荐使用 configuration 配置项来配置 MyBatis 全局配置文件中的配置。
+需要注意的是，application.yaml 中，config-location 和 configuration 不能同时配置，否则项目会无法启动。
 
-2、新建 bean 层，也可以是 domain、entity、POJO 等，该层的实体类与数据库表一一映射，然后在 bean 层中新建实体类 Ebook：
+不推荐使用 MyBatis 全局配置文件，推荐使用 configuration 配置项来配置。
+
+2、新建 domain 层，也可以是 entity、POJO 等，该层中的实体类与数据库表一一映射，然后在 domain 层中新建实体类 Test：
 
 ```java
 @ToString
 @Data
-public class Ebook {
-  private Long id;
+public class Test {
+    private Integer id;
 
-  private String name;
+    private String name;
 
-	// ...
+    private String password;
 }
 ```
 
-3、新建 mapper 层（**持久层**，早期也叫 **Dao 层**），然后在 mapper 层中新建 Mapper 接口 EbookMapper，并标注 @Mapper 注解：
+3、新建 mapper 层（**持久层**，早期也叫 **Dao 层**），然后在 mapper 层中新建接口 TestMapper，并标注 @Mapper 注解：
 
 ```java
 // 注解@Mapper表示这是一个Mapper接口，用来操作数据库的
 @Mapper
-public interface EbookMapper {
-    public Ebook getEbookById(Long id);
+public interface TestMapper {
+    List<Test> list();
 }
 ```
 
-4、在 `resources/mybatis/mapper` 目录中新建 SQL 映射文件 EbookMapper.xml，并通过 namespace 绑定上面的 Mapper 接口：
+4、在启动类上增加 @MapperScan 注解，这样，就无需在每个 Mapper 接口上标注 @Mapper 注解了：
+
+```java
+@MapperScan("com.zoe.wiki.mapper")
+```
+
+5、在 `resources/mapper` 目录中新建 SQL 脚本映射文件 TestMapper.xml，并通过 namespace 绑定上面的 TestMapper 接口：
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zoe.admin.mapper.EbookMapper">
-    <!-- 根据id查找电子书，getEbookById是EbookMapper接口中的方法 -->
-    <select id="getEbookById" resultType="com.zoe.admin.bean.Ebook">
-        select * from ebook where id=#{id}
+<mapper namespace="com.zoe.admin.mapper.TestMapper">
+    <!-- list是TestMapper接口中的方法 -->
+    <select id="list" resultType="com.zoe.wiki.domain.Test">
+        select `id`, `name`, `password` from `test`
     </select>
 </mapper>
+```
+
+6、配置 SQL 映射文件所在路径：
+
+```yaml
+mybatis:
+  mapper-locations: classpath:/mapper/**/*.xml
+```
+
+7、新建 service 层，并在 service 层中新建 TestService 类，用来处理具体的业务逻辑：
+
+```java
+// @Service注解表示这个Service交给Spring来管理，Spring会扫描到这个类
+@Service
+public class TestService {
+
+    // @Resource注解会把TestMapper注入进来，也可以使用@Autowired注解
+    // @Resource是JDK自带的，@Autowired是Spring自带的
+    @Resource
+    private TestMapper testMapper;
+
+    public List<Test> list(){
+        return testMapper.list();
+    }
+}
+```
+
+8、新建 controller 层，并在 controller 层中新建 TestController 类，处理 get 请求：
+
+```java
+@RestController
+public class TestController {
+
+    @Resource
+    private TestService testService;
+
+    @GetMapping("/test/list")
+    public List<Test> list(){
+        return testService.list();
+    }
+}
+```
+
+最后启动项目，访问 `/test/list`，即可获取 test 表中的所有数据。
+
+在上面的例子中，我们创建了 SQL 映射文件（XML 格式的文件）用于编写 SQL 语句，其实，如果 SQL 语句比较简单的话，可以使用注解方式代替 SQL 映射文件。
+
+使用注解方式，需要在 Mapper 接口中的方法上增加 @Select 注解（如果是插入操作，使用 @Insert 注解），并把 SQL 语句写在该注解中，比如：
+
+```java
+@Mapper
+public interface EbookMapper {
+    @Select("select * from ebook where id=#{id}")
+    public Ebook getEbookById(Long id);
+}
 ```
 
 插入一条数据的 XML 写法和注解写法如下：
 
 ```xml
-<insert id="insertEbook" useGeneratedKeys="true" keyProperty="id">
-  insert into ebook(`name`, `description`) values(#{name}, #{description})
+<insert id="insertTest" useGeneratedKeys="true" keyProperty="id">
+    insert into test(`name`, `password`) values(#{name}, #{password})
 </insert>
 ```
 
 ```java
-@Insert("insert into ebook(`name`, `description`) values(#{name}, #{description})")
+@Insert("insert into test(`name`, `password`) values(#{name}, #{description})")
 @Options(useGeneratedKeys = true, keyProperty = "id")
 ```
 
-需要注意的是，如果成功插入一条数据后，想要返回该条数据，并且加上自增 id，需要加上 useGeneratedKeys 和 keyProperty 属性。
-
-5、新建 service 层，并在 service 层中新建 EbookService 类，用来处理具体的业务逻辑：
-
-```java
-// 注解@Service表示这个Service交给Spring来管理，Spring会扫描到这个类
-@Service
-public class EbookService {
-  @Autowired
-  EbookMapper ebookMapper;
-
-  public Ebook getEbookById(Long id) {
-    return ebookMapper.getEbookById(id);
-  }
-}
-```
-
-6、在 TestController 中增加一个 GET 请求：
-
-```java
-@Controller
-public class TestController {
-  @Autowired
-  EbookService ebookService;
-
-  @ResponseBody
-  @GetMapping("/ebook")
-  public Ebook getEbookById(@RequestParam("id") Long id) {
-    return ebookService.getEbookById(id);
-  }
-}
-```
-
-最后启动项目，访问 `/ebook?id=xxx`，即可根据 id 获取到一条 Ebook 数据。
-
-在上面的例子中，我们创建了 SQL 映射文件（XML 格式的文件）用于编写 SQL 语句，其实，如果 SQL 语句比较简单的话，可以通过注解的方式，省略 SQL 映射文件。
-
-使用注解方式，需要在 Mapper 接口中增加 @Select 注解（如果是插入操作，用 @Insert 注解），并把 SQL 语句写在该注解中，比如：
-
-```java
-@Mapper
-public interface EbookMapper {
-  @Select("select * from ebook where id=#{id}")
-  public Ebook getEbookById(Long id);
-}
-```
+如果成功插入一条数据后，想要返回该条数据，并且加上自增 id，需要加上 useGeneratedKeys 和 keyProperty 属性。
 
 可以混合使用 SQL 映射文件和 @Select 注解。
 
@@ -548,7 +583,7 @@ MyBatis 官方提供了一个代码生成器，可以简化 MyBatis 代码。对
 </plugin>
 ```
 
-2、在 src/main/resources 中创建 generator 目录，在目录中新建代码生成器的配置文件 generator-config.xml，配置如下：
+2、在 src/main/resources 中新建 generator 目录，并在目录中新建配置文件 generator-config.xml，配置如下：
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -557,44 +592,44 @@ MyBatis 官方提供了一个代码生成器，可以简化 MyBatis 代码。对
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-  <context id="Mysql" targetRuntime="MyBatis3" defaultModelType="flat">
+    <context id="Mysql" targetRuntime="MyBatis3" defaultModelType="flat">
 
-    <!-- 自动检查关键字，为关键字增加反引号 -->
-    <property name="autoDelimitKeywords" value="true"/>
-    <property name="beginningDelimiter" value="`"/>
-    <property name="endingDelimiter" value="`"/>
+        <!-- 自动检查关键字，为关键字增加反引号 -->
+        <property name="autoDelimitKeywords" value="true"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
 
-    <!--覆盖生成XML文件-->
-    <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin" />
-    <!-- 生成的实体类添加toString()方法 -->
-    <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
+        <!-- 覆盖生成XML文件 -->
+        <plugin type="org.mybatis.generator.plugins.UnmergeableXmlMappersPlugin"/>
+        <!-- 生成的实体类添加toString()方法 -->
+        <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
 
-    <!-- 不生成注释 -->
-    <commentGenerator>
-      <property name="suppressAllComments" value="true"/>
-    </commentGenerator>
+        <!-- 不生成注释 -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
 
-    <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                    connectionURL="jdbc:mysql://localhost:3306/wikidev"
-                    userId="wikidev"
-                    password="wikidev">
-    </jdbcConnection>
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/wiki"
+                        userId="root"
+                        password="123456">
+        </jdbcConnection>
 
-    <!-- domain类的位置 -->
-    <javaModelGenerator targetProject="src\main\java"
-                        targetPackage="com.zoe.wiki.domain"/>
+        <!-- domain类位置 -->
+        <javaModelGenerator targetProject="src\main\java"
+                            targetPackage="com.zoe.wiki.domain"/>
 
-    <!-- mapper xml的位置 -->
-    <sqlMapGenerator targetProject="src\main\resources"
-                     targetPackage="mapper"/>
+        <!-- SQL映射文件位置 -->
+        <sqlMapGenerator targetProject="src\main\resources"
+                         targetPackage="mapper"/>
 
-    <!-- mapper类的位置 -->
-    <javaClientGenerator targetProject="src\main\java"
-                         targetPackage="com.zoe.wiki.mapper"
-                         type="XMLMAPPER"/>
+        <!-- mapper类位置 -->
+        <javaClientGenerator targetProject="src\main\java"
+                             targetPackage="com.zoe.wiki.mapper"
+                             type="XMLMAPPER"/>
 
-    <table tableName="demo" domainObjectName="Demo"/>
-  </context>
+        <table tableName="demo" domainObjectName="Demo"/>
+    </context>
 </generatorConfiguration>
 ```
 
@@ -640,15 +675,17 @@ public class DemoController {
 }
 ```
 
-启动项目，访问 /demo/list 接口，即可获取到 demo 表中的所有数据。
+启动项目，访问 /demo/list 接口，即可查询到 demo 表中的所有数据。
 
 ## 11 通用返回类
 
-项目开发中，需要对接口的返回值进行统一。可以手动构造一个**通用返回类**。
+项目开发中，需要对接口的返回值进行统一，可以手动构造一个**通用返回类**。
 
 本项目中，在 com.zoe.wiki 中创建了 resp 层，并在该层中创建了通用返回类 CommonResp：
 
 ```java
+@Data
+@ToString
 public class CommonResp<T> {
 
     /**
@@ -665,41 +702,6 @@ public class CommonResp<T> {
      * 返回泛型数据，自定义类型
      */
     private T content;
-
-    public boolean getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public T getContent() {
-        return content;
-    }
-
-    public void setContent(T content) {
-        this.content = content;
-    }
-
-    // toString方法主要用来打印日志
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer("ResponseDto{");
-        sb.append("success=").append(success);
-        sb.append(", message='").append(message).append('\'');
-        sb.append(", content=").append(content);
-        sb.append('}');
-        return sb.toString();
-    }
 }
 ```
 
@@ -737,22 +739,28 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowedHeaders(CorsConfiguration.ALL)
-                .allowedMethods(CorsConfiguration.ALL)
-                .allowCredentials(true)
-                .maxAge(3600); // 1小时内不需要再预检（发OPTIONS请求）
+            .allowedOriginPatterns("*")
+            .allowedHeaders(CorsConfiguration.ALL)
+            .allowedMethods(CorsConfiguration.ALL)
+            .allowCredentials(true)
+            .maxAge(3600); // 1小时内不需要再预检（发OPTIONS请求）
     }
 }
 ```
 
 然后重启项目，就不会出现跨域问题了。
 
-## 13 过滤器
+## 13 打印接口耗时
 
-**接口耗时**在我们的应用监控中，是一个非常重要的监控点，可以用来衡量应用的处理能力。在 Spring Boot 项目中可以通过配置**过滤器**来打印接口耗时。
+### (1) 过滤器
 
-需要在 com.zoe.wiki 中创建 filter 层，并在该层中创建 LogFilter 类用来编写过滤器代码。过滤器的代码一般比较固定，如下所示：
+**接口耗时**在我们的应用监控中，是一个非常重要的监控点，可以用来衡量应用的处理能力。
+
+在 Spring Boot 项目中，可以通过配置**过滤器**来打印接口耗时。
+
+在我们的项目中配置过滤器，需要在 com.zoe.wiki 中创建 filter 层，并在该层中创建 LogFilter 类用来编写过滤器代码。
+
+过滤器的代码一般比较固定，如下所示：
 
 ```java
 // 添加@Component注解，这样Spring Boot就会自动去扫描LogFilter类，容器就会拿到这个过滤器了
@@ -774,9 +782,12 @@ public class LogFilter implements Filter {
         LOG.info("请求地址: {} {}", request.getRequestURL().toString(), request.getMethod());
         LOG.info("远程地址: {}", request.getRemoteAddr());
 
+        // 记录开始时间
         long startTime = System.currentTimeMillis();
-       // 通过链来调用业务方法
+        
+        // 执行后面的过滤器，如果后面没有过滤器，就执行业务代码
         filterChain.doFilter(servletRequest, servletResponse);
+        
         LOG.info("------------- LogFilter结束耗时: {} ms -------------", System.currentTimeMillis() - startTime);
     }
 }
@@ -786,16 +797,15 @@ public class LogFilter implements Filter {
 
 上面的代码中实现了 Filter 接口，它是 servlet 包里的。其实，过滤器是 servlet（可以理解成请求接口）的一个概念，而 servlet 是容器的一个概念，所以过滤器是给容器（比如 Tomcat）用的。
 
-## 14 拦截器
+### (2) 拦截器
 
-上面介绍了如何使用**过滤器**来打印接口耗时。对于打印接口耗时，也可以采用配置**拦截器**的方式。
+对于打印接口耗时，也可以使用**拦截器**。
 
-需要在 com.zoe.wiki 中创建 interceptor 层，并在 interceptor 层中创建 LogInterceptor 类：
+拦截器是 Spring 框架特有的，常用于登录校验、权限校验、请求日志打印等。
+
+配置拦截器需要在 com.zoe.wiki 中创建 interceptor 层，并在 interceptor 层中创建 LogInterceptor 类：
 
 ```java
-/**
- * 拦截器：Spring框架特有的，常用于登录校验，权限校验，请求日志打印
- */
 @Component
 public class LogInterceptor implements HandlerInterceptor {
 
@@ -833,18 +843,18 @@ public class SpringMvcConfig implements WebMvcConfigurer {
     LogInterceptor logInterceptor;
 
     public void addInterceptors(InterceptorRegistry registry) {
-        // 对于所有请求，除了/login，注册拦截器
+        // 对于所有请求，除了/login请求，注册拦截器
         registry.addInterceptor(logInterceptor)
-                .addPathPatterns("/**").excludePathPatterns("/login");
+            .addPathPatterns("/**").excludePathPatterns("/login");
     }
 }
 ```
 
-这样，重启项目，访问接口，就能打印出拦截器日志了。
+这样，重启项目，访问接口，就可以打印出拦截器日志了。
 
-## 15 AOP
+### (3) AOP
 
-在 Spring Boot 项目中，可以配置 AOP，用来打印接口耗时、请求参数、返回参数。
+在 Spring Boot 项目中，可以配置 AOP，来打印接口耗时、请求参数、返回参数。
 
 首先，需要在 pom.xml 中增加依赖：
 
@@ -866,6 +876,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 然后，在 com.zoe.wiki 中创建 aspect 层，并在该层中创建 LogAspect 类：
 
 ```java
+// @Aspect注解很重要，不能忘记
 @Aspect
 @Component
 public class LogAspect {
@@ -877,11 +888,11 @@ public class LogAspect {
      * com.zoe.*.controller中的所有Controller中的所有方法（包括参数），都会被AOP拦截到
      */
     @Pointcut("execution(public * com.zoe.*.controller..*Controller.*(..))")
-    public void controllerPointcut() {}
+    public void controllerPointcut() {
+    }
 
     /**
-     * 前置通知
-     * 表示在执行业务代码之前要去做的事情
+     * 前置通知，表示在执行业务代码之前要去做的事情
      */
     @Before("controllerPointcut()")
     public void doBefore(JoinPoint joinPoint) throws Throwable {
@@ -905,17 +916,17 @@ public class LogAspect {
         Object[] args = joinPoint.getArgs();
         // LOG.info("请求参数: {}", JSONObject.toJSONString(args));
 
-        Object[] arguments  = new Object[args.length];
+        Object[] arguments = new Object[args.length];
         for (int i = 0; i < args.length; i++) {
             if (args[i] instanceof ServletRequest
-                    || args[i] instanceof ServletResponse
-                    || args[i] instanceof MultipartFile) {
+                || args[i] instanceof ServletResponse
+                || args[i] instanceof MultipartFile) {
                 continue;
             }
             arguments[i] = args[i];
         }
         // 排除字段，敏感字段（密码等）或太长的字段（文件内容或者富文本等）不显示
-        String[] excludeProperties = { "password", "file" };
+        String[] excludeProperties = {"password", "file"};
         PropertyPreFilters filters = new PropertyPreFilters();
         PropertyPreFilters.MySimplePropertyPreFilter excludefilter = filters.addFilter();
         excludefilter.addExcludes(excludeProperties);
@@ -923,8 +934,7 @@ public class LogAspect {
     }
 
     /**
-     * 环绕通知，也就是环绕业务内容
-     * 在业务内容之前和之后，都会执行
+     * 环绕通知，也就是环绕业务内容，在业务内容之前和之后，都会执行
      */
     @Around("controllerPointcut()")
     public Object doAround(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
@@ -932,7 +942,7 @@ public class LogAspect {
         // 执行业务内容
         Object result = proceedingJoinPoint.proceed();
         // 打印返回结果，同时排除字段，敏感字段或太长的字段不显示
-        String[] excludeProperties = { "password", "file" };
+        String[] excludeProperties = {"password", "file"};
         PropertyPreFilters filters = new PropertyPreFilters();
         PropertyPreFilters.MySimplePropertyPreFilter excludefilter = filters.addFilter();
         excludefilter.addExcludes(excludeProperties);
@@ -946,11 +956,107 @@ public class LogAspect {
 
 最后，重启项目，访问接口，就能打印出 AOP 日志了。
 
-上面的 LogAspect 类又叫做**切面**，把切点和通知结合起来就是切面。
+上面的 LogAspect 类又叫做**切面**，把**切点**和**通知**结合起来就是**切面**。
 
 一般项目中，过滤器、拦截器、AOP 三选一即可。
 
-## 16 雪花算法
+## 14 分页功能
+
+对于列表查询接口，一般需要支持分页，在项目中，我们使用 PageHelper 实现了分页功能，下面介绍具体实现步骤。
+
+1、首先引入依赖：
+
+```xml
+<!-- PageHelper插件，用于分页-->
+<dependency>
+    <groupId>com.github.pagehelper</groupId>
+    <artifactId>pagehelper-spring-boot-starter</artifactId>
+    <version>1.2.13</version>
+</dependency>
+```
+
+2、在需要支持分页的地方，加上如下代码：
+
+```java
+// 只对下面第一个select语句起作用，所以一般会与查询语句写在一起，如下所示
+// 起始页从1开始
+PageHelper.startPage(req.getPage(), req.getSize());
+List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
+```
+
+这样，我们的查询就支持分页了。
+
+可以在 application.properties 中增加如下配置，来打印 SQL 日志：
+
+```properties
+# 打印所有的SQL日志：SQL、参数、结果
+# trace是最低的日志等级，所有的日志都会打印出来
+logging.level.com.zoe.wiki.mapper=trace
+```
+
+还可以通过 PageInfo 获取其它分页信息：
+
+```java
+PageInfo<Ebook> pageInfo = new PageInfo<>(ebookList);
+LOG.info("总行数: {}", pageInfo.getTotal());
+LOG.info("总页数: {}", pageInfo.getPages());
+```
+
+分页功能，最少需要查两次，一次查所有的数据，一次查当前页的数据，然后得到分页结果。
+
+分页最重要的四个数据：当前页、每页条数、总条数、列表数据。
+
+下面是完整的支持分页的 Service 代码：
+
+```java
+@Service
+public class EbookService {
+    // 打印日志
+    private static final Logger LOG = LoggerFactory.getLogger(EbookService.class);
+
+    @Resource
+    private EbookMapper ebookMapper;
+
+    @Resource
+    private SnowFlake snowFlake;
+
+    public PageResp<EbookQueryResp> list(EbookQueryReq req){
+        EbookExample ebookExample = new EbookExample();
+        EbookExample.Criteria criteria = ebookExample.createCriteria();
+        // 动态SQL：如果传递了请求参数name，就按照name进行模糊查询，否则就返回全部数据
+        if(!ObjectUtils.isEmpty(req.getName())) {
+            // %表示左匹配、右匹配
+            criteria.andNameLike("%" + req.getName() + "%");
+        }
+        // 只对下面第一个select语句起作用
+        PageHelper.startPage(req.getPage(), req.getSize());
+        List<Ebook> ebookList = ebookMapper.selectByExample(ebookExample);
+
+        // 通过pageInfo获取其它分页信息
+        PageInfo<Ebook> pageInfo = new PageInfo<>(ebookList);
+        LOG.info("总行数: {}", pageInfo.getTotal());
+        LOG.info("总页数: {}", pageInfo.getPages());
+
+        // List<Ebook>需要转换成List<EbookQueryResp>，需要使用循环
+        List<EbookQueryResp> ebookRespList = new ArrayList<>();
+        for(Ebook ebook : ebookList){
+            EbookQueryResp ebookResp = new EbookQueryResp();
+            // 把ebook中的每个属性拷贝到ebookResp中
+            BeanUtils.copyProperties(ebook, ebookResp);
+            ebookRespList.add(ebookResp);
+        }
+        // CopyUtil中封装了上面的循环拷贝操作
+        // List<EbookQueryResp> ebookRespList = CopyUtils.copyList(ebookList, EbookQueryResp.class);
+
+        PageResp<EbookQueryResp> pageResp = new PageResp();
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(ebookRespList);
+        return pageResp;
+    }
+}
+```
+
+## 15 雪花算法
 
 雪花算法主要用来生成数据库 ID，雪花算法生成的 ID 其实就是时间戳加上一些机器码，再加上递增的序列号，它是一个**长整型**。
 
@@ -984,7 +1090,7 @@ public class JacksonConfig {
 }
 ```
 
-## 17 参数校验
+## 16 参数校验
 
 后端的参数校验需要增加依赖：
 
@@ -1012,15 +1118,10 @@ private int size;
 public CommonResp list(@Valid EbookQueryReq req){}
 ```
 
-## 18 Jar 包
+## 17 Jar 包
 
 创建一个可执行的 Jar 包，需要在 pom.xml 中引入 spring-boot-maven-plugin；
 
 然后在命令行中执行 `mvn package`，或者执行 Maven Lifecycle 中的 clean 和 package，即可在 target 目录中创建一个 Jar 包，名字类似于 spring-boot-demo-1.0-SNAPSHOT；
 
 最后，把该 Jar 包上传到目标服务器，执行 `java -jar spring-boot-demo-1.0-SNAPSHOT.jar` 命令，即可执行该 Jar 包。
-
-
-
-
-
