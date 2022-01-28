@@ -1060,9 +1060,11 @@ public class EbookService {
 
 雪花算法主要用来生成数据库 ID，雪花算法生成的 ID 其实就是时间戳加上一些机器码，再加上递增的序列号，它是一个**长整型**。
 
-**雪花算法 ID：** 时间戳 + 数据中心 + 机器中心 + 序列号，数据中心和机器中心具体的数值一般可以放在配置文件中，也可以通过一些算法在机器启动的时候自动到 Redis 缓存中去获取一个唯一的不重复的值。
+**雪花算法 ID：** 时间戳 + 数据中心 + 机器标识 + 序列号，数据中心和机器标识具体的数值一般可以放在配置文件中，也可以通过一些算法在机器启动的时候自动到 Redis 缓存中去获取一个唯一的不重复的值。
 
-由于雪花算法生成的 ID 是长整型，传到前端会导致精度丢失，有两种解决方案：
+ID 的几种算法：自增、uuid、雪花算法。
+
+由于雪花算法生成的 ID 是长整型，传到前端会导致**精度丢失**，有两种解决方案：
 
 1、在查询接口返回的实体类的 id 上增加注解：
 
@@ -1092,7 +1094,7 @@ public class JacksonConfig {
 
 ## 16 参数校验
 
-后端的参数校验需要增加依赖：
+集成 Validation 做参数校验，需要增加如下依赖：
 
 ```xml
 <dependency>
@@ -1101,9 +1103,9 @@ public class JacksonConfig {
 </dependency>
 ```
 
-对于查询接口的分页参数 size，需要增加校验规则，防止有人用一些工具脚本直接访问后端接口的时候，恶意把 size 改成很大的值，导致查询数据量过大造成服务器崩溃。
+对于查询接口的分页参数 size，需要增加校验规则，防止有人直接访问后端接口时，恶意把 size 改成很大的值，导致查询数据量过大，造成服务器崩溃。
 
-对于 size 增加校验规则，只需在分页请求的实体类中增加如下注解即可：
+对 size 增加校验规则，只需在分页请求的实体类中增加如下注解即可：
 
 ```java
 @NotNull(message = "size不能为空")
@@ -1118,7 +1120,57 @@ private int size;
 public CommonResp list(@Valid EbookQueryReq req){}
 ```
 
-## 17 Jar 包
+对于校验不通过出现的异常，需要做统一异常处理。
+
+统一异常处理，需要在 controller 层中增加 ControllerExceptionHandler 类，这样 Spring Boot 会在校验失败的时候，统一返回错误：
+
+```java
+/**
+ * 用于统一异常处理、数据预处理等
+ */
+@ControllerAdvice
+public class ControllerExceptionHandler {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ControllerExceptionHandler.class);
+
+    /*
+     * 校验异常统一处理
+     */
+    @ExceptionHandler(value = BindException.class)
+    @ResponseBody
+    public CommonResp validExceptionHandler(BindException e) {
+        CommonResp commonResp = new CommonResp();
+        LOG.warn("参数校验失败：{}", e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+        commonResp.setSuccess(false);
+        commonResp.setMessage(e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+        return commonResp;
+    }
+}
+```
+
+BindException 是校验失败后抛出的异常。在后期项目中，可以根据框架抛出的不同的异常，仿照上面的类，做统一的拦截处理。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 18 Jar 包
 
 创建一个可执行的 Jar 包，需要在 pom.xml 中引入 spring-boot-maven-plugin；
 

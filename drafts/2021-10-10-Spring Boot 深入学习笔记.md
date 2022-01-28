@@ -565,7 +565,7 @@ public Ebook insertEbook(Ebook ebook) {
 
 
 
-## 4 Lombok 简化开发
+## 7 Lombok 简化开发
 
 Lombok 可以简化 JavaBean 开发。
 
@@ -626,7 +626,7 @@ public class User {
 </build>
 ```
 
-## 5 Thymeleaf
+## 8 Thymeleaf
 
 Spring Boot 处理完请求后，跳转到某个页面的过程，叫做**视图解析**，常见的**视图处理方式**有转发、重定向、自定义视图。JSP 不支持在 Jar 包中编译，所以 Spring Boot 默认不支持 JSP，需要引入第三方模板引擎技术来实现**视图解析**功能。
 
@@ -735,7 +735,7 @@ public class ThymeleafTestController {
 </div>
 ```
 
-## 4 数据访问
+## 9 数据访问
 
 导入 **JDBC 场景**和**数据库驱动**：
 
@@ -788,7 +788,7 @@ class SpringBootAdminWebApplicationTests {
 }
 ```
 
-## 5 Druid
+## 10 Druid
 
 Druid 是阿里开源的数据库连接池，它能够提供强大的监控和扩展功能。
 
@@ -856,9 +856,99 @@ public class MyDataSourceConfig {
 
 #### (2) 场景启动器
 
+## 11 JUnit5
 
+Spring Boot 从 **2.2.0** 版本开始引入 JUnit5 作为默认的单元测试库。
 
+JUnit 5 由 JUnit Platform、JUnit Jupiter、JUnit Vintage 组成。
 
+**JUnit Platform：**在 JVM 上启动测试框架的基础，不仅支持 JUnit 自带的测试引擎，也支持接入其它测试引擎。
+
+**JUnit Jupiter：**提供了 JUnit5 的新的编程模型，是 JUnit5 新特性的核心，内部包含了一个测试引擎，用于在 JUnit Platform 上运行。
+
+**JUnit Vintage：**提供了兼容 JUnit3.x、JUnit4.x 的测试引擎。
+
+**Spring Boot 2.4 及以上版本移除了对 Vintage 的依赖，如果需要兼容 JUnit4，需要自行引入。**
+
+使用 JUnit5，只需引入如下场景启动器即可：
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+兼容 JUnit4，需要自行引入 Vintage：
+
+```xml
+<dependency>
+    <groupId>org.junit.vintage</groupId>
+    <artifactId>junit-vintage-engine</artifactId>
+    <scope>test</scope>
+    <exclusions>
+        <exclusion>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+
+JUnit5 测试用例写法：
+
+```java
+@SpringBootTest
+class WikiApplicationTests {
+    
+    @Test
+    void contextLoads() {}
+    
+}
+```
+
+由于 Spring Boot 整合了 JUnit，因此 JUnit 类具有 Spring Boot 的自动装配功能（需要标注 @SpringBootTest 注解），且在 JUnit 类中，可以使用 @Autowired 注解注入容器中的组件，也可以使用 @Transactional 注解在测试完成后自动回滚。
+
+### 参数化测试
+
+参数化测试是 JUnit5 很重要的一个新特性，它使得**用不同的参数多次运行测试**成为了可能，也为单元测试带来了许多便利。
+
+参数化测试支持外部的各类入参，比如 CSV、YML、JSON 文件，甚至方法的返回值。只需要去实现 ArgumentsProvider 接口，任何外部文件都可以作为它的入参。
+
+通过 @ValueSource 等注解指定入参，可以使用不同的参数进行多次单元测试，而无需每增加一个参数就新增一个单元测试，省去了很多冗余代码。
+
+`@ValueSource`：指定入参来源，支持八大基础类以及 String 类、Class 类
+
+`@NullSource`：提供一个 null 入参
+
+`@EnumSource`：提供一个枚举入参
+
+`@CsvFileSource`：读取 CSV 文件内容作为入参
+
+`@MethodSource`：读取指定方法的返回值作为入参，注意，方法返回需是一个流
+
+下面看一个例子：
+
+```java
+public class TestParameterized {
+    @ParameterizedTest
+    @ValueSource(ints = {1, 2, 3, 4, 5})
+    void testParameterized(int i) {
+        System.out.println(i);
+    }
+
+    @ParameterizedTest
+    @MethodSource("stringProvider")
+    void testParameterized2(String i) {
+        System.out.println(i);
+    }
+
+    static Stream<String> stringProvider() {
+        return Stream.of("apple", "banana");
+    }
+}
+```
 
 
 
