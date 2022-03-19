@@ -1,9 +1,4 @@
----
-title: Flutter 状态管理 Provide 和 Provider
-date: 2019-12-14
----
-
-# Flutter 状态管理 Provide 和 Provider
+# 在 Flutter 中使用 Provide 和 Provider 管理状态
 
 在 Flutter 开发中，状态管理是一个永恒的话题。一般的原则是：如果状态是组件私有的，则应该由组件自己管理；如果状态要跨组件共享，则该状态应该由各个组件共同的父元素来管理。
 

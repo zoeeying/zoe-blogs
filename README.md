@@ -2,8 +2,8 @@
 
 ## ES6
 
-- [ES6 基础知识](./posts/2019-09-25-ES6基础知识.md)
-- [Promise 对象](./posts/2019-11-10-ES6中的Promise对象.md)
+- [ES6 基础知识](./posts/2019-09-25-ES6 基础知识.md)
+- [Promise 对象](./posts/2019-11-10-ES6 中的 Promise 对象.md)
 - [Symbol](./posts/2019-11-10-ES6新增的数据类型Symbol.md)
 - [async&await](./posts/2019-12-28-es6-async-and-await.md)
 - [Generator 函数](./posts/2019-12-28-es6-generator.md)

@@ -1,4 +1,4 @@
-# async&await
+# ES6 中的 async&await
 
 ## 1 简介
 
