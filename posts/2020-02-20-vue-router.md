@@ -1,4 +1,4 @@
-# 在 Vue 应用中使用 vue-router 配置路由
+# vue-router
 
 路由指的是 SPA 的路径管理器，vue-router 是 Web 应用的链接路径管理器。
 
