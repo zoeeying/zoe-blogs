@@ -862,11 +862,11 @@ Spring Boot 从 **2.2.0** 版本开始引入 JUnit5 作为默认的单元测试�
 
 JUnit 5 由 JUnit Platform、JUnit Jupiter、JUnit Vintage 组成。
 
-**JUnit Platform：**在 JVM 上启动测试框架的基础，不仅支持 JUnit 自带的测试引擎，也支持接入其它测试引擎。
+**JUnit Platform：** 在 JVM 上启动测试框架的基础，不仅支持 JUnit 自带的测试引擎，也支持接入其它测试引擎。
 
-**JUnit Jupiter：**提供了 JUnit5 的新的编程模型，是 JUnit5 新特性的核心，内部包含了一个测试引擎，用于在 JUnit Platform 上运行。
+**JUnit Jupiter：** 提供了 JUnit5 的新的编程模型，是 JUnit5 新特性的核心，内部包含了一个测试引擎，用于在 JUnit Platform 上运行。
 
-**JUnit Vintage：**提供了兼容 JUnit3.x、JUnit4.x 的测试引擎。
+**JUnit Vintage：** 提供了兼容 JUnit3.x、JUnit4.x 的测试引擎。
 
 **Spring Boot 2.4 及以上版本移除了对 Vintage 的依赖，如果需要兼容 JUnit4，需要自行引入。**
 
