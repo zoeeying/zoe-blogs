@@ -1,6 +1,6 @@
 # TypeScript 基础入门
 
-## 1 简介
+## 1. 简介
 
 TypeScript 是 JavaScript 的一个超集，是**静态类型语言**，是由微软开发的自由和开源的编程语言，设计目标是开发大型应用。TypeScript 不可以直接运行在浏览器环境或者 node 环境，必须编译成 JavaScript 才行。
 
@@ -31,17 +31,20 @@ function tsDemo(data: Point) {
 tsDemo({ x: 3, y: 4 })
 ```
 
-## 2 环境搭建
+## 2. 环境搭建
 
-1、安装 Node
+1、安装 Node。
 
-2、全局安装 TypeScript，可以通过命令 `tsc --version` 查看 TS 的版本号，同时检查 TS 是否安装成功
+2、全局安装 TypeScript。
 
 ```bash
 npm install -g typescript
+
+# 查看TS版本号
+tsc --version
 ```
 
-3、新建项目目录，在项目目录中新建文件 demo.ts
+3、新建一个项目，并新建文件 demo.ts。
 
 ```typescript
 function tsDemo(data: {x: number, y: number}) {
@@ -50,9 +53,19 @@ function tsDemo(data: {x: number, y: number}) {
 tsDemo({ x: 3, y: 4 })
 ```
 
-4、在项目目录下执行命令 `tsc demo.ts`（使用 TypeScript 对 demo.ts 进行编译），生成 demo.js 文件，通过命令 `node demo.js` 运行该文件。其实可以使用工具可以简化这些步骤，需要全局安装 ts-node，然后通过命令 `ts-node demo.ts` 即可完成对 demo.ts 文件的编译和运行
+4、在项目目录下执行 `tsc demo.ts`，可以对 demo.ts 进行编译，生成 demo.js 文件。
 
-## 3 静态类型
+```bash
+# 编译
+tsc demo.ts
+
+# 运行JS文件
+node demo.js
+```
+
+5、可以全局安装 ts-node，并通过执行命令 `ts-node demo.ts`，同时完成对 demo.ts 文件的编译和运行。
+
+## 3. 静态类型
 
 通过 `let count: number = 10` 可以声明一个 count 变量，它的类型只能是 number，同时，count 也会具备 number 静态类型所有的属性和方法。
 
@@ -164,11 +177,11 @@ function getTotal(first: number, second: number): number {
 const total = getTotal(3, 5)
 ```
 
-## 4 函数
+## 4. 函数
 
 ### 4.1 三种定义方式
 
-#### (1) 函数声明法
+#### （1）函数声明法
 
 ```typescript
 // 使用function关键字来定义函数，:string表示函数返回的数据类型是string
@@ -203,7 +216,7 @@ function add({ first, second }: { first: number; second: number }): number {
 }
 ```
 
-#### (2) 函数表达式法
+#### （2）函数表达式法
 
 将函数赋值给一个变量，变量名就是函数名。
 
@@ -214,7 +227,7 @@ const searchPerson = function (age: number): string {
 console.log(searchPerson(28))
 ```
 
-#### (3) 箭头函数
+#### （3）箭头函数
 
 ```typescript
 // 方式1，:string可以省略，因为通过类型推断可以推断出来
@@ -226,7 +239,7 @@ const searchPerson2: (age: number) => string = (age) =>
 
 ### 4.2 函数分类
 
-#### (1) 有可选参数的函数
+#### （1）有可选参数的函数
 
 ```javascript
 // ?表示可选参数
@@ -242,7 +255,7 @@ function searchPerson(age: number, stature?: string): string {
 console.log(searchPerson(29, '北大毕业的'))
 ```
 
-#### (2) 有默认参数的函数
+#### （2）有默认参数的函数
 
 ```typescript
 // 通过等号来设置默认参数
@@ -252,7 +265,7 @@ function searchPerson(age: number = 29, stature: string = '很帅的'): string {
 console.log(searchPerson(18))
 ```
 
-#### (3) 有剩余参数的函数
+#### （3）有剩余参数的函数
 
 ```typescript
 // ...扩展运算符，string[]表示字符串数组
@@ -270,7 +283,7 @@ function searchPerson(...xuqiu: string[]): string {
 console.log(searchPerson('29岁的', '清华毕业的', '185以上的'))
 ```
 
-## 4 变量的作用域
+## 4. 变量的作用域
 
 let 声明的变量具有块级作用域（花括号内部）。
 
@@ -290,7 +303,7 @@ zhengXing()
 console.log(yangzi) // 美女
 ```
 
-## 5 数组
+## 5. 数组
 
 ```typescript
 // 字面量赋值法
@@ -354,7 +367,7 @@ const teacherList: [string, number, string][] = [
 
 一个数组的长度是固定的，数组中的每个元素的数据类型也是固定的，该数组也可以被叫作**元祖**。
 
-## 6 interface
+## 6. interface
 
 ```typescript
 // 类型别名
@@ -423,7 +436,7 @@ interface 也可以用来定义数组这样的索引类型，参考文档。
 
 interface 只是用来帮助我们做语法校验的工具，并不会真正地编译成 JavaScript 代码。
 
-## 6 字符串
+## 7. 字符串
 
 TypeScript 中有两种类型的字符串：**基本类型字符串**和**引用类型字符串**，用法都是一样的，具有的方法和属性也都是一样的。都具有 length 属性，可以获取字符串的长度。
 
@@ -449,7 +462,7 @@ console.log(something.substring(8, 13)) // 心情美美哒
 console.log(something.replace('小姐姐', '小哥哥')) // 把something字符串中的'小姐姐'替换成'小哥哥'返回新的字符串
 ```
 
-## 7 日期
+## 8. 日期
 
 ```typescript
 // 不传递参数
@@ -469,7 +482,7 @@ console.log(d4)
 console.log(d5)
 ```
 
-## 8 正则表达式
+## 9. 正则表达式
 
 **正则表达式修饰符：**
 
@@ -517,7 +530,7 @@ console.log(reg5.test(str)) // true
 console.log(reg5.exec(str))
 ```
 
-## 9 类
+## 10. 类
 
 ### 9.1 声明
 
@@ -715,6 +728,7 @@ console.log(people.name) // 调用getter，name后面不需要加括号，打印
 ```typescript
 class Demo {
   private static instance: Demo
+  
   // 不可以通过new Demo()的形式创建实例
   private constructor(public name: string) {}
 
@@ -738,9 +752,11 @@ readonly 是类的属性修饰符，使用该修饰符修饰的属性，只能�
 // 通过使用getter，实现只读
 class Person {
   private _name: string
+  
   constructor(name: string) {
     this._name = name
   }
+  
   get name() {
     return this._name
   }
@@ -752,7 +768,9 @@ class Person {
 class Person {
   constructor(public readonly name: string) {}
 }
+
 const person = new Person('zoe')
+
 // person.name = 'ying' // 报错
 console.log(person.name)
 ```
@@ -856,9 +874,42 @@ girl1.talk()
 girl2.talk()
 ```
 
+## 11 编译选项
 
+在**环境搭建**章节中，我们学习到可以通过执行命令 `tsc demo.ts` 对 demo.ts 进行编译，生成 demo.js。
 
+如果项目中有大量的 TS 文件怎么办？可以在项目中配置 tsconfig.json（tsconfig.json 是 TS 编译器的配置文件），通过执行 `tsc` 命令对项目中的所有 TS 文件进行编译。
 
+下面介绍 tsconfig.json 中具体配置项的含义。
 
+| 配置项          | 默认值                                                  | 描述                                                 |
+| --------------- | ------------------------------------------------------- | ---------------------------------------------------- |
+| include         | `["**/*"]`                                              | 指定哪些 TS 文件需要被编译。                         |
+| exclude         | `["node_modules", "bower_components", "jspm_packages"]` | 指定哪些 TS 文件不需要被编译。                       |
+| extends         | /                                                       | 指定被继承的配置文件。                               |
+| files           | /                                                       | 指定被编译的具体的文件。                             |
+| compilerOptions | /                                                       | 编译选项，包含多个**子选项**，用来完成对编译的配置。 |
 
+compilerOptions 子选项如下。
 
+| 配置项           | 默认值  | 描述                                                         |
+| ---------------- | ------- | ------------------------------------------------------------ |
+| target           | `"ES3"` | 指定 TS 被编译成的 ES 版本。`"ESNext"` 表示最新版本的 ES。   |
+| module           | /       | 指定要使用的模块化规范。可以设置 `"commonjs"`、`"amd"`、`"es6"` 等。推荐使用 `"es6"` |
+| lib              | /       | 指定项目中要使用的库。可以设置 `"dom"`、`"es6"`、`"es2015.promise"`、`"webworker"` 等值。一般不需要手动配置。 |
+| outDir           | /       | 指定编译后 JS 文件所在的目录。                               |
+| outFile          | /       | 将 TS 文件中**全局作用域**的代码编译后合并到同一个文件中。不建议使用。 |
+| allowJs          | false   | 配置是否对 JS 文件进行编译。                                 |
+| checkJs          | false   | 配置是否检查 JS 代码是否符合 TS 语法规范。                   |
+| removeComments   | false   | 配置是否移除注释。                                           |
+| noEmit           | false   | 设置成 true，表示不生成编译后的文件，一般用于不想使用 TS 的编译功能，而只想使用 TS 对语法进行检查。 |
+| noEmitOnError    | false   | 设置成 true，表示有语法错误时，编译会报错，且不会生成编译后的文件。 |
+| alwaysStrict     | false   | 设置编译后的 JS 文件是否使用严格模式。如果使用了导出、引入模块，JS 代码会自动使用严格模式。 |
+| noImplicitAny    | false   | 设置成 true，表示不允许隐式的 any 类型。                     |
+| noImplicitThis   | false   | 设置成 true，表示不允许不明确类型的 this。                   |
+| strictNullChecks | false   | 设置成 true，表示对于有可能的空值，必须严格检查处理。        |
+| strict           | false   | 所有严格检查的总开关。                                       |
+| types            | /       | 指定只使用哪些全局类型声明，而不是 node_modules/@types 下所有的类型声明。比如，`"types": ["node"]` 表示 node_modules/@types/node。 |
+| typeRoots        | /       | 指定只寻找特定目录下的类型声明文件。                         |
+| baseUrl          | /       | 设置`baseUrl`来告诉编译器到哪里去查找模块。 所有非相对模块导入都会被当做相对于 `baseUrl`。 |
+| paths            | /       | 用来做路径重映射。需要先设置 baseUrl。比如，`"@/*": ["./src/*"]` 表示把相对于 baseUrl 的 src 路径重映射成 @。 |
