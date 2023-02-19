@@ -1,4 +1,4 @@
-# TypeScript 基础入门
+# TypeScript 基础语法
 
 ## 1. 简介
 
@@ -283,26 +283,6 @@ function searchPerson(...xuqiu: string[]): string {
 console.log(searchPerson('29岁的', '清华毕业的', '185以上的'))
 ```
 
-## 4. 变量的作用域
-
-let 声明的变量具有块级作用域（花括号内部）。
-
-```typescript
-var yangzi: string = '美女' // 全局变量
-function zhengXing(): void { // 函数没有返回值，就用void
-  console.log(yangzi) // 这里变量提升了，会打印出undefined（构建会报错）
-  var yangzi: string = '丑女' // 局部变量
-  console.log(yangzi) // 丑女
-  {
-    let temp = 'hello'
-  }
-  // 'hello'，构建后，TS文件中的let会被转成var，所以运行JS文件这里还是能打印出'hello'（构建会报错）
-  console.log(temp)
-}
-zhengXing()
-console.log(yangzi) // 美女
-```
-
 ## 5. 数组
 
 ```typescript
@@ -367,23 +347,137 @@ const teacherList: [string, number, string][] = [
 
 一个数组的长度是固定的，数组中的每个元素的数据类型也是固定的，该数组也可以被叫作**元祖**。
 
-## 6. interface
+## 6. type & interface
+
+**类型别名（type）**用于为一个类型创建一个新的名字，可用于声明**基本类型**、**联合类型**、**元祖类型**，还有其它一些必须手写的类型。
 
 ```typescript
-// 类型别名
-type Person = { name: string }
+type MyNumber = number;
+type StringOrNumber = string | number;
+type Point = [number, number];
 
-// interface
-interface Person {
-  name: string
+type Text = string | string[];
+type Text2 = string | { text: string };  
+
+type Callback = (data: string) => void;
+type Callback2<T> = (data: T) => void;  
+
+type NameLookup = Dictionary<string, Person>;  
+
+type Pair<T> = [T, T];  
+type Coordinates = Pair<number>;  
+
+type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
+```
+
+```typescript
+interface Dog {
+  wong();
+}
+interface Cat {
+  miao();
+}
+
+// 联合类型
+type Pet = Dog | Cat
+
+// 具体定义数组每个位置的类型
+type PetList = [Dog, Pet]
+```
+
+**接口（interface）**是一个非常灵活的概念，除了可用于对类的一部分行为进行抽象以外，也常用于对**对象的形状（Shape）**进行描述。interface 只是用来帮助我们做语法校验的工具，并不会真正地编译成 JavaScript 代码。
+
+下面学习一下类型别名与接口的区别：
+
+1、类型别名和接口都可以用来描述一个**对象**或**函数**。
+
+```typescript
+// 为对象字面量类型取一个别名
+type Point = {
+  x: number;
+  y: number;
+};
+
+// 为函数类型取一个别名
+type SetPoint = (x: number, y: number) => void;
+```
+
+```typescript
+interface Point {
+  x: number;
+  y: number;
+}
+
+interface SetPoint {
+  (x: number, y: number): void;
 }
 ```
 
-interface 可以代表对象和函数，无法代表基础类型，而类型别名可以代表基础类型：
+2、接口通过 extends 来扩展，类型别名通过 &（交叉运算符）来扩展。
 
 ```typescript
-type Point = number 
+type Type1 = {
+  name: string
+}
+
+interface Interface1 {
+  name: string
+}
+
+// type扩展type
+type Type2 = Type1 & {
+  age: number
+
+  // 不会报错，但是number和string进行交叉后，得到的是never，因此name属性的类型会变成never
+  name: number
+}
+
+// type扩展interface
+type Type2 = Interface1 & {
+  age: number
+}
+
+// interface扩展interface
+interface Interface2 extends Interface1 {
+  age: number
+}
+
+// interface扩展type
+interface Interface2 extends Type1 {
+  age: number
+
+  // 会报错，对于同一个属性，其类型必须一致
+  // name: number
+}
 ```
+
+3、type 语句中可以使用 typeof 获取实例的类型进行赋值。
+
+```typescript
+// 当你想获取一个变量的类型时，使用typeof
+let div = document.createElement('div');
+type B = typeof div
+```
+
+4、接口可以**声明合并**，而类型别名不行。
+
+```typescript
+interface User {
+  name: string
+  age: number
+}
+
+interface User {
+  sex: string
+}
+
+// 会报错，如果重复定义同一个属性，类型必须一致
+interface User {
+  sex: boolean;
+}
+```
+
+其它的例子：
 
 ```typescript
 interface Person {
@@ -401,6 +495,7 @@ const person = {
   sex: 'female',
 }
 getPersonName(person) // 只需要保证必须有name属性即可，允许多出sex属性
+
 // 传递字面量形式的参数（对象字面量直接赋值），会进行类型强校验，不允许多出sex属性
 getPersonName({
   name: 'zoe',
@@ -420,21 +515,6 @@ interface Teacher extends Person {
   teach(): string
 }
 ```
-
-interface 除了可以用来定义属性和方法以外，还可以用来定义函数类型：
-
-```typescript
-interface SayHi {
-  (word: string): string
-}
-const say: SayHi = (word: string) => {
-  return word
-}
-```
-
-interface 也可以用来定义数组这样的索引类型，参考文档。
-
-interface 只是用来帮助我们做语法校验的工具，并不会真正地编译成 JavaScript 代码。
 
 ## 7. 字符串
 
@@ -873,43 +953,3 @@ let girl2: badGirl.Girl = new badGirl.Girl()
 girl1.talk()
 girl2.talk()
 ```
-
-## 11 编译选项
-
-在**环境搭建**章节中，我们学习到可以通过执行命令 `tsc demo.ts` 对 demo.ts 进行编译，生成 demo.js。
-
-如果项目中有大量的 TS 文件怎么办？可以在项目中配置 tsconfig.json（tsconfig.json 是 TS 编译器的配置文件），通过执行 `tsc` 命令对项目中的所有 TS 文件进行编译。
-
-下面介绍 tsconfig.json 中具体配置项的含义。
-
-| 配置项          | 默认值                                                  | 描述                                                 |
-| --------------- | ------------------------------------------------------- | ---------------------------------------------------- |
-| include         | `["**/*"]`                                              | 指定哪些 TS 文件需要被编译。                         |
-| exclude         | `["node_modules", "bower_components", "jspm_packages"]` | 指定哪些 TS 文件不需要被编译。                       |
-| extends         | /                                                       | 指定被继承的配置文件。                               |
-| files           | /                                                       | 指定被编译的具体的文件。                             |
-| compilerOptions | /                                                       | 编译选项，包含多个**子选项**，用来完成对编译的配置。 |
-
-compilerOptions 子选项如下。
-
-| 配置项           | 默认值  | 描述                                                         |
-| ---------------- | ------- | ------------------------------------------------------------ |
-| target           | `"ES3"` | 指定 TS 被编译成的 ES 版本。`"ESNext"` 表示最新版本的 ES。   |
-| module           | /       | 指定要使用的模块化规范。可以设置 `"commonjs"`、`"amd"`、`"es6"` 等。推荐使用 `"es6"` |
-| lib              | /       | 指定项目中要使用的库。可以设置 `"dom"`、`"es6"`、`"es2015.promise"`、`"webworker"` 等值。一般不需要手动配置。 |
-| outDir           | /       | 指定编译后 JS 文件所在的目录。                               |
-| outFile          | /       | 将 TS 文件中**全局作用域**的代码编译后合并到同一个文件中。不建议使用。 |
-| allowJs          | false   | 配置是否对 JS 文件进行编译。                                 |
-| checkJs          | false   | 配置是否检查 JS 代码是否符合 TS 语法规范。                   |
-| removeComments   | false   | 配置是否移除注释。                                           |
-| noEmit           | false   | 设置成 true，表示不生成编译后的文件，一般用于不想使用 TS 的编译功能，而只想使用 TS 对语法进行检查。 |
-| noEmitOnError    | false   | 设置成 true，表示有语法错误时，编译会报错，且不会生成编译后的文件。 |
-| alwaysStrict     | false   | 设置编译后的 JS 文件是否使用严格模式。如果使用了导出、引入模块，JS 代码会自动使用严格模式。 |
-| noImplicitAny    | false   | 设置成 true，表示不允许隐式的 any 类型。                     |
-| noImplicitThis   | false   | 设置成 true，表示不允许不明确类型的 this。                   |
-| strictNullChecks | false   | 设置成 true，表示对于有可能的空值，必须严格检查处理。        |
-| strict           | false   | 所有严格检查的总开关。                                       |
-| types            | /       | 指定只使用哪些全局类型声明，而不是 node_modules/@types 下所有的类型声明。比如，`"types": ["node"]` 表示 node_modules/@types/node。 |
-| typeRoots        | /       | 指定只寻找特定目录下的类型声明文件。                         |
-| baseUrl          | /       | 设置`baseUrl`来告诉编译器到哪里去查找模块。 所有非相对模块导入都会被当做相对于 `baseUrl`。 |
-| paths            | /       | 用来做路径重映射。需要先设置 baseUrl。比如，`"@/*": ["./src/*"]` 表示把相对于 baseUrl 的 src 路径重映射成 @。 |
