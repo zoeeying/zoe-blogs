@@ -113,7 +113,7 @@ Vitest 与 Jest 一样，是一个测试运行器，包括测试套件（describ
 
 在 src/App.js 中，编写一个函数式组件 App。
 
-```react
+```jsx
 import * as React from 'react';
 
 const title = 'Hello React';
@@ -127,7 +127,7 @@ export default App;
 
 在 src/App.test.js 中，对 App 组件进行测试。
 
-```react
+```jsx
 import * as React from 'react';
 import { render } from '@testing-library/react';
 
@@ -144,7 +144,7 @@ RTL 的 render 函数，可以渲染任意的 JSX 语法，得到 React 组件�
 
 还可以使用 RTL 提供的 debug 函数进行调试。
 
-```react
+```jsx
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
@@ -173,7 +173,7 @@ describe('App', () => {
 
 事实上，React Testing Library 并不关心组件的实现细节，下面以一个复杂的可控组件为例（包括 useState、事件处理、props），观察 RTL 的 debug 输出。
 
-```react
+```jsx
 import * as React from 'react';
 
 function App() {
@@ -242,7 +242,7 @@ export default App;
 
 React Testing Library 除了提供了 render 函数用于渲染组件外，还提供了一系列 API（在 screen 对象上）用于查询元素。
 
-```react
+```jsx
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
@@ -276,7 +276,7 @@ describe('App', () => {
 
 默认情况下，如果找不到元素，getByText 会抛出一个错误。在编写测试用例时，使用 getByText 的抛错特性，有利于开发者对测试用例进行调试。一些开发者会利用 getByText 的这个特性，来隐式断言元素是否存在于 DOM 中。但是，更推荐使用 expect 来做显式断言，因为 getByText 抛错会阻止测试程序继续执行下去。
 
-```react
+```jsx
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
@@ -297,7 +297,7 @@ describe('App', () => {
 
 getByText 函数的参数可以是字符串，也可以是正则表达式，如果是字符串，则表示精确匹配，如果是正则表达式，则表示模糊匹配。
 
-```react
+```jsx
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
@@ -329,7 +329,7 @@ RTL 还提供了另一个强大的查询类型 role，对应的方法是 getByRo
 
 使用 getByRole 的好处是，如果查询的 role 在渲染的组件 HTML 中不存在，控制台会提示所有可用于查询的 role。
 
-```react
+```jsx
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
@@ -371,7 +371,7 @@ Name "Search:":
 
 由于我们的 App 组件中有一个输入框（input 元素），且输入框隐式的 role 是 `textbox`，因此，可以通过 `textbox` 查询到该 input 元素。
 
-```react
+```jsx
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
@@ -440,7 +440,7 @@ findBy 对应所有查询类型的方法如下。
 
 然而，getBy 无法用于测试元素不存在的场景。
 
-```react
+```jsx
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
@@ -462,7 +462,7 @@ describe('App', () => {
 
 为了断言不存在的元素，可以使用 queryBy。
 
-```react
+```jsx
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
@@ -485,7 +485,7 @@ findBy 用于查询异步元素（一开始不存在，最终会显示的元素�
 
 比如有这样一个 React 组件：初始渲染完后，组件调用一个模拟的 user 接口，获取 user 对象，并调用 setState，触发组件更新和重新渲染，最后渲染出 "Signed in as ..."。
 
-```react
+```jsx
 const getUser = () => {
   return Promise.resolve({ id: '1', name: 'Robin' });
 };
@@ -525,7 +525,7 @@ function App() {
 
 由于组件中调用了异步接口，组件在初次渲染后，会再次触发渲染。所以测试该组件的话，需要写一个异步测试来等待异步的 Promise resolve。换句话说，必须等待组件获取异步数据并重新渲染。
 
-```react
+```jsx
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
@@ -544,7 +544,7 @@ describe('App', () => {
 
 组件初次渲染后，我们使用 queryByText 来断言 "Signed in as" 不存在。然后等待该 text 在 Promise resolve、组件重新渲染后最终被找到。可以加上两个 debug 方法，在命令行验证输出。
 
-```react
+```jsx
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 
@@ -616,7 +616,7 @@ Jest、Vitest、Chai 都原生提供这些断言函数。同时，React Testing 
 
 可以使用 React Testing Library 提供的 fireEvent、waitFor 函数来模拟用户的交互。下面看看它们是如何使用的。
 
-```react
+```jsx
 import * as React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 
@@ -641,7 +641,7 @@ fireEvent 函数接收两个参数：元素（通过 textbox role 查出来的�
 
 注意，如果组件中有异步任务，比如上面的 App 组件中调用了接口获取 user 对象，对该组件进行测试后，可以在控制台看到警告 “*Warning: An update to App inside a test was not wrapped in act(...).*”。这意味着，有异步任务正在进行，因此必须确保在测试代码中对此进行处理。通常这种情况是在 React Testing Library 中的 act 函数中处理的，我们需要做的是使用异步查询函数进行等待即可。
 
-```react
+```jsx
 describe('App', () => {
   it('renders App component', async () => {
     render(<App />);
@@ -662,7 +662,7 @@ describe('App', () => {
 
 我们也可以在触发事件前后使用断言。
 
-```react
+```jsx
 describe('App', () => {
   it('renders App component', async () => {
     render(<App />);
@@ -683,7 +683,7 @@ describe('App', () => {
 
 我们也可以使用 RTL 中的 waitFor 函数结合 getBy 变体等待异步更新（替代 findBy）。
 
-```react
+```jsx
 import * as React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
@@ -718,7 +718,7 @@ describe('App', () => {
 
 比如，`fireEvent.change()` 只能触发 change 事件，而 `uerEvent.type()` 除了能触发 change 事件以外，还触发了 keyDown、keyPress 和 keyUp 事件。
 
-```react
+```jsx
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -751,7 +751,7 @@ React Testing Library 中，尽可能使用 userEvent，而不是 fireEvent。�
 
 现在，我们来测试 Search 组件的回调函数。
 
-```react
+```jsx
 function Search({ value, onChange, children }) {
   return (
     <div>
@@ -771,7 +771,7 @@ export { Search };
 
 使用 Vitest/Jest 提供的测试函数来模拟传递给组件的 onChange 函数。在文本框触发了用户交互后，我们可以断言 onChange 回调函数被调用了。
 
-```react
+```jsx
 describe('Search', () => {
   it('calls the onChange callback handler', () => {
     // Jest
@@ -796,7 +796,7 @@ describe('Search', () => {
 
 通过这个用例，我们也可以证明，相较于 fireEvent，userEvent 能更近似地模拟用户行为：fireEvent 触发 change 事件，回调函数只会执行一次，而 userEvent 触发 change 事件，有多少次按键，回调函数就会执行多少次。
 
-```react
+```jsx
 describe('Search', () => {
   it('calls the onChange callback handler', async () => {
     // Jest
@@ -825,7 +825,7 @@ describe('Search', () => {
 
 下面是一个 React 组件，使用 Axios 请求一个远程 API 来获取数据。
 
-```react
+```jsx
 import * as React from 'react';
 import axios from 'axios';
 
@@ -868,6 +868,3 @@ function App() {
 
 export default App;
 ```
-
-
-
