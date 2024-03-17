@@ -58,7 +58,7 @@ compilerOptions 子选项如下。
 
 declare 关键字可以描述以下类型。
 
-- 变量（const、let、var 命令声明）  declar const a:string 
+- 变量（const、let、var 命令声明）  declar const a:string
 - type 或者 interface 命令声明的类型
 - class
 - enum
@@ -101,16 +101,3 @@ String.prototype.toSmallString = ():string => {
 `export {}` 作用是强制编译器将这个脚本当作**模块**处理，这是因为 declare global 必须用在模块里面。
 
 看到一个解释，如果是 .d.ts 声明文件中，任何的 declare 默认就是 global 的，因此在 .d.ts 文件中不能出现 declare global，只有在模块文件中，如果想要定义全局的可以使用 declare global。
-
-
-
-   
-
-
-
-
-
-
-
-
-
