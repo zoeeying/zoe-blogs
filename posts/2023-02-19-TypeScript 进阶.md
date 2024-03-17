@@ -44,6 +44,8 @@ compilerOptions 子选项如下。
 
 ## 2. 声明文件
 
+单独使用的模块，一般会同时提供一个单独的**类型声明文件**（declaration file），把本模块的**外部接口**的所有类型都写在这个文件里面，便于模块使用者了解接口，也便于编译器检查使用者的用法是否正确。
+
 类型声明文件：用来为已存在的 JS 库提供类型信息。
 
 类型声明文件以 .d.ts 结尾，只能包含**类型信息**，不能包含**可执行代码**。
@@ -52,11 +54,57 @@ compilerOptions 子选项如下。
 
 内置类型声明文件：TS 为 JS 运行时可用的所有标准化内置 API 都提供了声明文件。
 
+## 3. declare 关键字
+
+declare 关键字可以描述以下类型。
+
+- 变量（const、let、var 命令声明）  declar const a:string 
+- type 或者 interface 命令声明的类型
+- class
+- enum
+- 函数（function）
+- 模块（module）
+- 命名空间（namespace）
+
+declare 只能用来描述已经存在的变量和数据结构，不能用来声明新的变量和数据结构。另外，所有 declare 语句都不会出现在编译后的文件里面。
+
+declare 关键字可以进行模块的类型扩展：
+
+```javascript
+// 为模块moduleA中的Foo接口扩充一个custom属性
+declare module 'moduleA' {
+  interface Foo {
+    custom: {
+      prop1: string;
+    }
+  }
+}
+```
+
+declare global 用法：
+
+```javascript
+export {};
+
+declare global {
+  interface String {
+    toSmallString(): string;
+  }
+}
+
+// 具体实现
+String.prototype.toSmallString = ():string => {
+  return '';
+};
+```
+
+`export {}` 作用是强制编译器将这个脚本当作**模块**处理，这是因为 declare global 必须用在模块里面。
+
+看到一个解释，如果是 .d.ts 声明文件中，任何的 declare 默认就是 global 的，因此在 .d.ts 文件中不能出现 declare global，只有在模块文件中，如果想要定义全局的可以使用 declare global。
 
 
 
-
-
+   
 
 
 
